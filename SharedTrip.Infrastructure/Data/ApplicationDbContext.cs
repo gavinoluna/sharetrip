@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace SharedTrip.Data
+namespace SharedTrip.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext
     {

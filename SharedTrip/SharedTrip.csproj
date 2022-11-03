@@ -15,4 +15,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\SharedTrip.Core\SharedTrip.Core.csproj" />
+  </ItemGroup>
+
 </Project>
