@@ -262,7 +262,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.Car", b =>
@@ -309,7 +309,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasIndex("DriverId");
 
-                    b.ToTable("Cars");
+                    b.ToTable("Cars", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.Colour", b =>
@@ -327,7 +327,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Colours");
+                    b.ToTable("Colours", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.Comment", b =>
@@ -354,7 +354,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasIndex("CreatorId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.Message", b =>
@@ -386,7 +386,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasIndex("SenderId");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.PassengerTrip", b =>
@@ -401,7 +401,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasIndex("PassengerId");
 
-                    b.ToTable("PassengersTrips");
+                    b.ToTable("PassengersTrips", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.PopulatedPlace", b =>
@@ -419,7 +419,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cities");
+                    b.ToTable("Cities", (string)null);
                 });
 
             modelBuilder.Entity("SharedTrip.Infrastructure.Data.Entities.Trip", b =>
@@ -475,7 +475,7 @@ namespace SharedTrip.Infrastructure.Migrations
 
                     b.HasIndex("StartDestinationId");
 
-                    b.ToTable("Trips");
+                    b.ToTable("Trips", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
