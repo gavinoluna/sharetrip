@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SharedTrip.Infrastructure.Data.Entities;
+using SharedTrip.Infrastructure.Data.Seeding.Configuration;
 
 namespace SharedTrip.Infrastructure.Data
 {
@@ -23,7 +24,7 @@ namespace SharedTrip.Infrastructure.Data
 
         public DbSet<Comment> Comments { get; set; } = null!;
 
-        public DbSet<PopulatedPlace> Cities { get; set; } = null!;
+        public DbSet<PopulatedPlace> PopulatedPlaces { get; set; } = null!;
 
         public DbSet<PassengerTrip> PassengersTrips { get; set; } = null!;
 
@@ -70,6 +71,10 @@ namespace SharedTrip.Infrastructure.Data
                 .HasOne(x => x.EndDestination)
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
+
+            builder.ApplyConfiguration(new PopulatedPlaceConfiguration());
+            builder.ApplyConfiguration(new CarBrandsConfiguration());
+            builder.ApplyConfiguration(new ColourConfiguration());
 
             base.OnModelCreating(builder);
         }
