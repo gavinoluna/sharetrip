@@ -18,9 +18,7 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddSignInManager();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddSingleton(new Cloudinary(builder.Configuration["CloudinaryString"]));
-
-builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
+builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();
 
