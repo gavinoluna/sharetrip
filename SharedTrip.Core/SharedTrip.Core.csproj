@@ -10,4 +10,9 @@
     <ProjectReference Include="..\SharedTrip.Infrastructure\SharedTrip.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="CloudinaryDotNet" Version="1.20.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Features" Version="5.0.17" />
+  </ItemGroup>
+
 </Project>

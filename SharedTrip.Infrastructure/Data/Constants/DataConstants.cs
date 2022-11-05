@@ -5,7 +5,10 @@
         public class User
         {
             public const int FirstNameMaxLength = 30;
+            public const int FirstNameMinLenght = 2;
             public const int LastNameMaxLength = 30;
+            public const int LastNameMinLength = 3;
+            public const int PhoneNumberMaxLength = 10;
         }
 
         public class Car
