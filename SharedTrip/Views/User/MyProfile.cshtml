@@ -1,0 +1,195 @@
+﻿@model MyProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src=@Model.ProfileImageUrl alt="avatar"
+                             class="rounded-circle img-fluid" style="width: 150px;">
+                        <h5 class="my-3">@Model.FirstName @Model.LastName</h5>
+                        <p class="text-muted mb-1"><i class="fa-solid fa-person-walking-luggage"></i>: @Model.CountOfTripsAsPassenger</p>
+                        <a><i class="fa-solid fa-person-walking-luggage"></i></a>
+                        <p class="text-muted mb-4">Bay Area, San Francisco, CA</p>
+                        <div class="d-flex justify-content-center mb-2">
+                            <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mb-4 mb-lg-0">
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush rounded-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="fas fa-globe fa-lg text-warning"></i>
+                                <p class="mb-0">https://mdbootstrap.com</p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
+                                <p class="mb-0">mdbootstrap</p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
+                                <p class="mb-0">mdbootstrap</p>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="fa-brands fa-facebook" style="color: #3b5998;"></i>
+                                <p class="mb-0">mdbootstrap</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="card mb-4">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Full Name</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">Johnatan Smith</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Email</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">example@example.com</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Phone</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">(097) 234-5678</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Mobile</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">(098) 765-4321</p>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <p class="mb-0">Address</p>
+                            </div>
+                            <div class="col-sm-9">
+                                <p class="text-muted mb-0">Bay Area, San Francisco, CA</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" rel="stylesheet">
+                <section class="content-item" id="comments">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-11">  
+                                <form>
+                                    <h3 class="pull-left">New Comment</h3>
+                                    <fieldset>
+                                        <div class="row">
+                                            <div class="col-sm-3 col-lg-2 hidden-xs">
+                                                <img class="image mr-10" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt="">
+                                            </div>
+                                            <div class="form-group commentSection">
+                                                <textarea class="form-control" id="message" placeholder="Your message" required=""></textarea>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <button type="submit" class="btn btn btn-primary pull-right">Submit</button>
+                                </form>
+
+                                <h3>Comments</h3>
+
+                                <!-- COMMENT 1 - START -->
+                                <div class="media">
+                                    <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar1.png" alt=""></a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">John Doe</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        <ul class="list-unstyled list-inline media-detail pull-left">
+                                            <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                                            <li><i class="fa fa-thumbs-up"></i>13</li>
+                                        </ul>
+                                        <ul class="list-unstyled list-inline media-detail pull-right">
+                                            <li class=""><a href="">Like</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- COMMENT 1 - END -->
+                                <!-- COMMENT 2 - START -->
+                                <div class="media">
+                                    <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar2.png" alt=""></a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">John Doe</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        <ul class="list-unstyled list-inline media-detail pull-left">
+                                            <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                                            <li><i class="fa fa-thumbs-up"></i>13</li>
+                                        </ul>
+                                        <ul class="list-unstyled list-inline media-detail pull-right">
+                                            <li class=""><a href="">Like</a></li>
+                                            <li class=""><a href="">Reply</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- COMMENT 2 - END -->
+                                <!-- COMMENT 3 - START -->
+                                <div class="media">
+                                    <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar3.png" alt=""></a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">John Doe</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        <ul class="list-unstyled list-inline media-detail pull-left">
+                                            <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                                            <li><i class="fa fa-thumbs-up"></i>13</li>
+                                        </ul>
+                                        <ul class="list-unstyled list-inline media-detail pull-right">
+                                            <li class=""><a href="">Like</a></li>
+                                            <li class=""><a href="">Reply</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- COMMENT 3 - END -->
+                                <!-- COMMENT 4 - START -->
+                                <div class="media">
+                                    <a class="pull-left" href="#"><img class="media-object" src="https://bootdey.com/img/Content/avatar/avatar4.png" alt=""></a>
+                                    <div class="media-body">
+                                        <h4 class="media-heading">John Doe</h4>
+                                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+                                        <ul class="list-unstyled list-inline media-detail pull-left">
+                                            <li><i class="fa fa-calendar"></i>27/02/2014</li>
+                                            <li><i class="fa fa-thumbs-up"></i>13</li>
+                                        </ul>
+                                        <ul class="list-unstyled list-inline media-detail pull-right">
+                                            <li class=""><a href="">Like</a></li>
+                                            <li class=""><a href="">Reply</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <!-- COMMENT 4 - END -->
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>

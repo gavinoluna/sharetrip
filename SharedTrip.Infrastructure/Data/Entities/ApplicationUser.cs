@@ -30,7 +30,7 @@ namespace SharedTrip.Infrastructure.Data.Entities
 
         public IEnumerable<PassengerTrip> PassengersTrips { get; set; } = new List<PassengerTrip>();
 
-        public IEnumerable<Comment> Comments { get; set; } = new List<Comment>();
+        public IEnumerable<Comment> ReceivedComments { get; set; } = new List<Comment>();
 
         public IEnumerable<Message> SentMessages { get; set; } = new List<Message>();
 

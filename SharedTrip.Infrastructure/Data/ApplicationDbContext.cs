@@ -30,6 +30,22 @@ namespace SharedTrip.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //Comments
+            builder
+                .Entity<Comment>()
+                .HasOne(x => x.Receiver)
+                .WithMany(x => x.ReceivedComments)
+                .HasForeignKey(x => x.ReceiverId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            builder
+                .Entity<Comment>()
+                .HasOne(x => x.Creator)
+                .WithMany()
+                .HasForeignKey(x => x.CreatorId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            //Trips
             builder
                 .Entity<PassengerTrip>()
                 .HasKey(x => new { x.TripId, x.PassengerId });
@@ -41,6 +57,17 @@ namespace SharedTrip.Infrastructure.Data
                 .HasForeignKey(x => x.DriverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Trip>()
+                .HasOne(x => x.StartDestination)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            builder.Entity<Trip>()
+                .HasOne(x => x.EndDestination)
+                .WithMany()
+                .OnDelete(DeleteBehavior.NoAction);
+
+            //Messages
             builder
                 .Entity<Message>()
                 .HasOne(x => x.Sender)
@@ -55,21 +82,12 @@ namespace SharedTrip.Infrastructure.Data
                 .HasForeignKey(x => x.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            //Cars
             builder
                 .Entity<Car>()
                 .HasOne(x => x.Driver)
                 .WithMany(x => x.Cars)
                 .HasForeignKey(x => x.DriverId)
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Trip>()
-                .HasOne(x => x.StartDestination)
-                .WithMany()
-                .OnDelete(DeleteBehavior.NoAction);
-
-            builder.Entity<Trip>()
-                .HasOne(x => x.EndDestination)
-                .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 
             builder.ApplyConfiguration(new PopulatedPlaceConfiguration());

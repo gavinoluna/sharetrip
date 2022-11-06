@@ -15,6 +15,12 @@ namespace SharedTrip.Infrastructure.Data.Entities
         public ApplicationUser Creator { get; set; } = null!;
 
         [Required]
+        public string ReceiverId { get; set; } = null!;
+
+        [ForeignKey(nameof(ReceiverId))]
+        public ApplicationUser Receiver { get; set; } = null!;
+
+        [Required]
         [StringLength(ContentMaxLength)]
         public string Content { get; set; } = null!;
 
