@@ -11,8 +11,8 @@
                 <div class="border border">
                     <h3 class="bg-gray p-4">Register Now</h3>
                     <form id="registerForm" asp-route-returnUrl="@Model.ReturnUrl" method="post" enctype="multipart/form-data">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                        <fieldset class="p-4">
+                        <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
+                        <fieldset class="p-4">  
                             <div class="form-floating">
                                 <input asp-for="Input.Email" class="form-control mb-3" placeholder="Email" autocomplete="username" aria-required="true" />
                                 <span asp-validation-for="Input.Email" class="text-danger"></span>

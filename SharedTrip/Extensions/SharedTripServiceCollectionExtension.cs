@@ -11,6 +11,8 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddSingleton(new Cloudinary(config["CloudinaryString"]));
             services.AddScoped<ICloudinaryService, CloudinaryService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ICarService, CarService>();
 
             return services;
         }

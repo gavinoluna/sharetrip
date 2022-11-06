@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
+using SharedTrip.Core.Models.User;
 using System.Security.Claims;
 
 namespace SharedTrip.Controllers
@@ -15,9 +16,21 @@ namespace SharedTrip.Controllers
             this.userService = userService;
         }
 
-        public async Task<IActionResult> MyProfile(string userId = null)
+        [HttpGet]
+        public async Task<IActionResult> ProfileInfo(string userId = null)
         {
-            var user = await this.userService.GetMyProfileDataAsync(User.Id());
+            ProfileViewModel user;
+
+            if (userId == null)
+            {
+                user = await this.userService.GetProfileInfoAsync(User.Id(), true);
+            }
+            else
+            {
+                user = await this.userService.GetProfileInfoAsync(userId, false);
+            }
+
+            ViewBag.UserId = User.Id();
 
             if (user == null)
             {

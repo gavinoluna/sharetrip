@@ -4,6 +4,6 @@ namespace SharedTrip.Core.Contracts
 {
     public interface IUserService
     {
-        Task<MyProfileViewModel> GetMyProfileDataAsync(string userId);
+        Task<ProfileViewModel> GetProfileInfoAsync(string userId, bool showMoreInfo);
     }
 }

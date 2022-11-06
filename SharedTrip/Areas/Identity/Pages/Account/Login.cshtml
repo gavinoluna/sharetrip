@@ -11,8 +11,8 @@
             <div class="col-lg-5 col-md-8 align-item-center">
                 <div class="border">
                     <h3 class="bg-gray p-4">Login Now</h3>
+                    <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
                     <form id="account" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                         <fieldset class="p-4">
                             <div class="form-floating">
                                 <input asp-for="Input.Email" class="form-control mb-3" placeholder="Email" autocomplete="username" aria-required="true" />

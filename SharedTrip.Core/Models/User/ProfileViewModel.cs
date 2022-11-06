@@ -3,7 +3,7 @@ using SharedTrip.Core.Models.Comments;
 
 namespace SharedTrip.Core.Models.User
 {
-    public class MyProfileViewModel
+    public class ProfileViewModel
     {
         public string Id { get; set; } = null!;
 
@@ -15,7 +15,9 @@ namespace SharedTrip.Core.Models.User
 
         public string PhoneNumber { get; set; } = null!;
 
-        public List<ProfileCarViewModel> Cars { get; set; } = new List<ProfileCarViewModel>();
+        public string Email { get; set; } = null!;
+
+        public IEnumerable<ProfileCarViewModel> Cars { get; set; } = new List<ProfileCarViewModel>();
 
         public int CountOfTripsAsDriver { get; set; }
 
@@ -23,6 +25,6 @@ namespace SharedTrip.Core.Models.User
 
         public double Rating { get; set; }
 
-        public List<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
+        public IEnumerable<CommentViewModel> Comments { get; set; } = new List<CommentViewModel>();
     }
 }

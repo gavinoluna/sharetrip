@@ -11,5 +11,7 @@
         public string Content { get; set; } = null!;
 
         public string CreatedOn { get; set; } = null!;
+
+        public string CreatorProfileImageUrl { get; set; } = null!;
     }
 }

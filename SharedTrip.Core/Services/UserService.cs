@@ -10,48 +10,44 @@ namespace SharedTrip.Core.Services
     public class UserService : IUserService
     {
         private readonly ApplicationDbContext context;
+        private readonly ICommentService commentService;
+        private readonly ICarService carService;
 
-        public UserService(ApplicationDbContext context)
+        public UserService(
+            ApplicationDbContext context,
+            ICommentService commentService,
+            ICarService carService)
         {
             this.context = context;
+            this.commentService = commentService;
+            this.carService = carService;
         }
 
-        public async Task<MyProfileViewModel> GetMyProfileDataAsync(string userId)
+        public async Task<ProfileViewModel> GetProfileInfoAsync(string userId, bool showMoreInfo)
         {
             var user = await this.context
                 .Users
                 .Where(u => u.Id == userId)
-                .Select(u => new MyProfileViewModel
+                .Select(u => new ProfileViewModel
                 {
                     Id = u.Id,
                     FirstName = u.FirstName,
                     LastName = u.LastName,
                     ProfileImageUrl = u.ProfilePictureUrl,
                     PhoneNumber = u.PhoneNumber,
+                    Email = u.Email,
                     Rating = u.Rating,
                     CountOfTripsAsPassenger = u.CountOfTripsAsPassenger,
-                    CountOfTripsAsDriver = u.CountOfTripsAsDriver,
-                    Cars = u.Cars.Select(c => new ProfileCarViewModel
-                    {
-                        Id = c.Id,
-                        Brand = c.Brand.Name,
-                        Colour = c.Colour.Name,
-                        ImageUrl = c.ImageUrl,
-                        Model = c.Model,
-                        Year = c.Year
-                    })
-                    .ToList(),
-                    Comments = u.ReceivedComments.Select(c => new CommentViewModel
-                    {
-                        Id = c.Id,
-                        Content = c.Content,
-                        CreatorName = $"{c.Creator.FirstName} {c.Creator.LastName}",
-                        CreatedOn = c.CreatedOn.ToString(),
-                        CreatorId = c.CreatorId
-                    })
-                    .ToList()
+                    CountOfTripsAsDriver = u.CountOfTripsAsDriver
                 })
                 .FirstOrDefaultAsync();
+
+            if (showMoreInfo)
+            {
+                user.Cars = await this.carService.GetMyCarsAsync(userId);
+            }
+
+            user.Comments = await this.commentService.GetAllByCommentsByUserIdAsync(userId);
 
             return user;
         }
