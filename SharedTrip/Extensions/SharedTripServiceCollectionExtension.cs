@@ -13,6 +13,7 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICarService, CarService>();
+            services.AddScoped<ITripService, TripService>();
 
             return services;
         }

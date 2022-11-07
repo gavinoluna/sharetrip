@@ -1,0 +1,39 @@
+﻿<div class="navbar navbar-expand-lg navbar-light navigation">
+    <h2 class="h1Title">Shared Trip</h2>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto main-nav">
+            <li class="nav-item active">
+                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Trip" asp-action="Trips">Trips</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" asp-controller="Trip" asp-action="MyTrips">My Trips</a>
+            </li>
+            <li class="nav-item dropdown dropdown-slide @@listing">
+                <a class="nav-link dropdown-toggle" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Listing <span><i class="fa fa-angle-down"></i></span>
+                </a>
+                <!-- Dropdown list -->
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item @@category" href="category.html">Ad-Gird View</a></li>
+                    <li><a class="dropdown-item @@listView" href="ad-list-view.html">Ad-List View</a></li>
+
+                    <li class="dropdown dropdown-submenu dropleft">
+                        <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0201" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
+
+                        <ul class="dropdown-menu" aria-labelledby="dropdown0201">
+                            <li><a class="dropdown-item" href="index.html">Submenu 01</a></li>
+                            <li><a class="dropdown-item" href="index.html">Submenu 02</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>

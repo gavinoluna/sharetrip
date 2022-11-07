@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using SharedTrip.Core.Contracts;
+using SharedTrip.Core.Models.Home;
 using SharedTrip.Models;
 using System.Diagnostics;
 
@@ -6,16 +8,26 @@ namespace SharedTrip.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        private readonly IUserService userService;
+        private readonly ITripService tripService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(
+            IUserService userService,
+            ITripService tripService)
         {
-            _logger = logger;
+            this.userService = userService;
+            this.tripService = tripService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var model = new HomeViewModel
+            {
+                CountOfTrips = await this.tripService.GetCountOfTripsAsync(),
+                CountOfUsers = await this.userService.GetCountOfUsersAsync()
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()

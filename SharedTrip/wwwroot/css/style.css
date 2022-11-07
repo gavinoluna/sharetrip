@@ -605,9 +605,9 @@ ul.pagination .active a {
 }
 
 .bg-1 {
-  background: url("../images/home/hero.jpg");
-  background-size: cover;
-  background-repeat: no-repeat;
+    background: url("https://res.cloudinary.com/dftfu5p0r/image/upload/v1667666616/friends-load-car-trunk-with-baggage-summer-road-trip-vacation_259348-6428.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .bg-2 {

@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
-using SharedTrip.Core.Models.Car;
-using SharedTrip.Core.Models.Comments;
 using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
 
@@ -22,6 +20,11 @@ namespace SharedTrip.Core.Services
             this.commentService = commentService;
             this.carService = carService;
         }
+
+        public async Task<int> GetCountOfUsersAsync()
+            => await this.context
+                         .Users
+                         .CountAsync();
 
         public async Task<ProfileViewModel> GetProfileInfoAsync(string userId, bool showMoreInfo)
         {
