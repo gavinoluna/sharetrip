@@ -14,6 +14,7 @@
         public class Car
         {
             public const int ModelMaxLength = 30;
+            public const int ModelMinLength = 3;
             public const int BrandNameMaxLength = 40;
             public const int ColourMaxLength = 20;
         }
