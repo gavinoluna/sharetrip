@@ -6,10 +6,12 @@ namespace SharedTrip.Core.Contracts
     {
         Task<IEnumerable<ProfileCarViewModel>> GetMyCarsAsync(string userId);
 
-        Task<bool> AddCarAsync(AddCarViewModel model, string userId);
+        Task<int> AddCarAsync(AddCarViewModel model, string userId);
 
         Task<IEnumerable<BrandViewModel>> GetBrandsAsync();
 
         Task<IEnumerable<ColourViewModel>> GetColoursAsync();
+
+        Task<CarDetailsViewModel> GetCarAsync(int carId);
     }
 }

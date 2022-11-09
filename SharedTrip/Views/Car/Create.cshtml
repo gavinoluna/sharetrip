@@ -4,47 +4,68 @@
     ViewData["Title"] = "Add Car";
 }
 
-<form method="post" enctype="multipart/form-data">
-    <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
-    <fieldset class="p-4">
-        <div class="form-group">
-            <label asp-for="@Model.BrandId">Select a Brand</label>
-            <select asp-for="@Model.BrandId" class="form-control">
-                @foreach (var brand in Model.Brands)
-                {
-                    <option value="@brand.Id">@brand.Name</option>
-                }
-            </select>
+<section class="login py-5 border-top-1">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-8 align-item-center">
+                <div class="border border">
+                    <h3 class="bg-gray p-4">Add a Car</h3>
+                    <form asp-controller="Car" asp-action="Create" method="post" enctype="multipart/form-data">
+                        <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
+                        <fieldset class="p-4">
+                            <div class="form-group">
+                                <label asp-for="@Model.BrandId">Select a Brand</label>
+                                <select asp-for="@Model.BrandId" class="form-control" id="dropdown-menu">
+                                    @foreach (var brand in Model.Brands)
+                                    {
+                                        <option value="@brand.Id">@brand.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-floating">
+                                <label asp-for="@Model.Model"></label>
+                                <input asp-for="@Model.Model" class="form-control mb-3" aria-required="true" />
+                                <span asp-validation-for="@Model.Model" class="text-danger"></span>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="@Model.ColourId">Select a Brand</label>
+                                <select asp-for="@Model.ColourId" class="form-control">
+                                    @foreach (var colour in Model.Colours)
+                                    {
+                                        <option value="@colour.Id">@colour.Name</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-floating">
+                                <label asp-for="@Model.Image">Car Image</label>
+                                <input asp-for="@Model.Image" class="form-control mb-3" type="file" />
+                                <span asp-validation-for="@Model.Image" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating">
+                                <label asp-for="@Model.Year"></label>
+                                <input asp-for="@Model.Year" class="form-control mb-3" type="number" aria-required="true" />
+                                <span asp-validation-for="@Model.Year" class="text-danger"></span>
+                            </div>
+                            <div class="form-floating">
+                                <label asp-for="@Model.CountOfSeats"></label>
+                                <input asp-for="@Model.CountOfSeats" class="form-control mb-3" type="number" aria-required="true" />
+                                <span asp-validation-for="@Model.CountOfSeats" class="text-danger"></span>
+                            </div>
+                            <div class="checkbox loggedin-forgot ml-3">
+                                <label asp-for="@Model.Climatronic" class="form-label">
+                                    <input class="checkbox form-check-input"asp-for="@Model.Climatronic" />
+                                    @Html.DisplayNameFor(m => m.Climatronic)
+                                </label>
+                            </div>
+                            <button type="submit" class="btn btn-primary font-weight-bold mt-3">Create</button>
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
         </div>
-        <div class="form-floating">
-            <label asp-for="@Model.Model"></label>
-            <input asp-for="@Model.Model" class="form-control mb-3" aria-required="true" />
-            <span asp-validation-for="@Model.Model" class="text-danger"></span>
-        </div>
-        <div class="form-group">
-            <label asp-for="@Model.ColourId">Select a Brand</label>
-            <select asp-for="@Model.ColourId" class="form-control">
-                @foreach (var colour in Model.Colours)
-                {
-                    <option value="@colour.Id">@colour.Name</option>
-                }
-            </select>
-        </div>
-        <div class="form-floating">
-            <label asp-for="@Model.Image">Car Image</label>
-            <input asp-for="@Model.Image" class="form-control mb-3" type="file" />
-            <span asp-validation-for="@Model.Image" class="text-danger"></span>
-        </div>
-        <div class="form-floating">
-            <label asp-for="@Model.Year"></label>
-            <input asp-for="@Model.Year" class="form-control mb-3" type="number" aria-required="true" />
-            <span asp-validation-for="@Model.Year" class="text-danger"></span>
-        </div>
-        <div class="form-floating">
-            <label asp-for="@Model.CountOfSeats"></label>
-            <input asp-for="@Model.CountOfSeats" class="form-control mb-3" type="number" aria-required="true" />
-            <span asp-validation-for="@Model.CountOfSeats" class="text-danger"></span>
-        </div>
-        <button type="submit" class="btn btn-primary font-weight-bold mt-3">Register Now</button>
-    </fieldset>
-</form>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,36 @@
+﻿@model CarDetailsViewModel
+
+@{
+    ViewBag.Title = "Car Details";
+}
+
+<h2 class="text-center">@ViewBag.Title</h2>
+<hr />
+
+<div class="container" style="display:inline">
+    <input type="hidden" asp-for="@Model.DriverId" />
+    <div class="row">
+        <div class="col-4">
+            <img class="card-img-top" style="width: 20rem;"
+                 src="@Model.ImageUrl" alt="Car Image">
+        </div>
+        <div class="card col-8 border-0">
+            <p style="font-size:25px;"><u>@Model.Brand @Model.Model</u></p>
+            <p>Colour: <b>@Model.Colour</b></p>
+            <p>Year: <b>@Model.Year</b></p>
+            <p>Count of Seats: <b>@Model.CountOfSeats</b></p>
+            <p>
+                <i class="fa-solid fa-fan" data-toggle="tooltip" data-placement="top" title="Climatronic"></i>:
+                @if (Model.Climatronic)
+                {
+                    <i class="fa-solid fa-check ml-1" data-toggle="tooltip" data-placement="top" title="Yes"></i>
+                }
+                else
+                {
+                    <i class="fa-solid fa-xmark ml-1" data-toggle="tooltip" data-placement="top" title="No"></i>
+                }
+            </p>
+            <a asp-controller="Car" asp-action="Details" asp-route-carId="@Model.Id" class="btn btn-primary font-weight-bold mt-3">Edit</a>
+        </div>
+    </div>
+</div>

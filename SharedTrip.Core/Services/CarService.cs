@@ -19,9 +19,8 @@ namespace SharedTrip.Core.Services
             this.cloudinaryService = cloudinaryService;
         }
 
-        public async Task<bool> AddCarAsync(AddCarViewModel model, string userId)
+        public async Task<int> AddCarAsync(AddCarViewModel model, string userId)
         {
-            var isCreated = false;
             var user = await this.context.Users.FindAsync(userId);
 
             if (user != null)
@@ -33,6 +32,7 @@ namespace SharedTrip.Core.Services
                     Climatronic = model.Climatronic,
                     CountOfSeats = model.CountOfSeats,
                     DriverId = userId,
+                    Model = model.Model,
                     Year = model.Year
                 };
 
@@ -41,15 +41,14 @@ namespace SharedTrip.Core.Services
                     car.ImageUrl = await this.cloudinaryService.UploadPicture(model.Image);
                     await this.context.Cars.AddAsync(car);
                     await this.context.SaveChangesAsync();
-                    isCreated = true;
+                    return car.Id;
                 }
                 catch (Exception)
                 {
-                    isCreated = false;
                 }
             }
 
-            return isCreated;
+            return -1;
         }
 
         public async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()
@@ -61,6 +60,26 @@ namespace SharedTrip.Core.Services
                              Name = b.Name
                          })
                          .ToListAsync();
+
+        public async Task<CarDetailsViewModel> GetCarAsync(int carId)
+        {
+            return await this.context
+                                .Cars
+                                .Where(c => c.Id == carId)
+                                .Select(c => new CarDetailsViewModel
+                                {
+                                    Id = c.Id,
+                                    Brand = c.Brand.Name,
+                                    Climatronic = c.Climatronic,
+                                    Colour = c.Colour.Name,
+                                    CountOfSeats = c.CountOfSeats,
+                                    DriverId = c.DriverId,
+                                    ImageUrl = c.ImageUrl,
+                                    Model = c.Model,
+                                    Year = c.Year
+                                })
+                                .FirstOrDefaultAsync();
+        }
 
         public async Task<IEnumerable<ColourViewModel>> GetColoursAsync()
             => await this.context

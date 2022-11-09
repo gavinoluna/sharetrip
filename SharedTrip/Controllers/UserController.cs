@@ -17,7 +17,7 @@ namespace SharedTrip.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ProfileInfo(string userId = null)
+        public async Task<IActionResult> Details(string userId = null)
         {
             ProfileViewModel user;
 

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
 using System.Security.Claims;
 
 namespace SharedTrip.Controllers
 {
+    [Authorize]
     public class CarController : Controller
     {
         private readonly ICarService carService;
@@ -29,19 +31,36 @@ namespace SharedTrip.Controllers
         {
             if (!ModelState.IsValid)
             {
+                carModel.Brands = await this.carService.GetBrandsAsync();
+                carModel.Colours = await this.carService.GetColoursAsync();
                 return View(carModel);
             }
 
-            var isCreated = await this.carService.AddCarAsync(carModel, User.Id());
+            var carId = await this.carService.AddCarAsync(carModel, User.Id());
 
-            if (!isCreated)
+            if (carId == -1)
             {
                 ModelState.AddModelError("", "Something went wrong");
 
-                return View();
+                carModel.Brands = await this.carService.GetBrandsAsync();
+                carModel.Colours = await this.carService.GetColoursAsync();
+                return View(carModel);
             }
 
-            return RedirectToAction("User", "ProfileInfo"); //Change it when CarView is ready
+            return RedirectToAction(nameof(Details), new { carId = carId });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details(int carId)
+        {
+            var car = await this.carService.GetCarAsync(carId);
+
+            if (car == null || car.DriverId != User.Id())
+            {
+                return RedirectToAction("Details", "User");
+            }
+
+            return View(car);
         }
     }
 }
