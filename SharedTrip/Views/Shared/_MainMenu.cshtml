@@ -1,4 +1,9 @@
-﻿<div class="navbar navbar-expand-lg navbar-light navigation">
+﻿@using Microsoft.AspNetCore.Identity
+@using SharedTrip.Infrastructure.Data.Entities
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+<div class="navbar navbar-expand-lg navbar-light navigation">
     <h2 class="h1Title">Shared Trip</h2>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -9,12 +14,14 @@
             <li class="nav-item active">
                 <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Trip" asp-action="Trips">Trips</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" asp-controller="Trip" asp-action="MyTrips">My Trips</a>
-            </li>
+            @if(SignInManager.IsSignedIn(User)){
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Trip" asp-action="Trips">Trips</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" asp-controller="Trip" asp-action="MyTrips">My Trips</a>
+                </li>
+            }
             <li class="nav-item dropdown dropdown-slide @@listing">
                 <a class="nav-link dropdown-toggle" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     Listing <span><i class="fa fa-angle-down"></i></span>
