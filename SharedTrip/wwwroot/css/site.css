@@ -30,11 +30,21 @@ body {
     background-color: #FFFFFF;
 }
 
-    .content-item.grey {
-        background-color: #F0F0F0;
-        padding: 50px 0;
-        height: 100%;
-    }
+.homeDiv{
+    width: 1110px;
+    display: inline-flex
+}
+
+.increasingNumber{
+    font-size: 35px;
+    margin-left: 20px;
+}
+
+.content-item.grey {
+    background-color: #F0F0F0;
+    padding: 50px 0;
+    height: 100%;
+}
 
     .content-item h2 {
         font-weight: 700;
