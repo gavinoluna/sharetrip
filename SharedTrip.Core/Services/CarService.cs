@@ -81,6 +81,19 @@ namespace SharedTrip.Core.Services
                                 .FirstOrDefaultAsync();
         }
 
+        public async Task<IEnumerable<CreateTripCarViewModel>> GetCarsForTripAsync(string userId)
+        {
+            return await this.context
+                .Cars
+                .Where(c => c.DriverId == userId)
+                .Select(c => new CreateTripCarViewModel
+                {
+                    Id = c.Id,
+                    Model = $"{c.Brand.Name} {c.Model}"
+                })
+                .ToListAsync();
+        }
+
         public async Task<IEnumerable<ColourViewModel>> GetColoursAsync()
             => await this.context
                          .Colours
