@@ -28,6 +28,7 @@ namespace SharedTrip.Core.Models.Car
         public bool Climatronic { get; set; }
 
         [Range(2, 10)]
+        [Display(Name = "Count of Seats")]
         public int CountOfSeats { get; set; }
     }
 }

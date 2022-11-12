@@ -13,9 +13,9 @@
                     <form asp-controller="Car" asp-action="Create" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
                         <fieldset class="p-4">
-                            <div class="form-group">
+                            <div class="form-group select">
                                 <label asp-for="@Model.BrandId">Select a Brand</label>
-                                <select asp-for="@Model.BrandId" class="form-control" id="dropdown-menu">
+                                <select asp-for="@Model.BrandId" class="form-control selectDiv">
                                     @foreach (var brand in Model.Brands)
                                     {
                                         <option value="@brand.Id">@brand.Name</option>
@@ -27,9 +27,9 @@
                                 <input asp-for="@Model.Model" class="form-control mb-3" aria-required="true" />
                                 <span asp-validation-for="@Model.Model" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.ColourId">Select a Brand</label>
-                                <select asp-for="@Model.ColourId" class="form-control">
+                            <div class="form-group select">
+                                <label asp-for="@Model.ColourId">Select a Colour</label>
+                                <select asp-for="@Model.ColourId" class="form-control selectDiv">
                                     @foreach (var colour in Model.Colours)
                                     {
                                         <option value="@colour.Id">@colour.Name</option>
@@ -53,7 +53,7 @@
                             </div>
                             <div class="checkbox loggedin-forgot ml-3">
                                 <label asp-for="@Model.Climatronic" class="form-label">
-                                    <input class="checkbox form-check-input"asp-for="@Model.Climatronic" />
+                                    <input class="checkbox form-check-input" asp-for="@Model.Climatronic" />
                                     @Html.DisplayNameFor(m => m.Climatronic)
                                 </label>
                             </div>

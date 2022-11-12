@@ -21,8 +21,30 @@ body {
     font-family: Georgia, serif
 }
 
+#divContainer {
+    margin-left: 50px;
+    margin-bottom: 20px;
+    margin-top: 30px;
+}
+
+.divCol {
+    padding: 5px;
+}
+
 body {
     margin-top: 20px;
+}
+
+.select div ul{
+    max-height: 250px;
+    overflow: auto;
+    width: 250px;
+}
+
+.selectDiv {
+    width: 660px;
+    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 .content-item {

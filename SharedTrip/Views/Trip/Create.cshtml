@@ -13,9 +13,9 @@
                     <form asp-controller="Car" asp-action="Create" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
                         <fieldset class="p-4">
-                            <div class="form-group">
-                                <label asp-for="@Model.StartDestinationId">Start Destination</label>
-                                <select asp-for="@Model.StartDestinationId" class="form-control" id="dropdown-menu">
+                            <div class="form-group select">
+                                <label asp-for="@Model.StartDestinationId"></label>
+                                <select asp-for="@Model.StartDestinationId" class="form-control selectDiv">
                                     @foreach (var dest in Model.StartDestinations)
                                     {
                                         <option value="@dest.Id">@dest.Name</option>
@@ -24,16 +24,16 @@
                             </div>
                             <div class="form-group">
                                 <label asp-for="@Model.EndDestinationId">End Destination</label>
-                                <select asp-for="@Model.EndDestinationId" class="form-control" id="dropdown-menu">
+                                <select asp-for="@Model.EndDestinationId" class="form-control selectDiv">
                                     @foreach (var dest in Model.EndDestinations)
                                     {
                                         <option value="@dest.Id">@dest.Name</option>
                                     }
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.CarId">Car</label>
-                                <select asp-for="@Model.CarId" class="form-control" id="dropdown-menu">
+                            <div class="form-group select">
+                                <label asp-for="@Model.CarId"></label>
+                                <select asp-for="@Model.CarId" class="form-control selectDiv">
                                     @foreach (var car in Model.Cars)
                                     {
                                         <option value="@car.Id">@car.Model</option>
@@ -50,29 +50,42 @@
                                 <input asp-for="@Model.PricePerPerson" class="form-control mb-3" type="number" aria-required="true" />
                                 <span asp-validation-for="@Model.PricePerPerson" class="text-danger"></span>
                             </div>
-                            <div class="checkbox loggedin-forgot ml-3">
-                                <label asp-for="@Model.SpaceForLuggage" class="form-label">
-                                    <input class="checkbox form-check-input" asp-for="@Model.SpaceForLuggage" />
-                                    @Html.DisplayNameFor(m => m.SpaceForLuggage)
-                                </label>
-                            </div>
-                            <div class="checkbox loggedin-forgot ml-3">
-                                <label asp-for="@Model.AllowedBaverages" class="form-label">
-                                    <input class="checkbox form-check-input" asp-for="@Model.AllowedBaverages" />
-                                    @Html.DisplayNameFor(m => m.AllowedBaverages)
-                                </label>
-                            </div>
-                            <div class="checkbox loggedin-forgot ml-3">
-                                <label asp-for="@Model.AllowedSmoking" class="form-label">
-                                    <input class="checkbox form-check-input" asp-for="@Model.AllowedSmoking" />
-                                    @Html.DisplayNameFor(m => m.AllowedSmoking)
-                                </label>
-                            </div>
-                            <div class="checkbox loggedin-forgot ml-3">
-                                <label asp-for="@Model.AllowedFood" class="form-label">
-                                    <input class="checkbox form-check-input" asp-for="@Model.AllowedFood" />
-                                    @Html.DisplayNameFor(m => m.AllowedFood)
-                                </label>
+                            <div class="container" id="divContainer">
+                                <div class="row">
+                                    <div class="col divCol">
+                                        <div class="checkbox loggedin-forgot ml-3">
+                                            <label asp-for="@Model.SpaceForLuggage" class="form-label">
+                                                <input class="checkbox form-check-input" asp-for="@Model.SpaceForLuggage" />
+                                                @Html.DisplayNameFor(m => m.SpaceForLuggage)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col divCol">
+                                        <div class="checkbox loggedin-forgot ml-3">
+                                            <label asp-for="@Model.AllowedBaverages" class="form-label">
+                                                <input class="checkbox form-check-input" asp-for="@Model.AllowedBaverages" />
+                                                @Html.DisplayNameFor(m => m.AllowedBaverages)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="w-100"></div>
+                                    <div class="col divCol">
+                                        <div class="checkbox loggedin-forgot ml-3">
+                                            <label asp-for="@Model.AllowedSmoking" class="form-label">
+                                                <input class="checkbox form-check-input" asp-for="@Model.AllowedSmoking" />
+                                                @Html.DisplayNameFor(m => m.AllowedSmoking)
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col divCol">
+                                        <div class="checkbox loggedin-forgot ml-3">
+                                            <label asp-for="@Model.AllowedFood" class="form-label">
+                                                <input class="checkbox form-check-input" asp-for="@Model.AllowedFood" />
+                                                @Html.DisplayNameFor(m => m.AllowedFood)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="form-floating">
                                 <label asp-for="@Model.AdditionalInformation"></label>
