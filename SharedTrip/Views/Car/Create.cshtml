@@ -13,7 +13,7 @@
                     <form asp-controller="Car" asp-action="Create" method="post" enctype="multipart/form-data">
                         <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
                         <fieldset class="p-4">
-                            <div class="form-group select">
+                            <div class="form-group" id="divElement">
                                 <label asp-for="@Model.BrandId">Select a Brand</label>
                                 <select asp-for="@Model.BrandId" class="form-control selectDiv">
                                     @foreach (var brand in Model.Brands)
@@ -27,7 +27,7 @@
                                 <input asp-for="@Model.Model" class="form-control mb-3" aria-required="true" />
                                 <span asp-validation-for="@Model.Model" class="text-danger"></span>
                             </div>
-                            <div class="form-group select">
+                            <div class="form-group" id="divElement">
                                 <label asp-for="@Model.ColourId">Select a Colour</label>
                                 <select asp-for="@Model.ColourId" class="form-control selectDiv">
                                     @foreach (var colour in Model.Colours)

@@ -54,5 +54,22 @@ namespace SharedTrip.Core.Services
 
             return user;
         }
+
+        public async Task<bool> HasCar(string userId)
+        {
+            var hasCar = false;
+
+            var user = await this.context
+                .Users
+                .Include(u => u.Cars)
+                .FirstAsync(u => u.Id == userId);
+
+            if (user.Cars.Any())
+            {
+                hasCar = true;
+            }
+
+            return hasCar;
+        }
     }
 }

@@ -13,20 +13,22 @@ namespace SharedTrip.Core.Models.Trip
         public IEnumerable<CreateTripCarViewModel> Cars { get; set; } = new List<CreateTripCarViewModel>();
 
         [Display(Name = "Price per Person")]
-        [Range(typeof(decimal), "0", "79228162514264337593543950335")]
+        [Range(typeof(decimal), "1", "79228162514264337593543950335")]
         [DataType(DataType.Currency)]
         public decimal PricePerPerson { get; set; }
 
+        [Display(Name = "Start Destination")]
+        [CompareDestinations]
         public int StartDestinationId { get; set; }
 
         public IEnumerable<PopulatedPlaceViewModel> StartDestinations { get; set; } = new List<PopulatedPlaceViewModel>();
 
+        [Display(Name = "End Destination")]
         public int EndDestinationId { get; set; }
 
         public IEnumerable<PopulatedPlaceViewModel> EndDestinations { get; set; } = new List<PopulatedPlaceViewModel>();
 
         [TripDate]
-        [DataType(DataType.Date)]
         public DateTime Date { get; set; }
 
         [Display(Name = "Space for Luggage")]

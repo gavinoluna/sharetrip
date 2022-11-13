@@ -142,6 +142,7 @@
     <script src="~/plugins/google-map/map.js" defer></script>
 
     <script src="~/js/script.js"></script>
+    @await Component.InvokeAsync("Notyf")
     @await RenderSectionAsync("Scripts", false)
 </body>
 </html>

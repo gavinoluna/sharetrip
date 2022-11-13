@@ -10,10 +10,10 @@
             <div class="col-lg-8 col-md-8 align-item-center">
                 <div class="border border">
                     <h3 class="bg-gray p-4">Create a Trip</h3>
-                    <form asp-controller="Car" asp-action="Create" method="post">
+                    <form asp-controller="Trip" asp-action="Create" method="post">
                         <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
                         <fieldset class="p-4">
-                            <div class="form-group select">
+                            <div class="form-group" id="divElement">
                                 <label asp-for="@Model.StartDestinationId"></label>
                                 <select asp-for="@Model.StartDestinationId" class="form-control selectDiv">
                                     @foreach (var dest in Model.StartDestinations)
@@ -21,9 +21,10 @@
                                         <option value="@dest.Id">@dest.Name</option>
                                     }
                                 </select>
+                                <span asp-validation-for="@Model.StartDestinationId" class="text-danger"></span>
                             </div>
-                            <div class="form-group">
-                                <label asp-for="@Model.EndDestinationId">End Destination</label>
+                            <div class="form-group" id="divElement">
+                                <label asp-for="@Model.EndDestinationId"></label>
                                 <select asp-for="@Model.EndDestinationId" class="form-control selectDiv">
                                     @foreach (var dest in Model.EndDestinations)
                                     {
@@ -31,7 +32,7 @@
                                     }
                                 </select>
                             </div>
-                            <div class="form-group select">
+                            <div class="form-group" id="divElement">
                                 <label asp-for="@Model.CarId"></label>
                                 <select asp-for="@Model.CarId" class="form-control selectDiv">
                                     @foreach (var car in Model.Cars)
@@ -42,7 +43,7 @@
                             </div>
                             <div class="form-floating">
                                 <label asp-for="@Model.Date"></label>
-                                <input asp-for="@Model.Date" class="form-control mb-3" aria-required="true" />
+                                <input asp-for="@Model.Date" type="datetime-local" value="@DateTime.Now.ToString("mm/dd/yyyy")" class="form-control mb-3" aria-required="true" />
                                 <span asp-validation-for="@Model.Date" class="text-danger"></span>
                             </div>
                             <div class="form-floating">
@@ -89,7 +90,7 @@
                             </div>
                             <div class="form-floating">
                                 <label asp-for="@Model.AdditionalInformation"></label>
-                                <input asp-for="@Model.AdditionalInformation" class="form-control mb-3" type="number" aria-required="true" />
+                                <textarea asp-for="@Model.AdditionalInformation" class="form-control mb-3" rows="3" aria-required="true"></textarea>
                                 <span asp-validation-for="@Model.AdditionalInformation" class="text-danger"></span>
                             </div>
                             <button type="submit" class="btn btn-primary font-weight-bold mt-3">Create</button>

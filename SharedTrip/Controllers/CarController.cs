@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
@@ -10,10 +11,14 @@ namespace SharedTrip.Controllers
     public class CarController : Controller
     {
         private readonly ICarService carService;
+        private readonly INotyfService notyfService;
 
-        public CarController(ICarService carService)
+        public CarController(
+            ICarService carService,
+            INotyfService notyfService)
         {
             this.carService = carService;
+            this.notyfService = notyfService;
         }
 
         [HttpGet]
@@ -41,12 +46,14 @@ namespace SharedTrip.Controllers
             if (carId == -1)
             {
                 ModelState.AddModelError("", "Something went wrong");
+                this.notyfService.Warning("Something went wrong");
 
                 carModel.Brands = await this.carService.GetBrandsAsync();
                 carModel.Colours = await this.carService.GetColoursAsync();
                 return View(carModel);
             }
 
+            this.notyfService.Success("You have successfully created a car.");
             return RedirectToAction(nameof(Details), new { carId = carId });
         }
 
@@ -57,6 +64,7 @@ namespace SharedTrip.Controllers
 
             if (car == null || car.DriverId != User.Id())
             {
+                this.notyfService.Warning("This car could not be found");
                 return RedirectToAction("Details", "User");
             }
 

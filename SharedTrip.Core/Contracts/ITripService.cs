@@ -6,8 +6,10 @@ namespace SharedTrip.Core.Contracts
     {
         Task<int> GetCountOfTripsAsync();
 
-        Task<int> CreateTripAsync(CreateTripViewModel model);
+        Task<int> CreateTripAsync(CreateTripViewModel model, string driverId);
 
         Task<IEnumerable<PopulatedPlaceViewModel>> GetPopulatedPlacesAsync();
+
+        Task<bool> CheckWhetherUserIsFree(string userId, CreateTripViewModel tripModel);
     }
 }

@@ -35,10 +35,10 @@ body {
     margin-top: 20px;
 }
 
-.select div ul{
+#divElement div ul{
     max-height: 250px;
     overflow: auto;
-    width: 250px;
+    width: 660px;
 }
 
 .selectDiv {

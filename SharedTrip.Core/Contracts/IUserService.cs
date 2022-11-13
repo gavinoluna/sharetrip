@@ -7,5 +7,7 @@ namespace SharedTrip.Core.Contracts
         Task<ProfileViewModel> GetProfileInfoAsync(string userId, bool showMoreInfo);
 
         Task<int> GetCountOfUsersAsync();
+
+        Task<bool> HasCar(string userId);
     }
 }
