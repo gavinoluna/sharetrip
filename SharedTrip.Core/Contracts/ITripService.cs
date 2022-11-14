@@ -11,5 +11,7 @@ namespace SharedTrip.Core.Contracts
         Task<IEnumerable<PopulatedPlaceViewModel>> GetPopulatedPlacesAsync();
 
         Task<bool> CheckWhetherUserIsFree(string userId, CreateTripViewModel tripModel);
+
+        Task<IEnumerable<TripViewModel>> GetMyTripsAsync(string userId);
     }
 }

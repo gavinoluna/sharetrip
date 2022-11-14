@@ -67,6 +67,10 @@ namespace SharedTrip.Infrastructure.Data
                 .WithMany()
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder.Entity<Trip>()
+                .Property(t => t.IsActive)
+                .HasDefaultValue(true);
+
             //Messages
             builder
                 .Entity<Message>()

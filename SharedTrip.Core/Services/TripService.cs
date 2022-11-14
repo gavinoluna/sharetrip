@@ -77,5 +77,30 @@ namespace SharedTrip.Core.Services
 
             return true;
         }
+
+        public async Task<IEnumerable<TripViewModel>> GetMyTripsAsync(string userId)
+        {
+            var trips = await this.context
+                .Trips
+                .Where(t => t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId))
+                .Select(t => new TripViewModel
+                {
+                    Id = t.Id,
+                    StartDestination = t.StartDestination.Name,
+                    EndDestination = t.EndDestination.Name,
+                    DriverId = t.DriverId,
+                    DriverImageUrl = t.Driver.ProfilePictureUrl,
+                    DriverName = $"{t.Driver.FirstName} {t.Driver.LastName}",
+                    Car = $"{t.Car.Brand.Name} {t.Car.Model}",
+                    Price = t.PricePerPerson,
+                    IsActive = t.IsActive,
+                    AllSeats = t.Car.CountOfSeats,
+                    FreeSeats = t.Car.CountOfSeats - (t.PassengersTrips.Count() + 1),
+                    Date = t.Date.ToString("MM/dd/yyyy HH:mm")
+                })
+                .ToListAsync();
+
+            return trips;
+        }
     }
 }

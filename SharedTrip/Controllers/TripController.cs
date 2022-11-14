@@ -71,7 +71,17 @@ namespace SharedTrip.Controllers
                 return View(model);
             }
 
-            return View("Details", new { tripId = tripId });
+            return RedirectToAction(nameof(MyTrips));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyTrips()
+        {
+            var trips = await this.tripService.GetMyTripsAsync(User.Id());
+
+            ViewBag.CurrentUserId = User.Id();
+
+            return View(trips);
         }
 
         private async Task PopulateCreateTripViewModel(CreateTripViewModel model)
