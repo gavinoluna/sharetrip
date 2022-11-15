@@ -55,6 +55,25 @@ namespace SharedTrip.Core.Services
             return user;
         }
 
+        public async Task<TripDriverViewModel> GetTripDriverAsync(string driverId)
+        {
+            var driver = await this.context
+                .Users
+                .Where(u => u.Id == driverId)
+                .Select(u => new TripDriverViewModel
+                {
+                    Id = u.Id,
+                    CountOfTripsAsDriver = u.CountOfTripsAsDriver,
+                    CountOfTripsAsPassenger = u.CountOfTripsAsPassenger,
+                    Name = $"{u.FirstName} {u.LastName}",
+                    PhoneNumber = u.PhoneNumber,
+                    ProfileImageUrl = u.ProfilePictureUrl
+                })
+                .FirstOrDefaultAsync();
+
+            return driver;
+        }
+
         public async Task<bool> HasCar(string userId)
         {
             var hasCar = false;

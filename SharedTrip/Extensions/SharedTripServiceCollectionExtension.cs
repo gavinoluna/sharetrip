@@ -1,4 +1,5 @@
-﻿using CloudinaryDotNet;
+﻿using AspNetCoreHero.ToastNotification;
+using CloudinaryDotNet;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Services;
 
@@ -14,6 +15,12 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ITripService, TripService>();
+            services.AddNotyf(config =>
+            {
+                config.DurationInSeconds = 6;
+                config.IsDismissable = true;
+                config.Position = NotyfPosition.TopRight;
+            });
 
             return services;
         }

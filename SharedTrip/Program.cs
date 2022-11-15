@@ -17,13 +17,6 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddSignInManager();
 builder.Services.AddControllersWithViews();
 
-builder.Services.AddNotyf(config =>
-{
-    config.DurationInSeconds = 6;
-    config.IsDismissable = true;
-    config.Position = NotyfPosition.TopRight;
-});
-
 builder.Services.AddApplicationServices(builder.Configuration);
 
 var app = builder.Build();

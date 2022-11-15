@@ -12,6 +12,8 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> CheckWhetherUserIsFree(string userId, CreateTripViewModel tripModel);
 
-        Task<IEnumerable<TripViewModel>> GetMyTripsAsync(string userId);
+        Task<IEnumerable<MyTripViewModel>> GetMyTripsAsync(string userId);
+
+        Task<TripViewModel> GetTripDetailsAsync(int tripId);
     }
 }

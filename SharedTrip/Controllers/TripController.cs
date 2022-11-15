@@ -84,6 +84,27 @@ namespace SharedTrip.Controllers
             return View(trips);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Details(int tripId)
+        {
+            var trip = await this.tripService.GetTripDetailsAsync(tripId);
+
+            if (trip == null)
+            {
+                this.notyfService.Error("This trip does not exist.");
+                return RedirectToAction(nameof(MyTrips)); //fix when all trips view is ready
+            }
+
+            var detailsModel = new TripDetailsViewModel
+            {
+                Trip = trip,
+                Car = await this.carService.GetCarAsync(trip.CarId),
+                Driver = await this.userService.GetTripDriverAsync(trip.DriverId)
+            };
+
+            return View(detailsModel);
+        }
+
         private async Task PopulateCreateTripViewModel(CreateTripViewModel model)
         {
             var destinations = await this.tripService.GetPopulatedPlacesAsync();

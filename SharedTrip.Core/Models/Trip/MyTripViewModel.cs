@@ -1,8 +1,6 @@
-﻿using SharedTrip.Core.Models.Car;
-
-namespace SharedTrip.Core.Models.Trip
+﻿namespace SharedTrip.Core.Models.Trip
 {
-    public class TripViewModel
+    public class MyTripViewModel
     {
         public int Id { get; set; }
 
@@ -12,11 +10,11 @@ namespace SharedTrip.Core.Models.Trip
 
         public string DriverName { get; set; } = null!;
 
-        public int CarId { get; set; }
-
         public string StartDestination { get; set; } = null!;
 
         public string EndDestination { get; set; } = null!;
+
+        public string Car { get; set; } = null!;
 
         public decimal Price { get; set; }
 
@@ -27,15 +25,5 @@ namespace SharedTrip.Core.Models.Trip
         public int AllSeats { get; set; }
 
         public bool IsActive { get; set; }
-
-        public bool SpaceForLuggage { get; set; }
-
-        public bool AllowedBaverages { get; set; }
-
-        public bool AllowedFood { get; set; }
-
-        public bool AllowedSmoking { get; set; }
-
-        public string AdditionalInformation { get; set; } = null!;
     }
 }

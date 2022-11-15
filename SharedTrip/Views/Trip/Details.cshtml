@@ -1,0 +1,185 @@
+﻿@model TripDetailsViewModel
+
+@{
+    ViewData["Title"] = "Trip Details";
+}
+
+<div class="row">
+    <div class="col-lg-7">
+        <div class="card mb-3">
+            <div class="card-header bg-white">
+                <div class="row mt-2">
+                    <div class="col-sm">
+                        <span class="h5">
+                            <span class="text-muted align-top">From</span>
+                            <span class="align-top">@Model.Trip.StartDestination</span>
+                        </span>
+                    </div>
+                    <div class="col-sm d-flex justify-content-center">
+                        <span class="align-top"><i class="fa-solid fa-arrow-right"></i></span>
+                    </div>
+                    <div class="col-sm">
+                        <span class="h5">
+                            <span class="text-muted align-top">To</span>
+                            <span class="align-top">@Model.Trip.EndDestination</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-regular fa-calendar"></i>
+                        <span class="text-muted align-top">Date: @Model.Trip.Date</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-gas-pump"></i>
+                        <span class="text-muted align-top">Price Per Person: </span>
+                        <span class="align-top">@Model.Trip.Price лв.</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-users"></i>
+                        <span class="text-muted align-top">Free Seats: </span>
+                        <span class="align-top">@Model.Trip.FreeSeats <span class="text-muted align-top">from</span> @Model.Trip.AllSeats</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-suitcase-rolling"></i>
+                        <span class="text-muted">Space for Luggage: </span>
+                        <span>@Model.Trip.SpaceForLuggage</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-wind"></i>
+                        <span class="text-muted">Climatronic: </span>
+                        <span>@Model.Car.Climatronic</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-smoking"></i>
+                        <span class="text-muted">Allowed Smoking: </span>
+                        <span>@Model.Trip.AllowedSmoking</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-utensils"></i>
+                        <span class="text-muted">Allowed Food: </span>
+                        <span>@Model.Trip.AllowedFood</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <i class="fa-solid fa-bottle-water"></i>
+                        <span class="text-muted">Allowed Baverages: </span>
+                        <span>@Model.Trip.AllowedBaverages</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <span class="text-muted">Is Active: </span>
+                        <span>@Model.Trip.IsActive</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card bg-light">
+                    <div class="card-body">
+                        @{
+                            if (String.IsNullOrEmpty(Model.Trip.AdditionalInformation))
+                            {
+                                <span>There is not additional information about the trip</span>
+                            }
+                            else
+                            {
+                                <span>@Model.Trip.AdditionalInformation</span>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="d-block col-lg-5">
+        <p class="text-muted">Driver's Profile</p>
+        <div class="card mb-3">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-sm-auto mb-3 mb-sm-0">
+                        <div class="d-flex flex-row justify-content-center">
+                            <a asp-controller="User" asp-action="Details" asp-route-userId="@Model.Driver.Id">
+                                <img src="@Model.Driver.ProfileImageUrl"
+                                     width="100" alt="Profile Picture" class="rounded-circle img-fluid profile-picture pp-large pp-sm-small">
+                            </a>
+                        </div>
+                    </div>
+                    <div class="col-12 col-sm nameDiv">
+                        <a class="text-link" asp-controller="User" asp-action="Details" asp-route-userId="@Model.Driver.Id">
+                            <span class="nameSpan">@Model.Driver.Name</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="row text-center text-success mb-3">
+                    <div class="col-6">
+                        <div class="thin-border py-2" id="passangerCount" data-toggle="tooltip" title="" data-original-title="Count of trips as a Driver">
+                            <i class="fa-solid fa-car"></i>
+                            <i class="ci ci-rider" style="font-size: larger; top:3px;"></i>
+                            <span>@Model.Driver.CountOfTripsAsDriver times</span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="thin-border py-2" id="driverCount" data-toggle="tooltip" title="" data-original-title="Count of trips as a Passenger">
+                            <i class="fa-solid fa-person-walking-luggage"></i>
+                            <i class="ci ci-driver" style="font-size: larger; top:3px;"></i>
+                            <span>@Model.Driver.CountOfTripsAsPassenger times</span>
+                        </div>
+                    </div>
+                </div>
+                @if (true)
+                {
+                    <div class="row mb-2">
+                        <div class="col">
+                            <i class="fa-solid fa-phone"></i>
+                            <span class="text-muted align-top">Phone Number:</span>
+                            <span class="align-top">@Model.Driver.PhoneNumber</span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+<div class="card lg-3 mt-3">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4 col-lg-4 mb-3 mb-md-0">
+                <div class="d-flex flex-row justify-content-center">
+                    <img src="@Model.Car.ImageUrl" alt="Car Image" width="200" class="rounded-circle img-fluid vehicle-picture-drive-details">
+                </div>
+            </div>
+            <div class="col-md-8 col-lg-8 mt-5">
+                <div class="row">
+                    <div class="col-12 col-xl-6">
+                        <span class="text-muted">Brand: </span>
+                        <span>@Model.Car.Brand</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <span class="text-muted">Model: </span>
+                        <span>@Model.Car.Model</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <span class="text-muted">Colour: </span>
+                        <span>@Model.Car.Colour</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <span class="text-muted">Year: </span>
+                        <span>@Model.Car.Year</span>
+                    </div>
+                    <div class="col-12 col-xl-6">
+                        <span class="text-muted">Count of Seats: </span>
+                        <span>@Model.Car.CountOfSeats</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

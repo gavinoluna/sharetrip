@@ -41,6 +41,15 @@ body {
     width: 660px;
 }
 
+.nameDiv {
+    margin-left: 40px;
+    margin-top: 30px;
+}
+
+.nameSpan{
+    font-size: 25px;
+}
+
 .selectDiv {
     width: 660px;
     margin-bottom: 10px;

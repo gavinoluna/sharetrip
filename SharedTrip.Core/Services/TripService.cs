@@ -78,12 +78,12 @@ namespace SharedTrip.Core.Services
             return true;
         }
 
-        public async Task<IEnumerable<TripViewModel>> GetMyTripsAsync(string userId)
+        public async Task<IEnumerable<MyTripViewModel>> GetMyTripsAsync(string userId)
         {
             var trips = await this.context
                 .Trips
-                .Where(t => t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId))
-                .Select(t => new TripViewModel
+                .Where(t => (t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId)) && t.IsActive == true)
+                .Select(t => new MyTripViewModel
                 {
                     Id = t.Id,
                     StartDestination = t.StartDestination.Name,
@@ -101,6 +101,34 @@ namespace SharedTrip.Core.Services
                 .ToListAsync();
 
             return trips;
+        }
+
+        public async Task<TripViewModel> GetTripDetailsAsync(int tripId)
+        {
+            var trip = await this.context
+                .Trips
+                .Where(t => t.Id == tripId)
+                .Select(t => new TripViewModel
+                {
+                    Id = t.Id,
+                    StartDestination = t.StartDestination.Name,
+                    EndDestination = t.EndDestination.Name,
+                    DriverId = t.DriverId,
+                    CarId = t.CarId,
+                    Price = t.PricePerPerson,
+                    IsActive = t.IsActive,
+                    AllSeats = t.Car.CountOfSeats,
+                    FreeSeats = t.Car.CountOfSeats - (t.PassengersTrips.Count() + 1),
+                    Date = t.Date.ToString("MM/dd/yyyy HH:mm"),
+                    AdditionalInformation = t.AdditionalInformation,
+                    AllowedBaverages = t.AllowedBaverages,
+                    AllowedFood = t.AllowedFood,
+                    AllowedSmoking = t.AllowedSmoking,
+                    SpaceForLuggage = t.SpaceForLuggage
+                })
+                .FirstOrDefaultAsync();
+
+            return trip;
         }
     }
 }

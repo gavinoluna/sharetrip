@@ -9,5 +9,7 @@ namespace SharedTrip.Core.Contracts
         Task<int> GetCountOfUsersAsync();
 
         Task<bool> HasCar(string userId);
+
+        Task<TripDriverViewModel> GetTripDriverAsync(string driverId);
     }
 }
