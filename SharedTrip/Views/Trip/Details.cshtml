@@ -134,7 +134,23 @@
                         </div>
                     </div>
                 </div>
-                @if (true)
+                <p>Passengers:</p>
+                @if (ViewBag.CurrentUserId == Model.Driver.Id)
+                {
+                    <div class="row mb-2">
+                        @foreach(var passenger in Model.Trip.Passengers)
+                        {
+                            <a asp-controller="User" asp-action="Details" asp-route-userId="@passenger.Id">
+                                <div class="col">
+                                    <img src="@passenger.ProfileImageUrl" width="100" alt="Profile Picture"
+                                    class="rounded-circle img-fluid profile-picture pp-large pp-sm-small">
+                                    <span class="text-muted">@passenger.Name</span>
+                                </div>
+                            </a>
+                        }
+                    </div>
+                }
+                else if (Model.Trip.Passengers.Any(p => p.Id == ViewBag.CurrentUserId))
                 {
                     <div class="row mb-2">
                         <div class="col">

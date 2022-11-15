@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Trip;
+using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
 
@@ -124,7 +125,14 @@ namespace SharedTrip.Core.Services
                     AllowedBaverages = t.AllowedBaverages,
                     AllowedFood = t.AllowedFood,
                     AllowedSmoking = t.AllowedSmoking,
-                    SpaceForLuggage = t.SpaceForLuggage
+                    SpaceForLuggage = t.SpaceForLuggage,
+                    Passengers = t.PassengersTrips.Select(p => new PassengerViewModel
+                    {
+                        Id = p.PassengerId,
+                        Name = $"{p.Passenger.FirstName} {p.Passenger.LastName}",
+                        ProfileImageUrl = p.Passenger.ProfilePictureUrl
+                    })
+                    .ToList()
                 })
                 .FirstOrDefaultAsync();
 

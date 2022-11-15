@@ -22,7 +22,7 @@
                             <i class="fa-solid fa-car"
                                data-toggle="tooltip" data-placement="top" title="Count of trips as a driver"></i>: @Model.CountOfTripsAsDriver
                         </p>
-                        @if (ViewBag.UserId == Model.Id)
+                        @if (ViewBag.CurrentUserId == Model.Id)
                         {
                             <div class="d-flex justify-content-center mb-2">
                                 <a asp-controller="User" asp-action="Edit" asp-route-userId="@Model.Id" class="btn btn-outline-primary ms-1">Edit</a>

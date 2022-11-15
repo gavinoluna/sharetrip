@@ -6,8 +6,7 @@ using System.Security.Claims;
 
 namespace SharedTrip.Controllers
 {
-    [Authorize]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private readonly IUserService userService;
 
@@ -29,8 +28,6 @@ namespace SharedTrip.Controllers
             {
                 user = await this.userService.GetProfileInfoAsync(userId, false);
             }
-
-            ViewBag.UserId = User.Id();
 
             if (user == null)
             {

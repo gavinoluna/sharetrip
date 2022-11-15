@@ -5,7 +5,7 @@ using SharedTrip.Core.Models.Comments;
 
 namespace SharedTrip.Controllers
 {
-    public class CommentController : Controller
+    public class CommentController : BaseController
     {
         private readonly ICommentService commentService;
 

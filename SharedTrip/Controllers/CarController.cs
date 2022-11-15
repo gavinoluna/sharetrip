@@ -7,8 +7,7 @@ using System.Security.Claims;
 
 namespace SharedTrip.Controllers
 {
-    [Authorize]
-    public class CarController : Controller
+    public class CarController : BaseController
     {
         private readonly ICarService carService;
         private readonly INotyfService notyfService;

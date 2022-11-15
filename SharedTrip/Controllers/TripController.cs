@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace SharedTrip.Controllers
 {
-    public class TripController : Controller
+    public class TripController : BaseController
     {
         private readonly ITripService tripService;
         private readonly ICarService carService;
@@ -78,8 +78,6 @@ namespace SharedTrip.Controllers
         public async Task<IActionResult> MyTrips()
         {
             var trips = await this.tripService.GetMyTripsAsync(User.Id());
-
-            ViewBag.CurrentUserId = User.Id();
 
             return View(trips);
         }

@@ -1,4 +1,5 @@
 ﻿using SharedTrip.Core.Models.Car;
+using SharedTrip.Core.Models.User;
 
 namespace SharedTrip.Core.Models.Trip
 {
@@ -37,5 +38,7 @@ namespace SharedTrip.Core.Models.Trip
         public bool AllowedSmoking { get; set; }
 
         public string AdditionalInformation { get; set; } = null!;
+
+        public IEnumerable<PassengerViewModel> Passengers { get; set; } = new List<PassengerViewModel>();
     }
 }
