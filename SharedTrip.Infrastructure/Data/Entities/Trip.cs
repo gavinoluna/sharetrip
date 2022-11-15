@@ -48,5 +48,7 @@ namespace SharedTrip.Infrastructure.Data.Entities
         public IEnumerable<PassengerTrip> PassengersTrips { get; set; } = new List<PassengerTrip>();
 
         public bool IsActive { get; set; }
+
+        public int CountOfSeats { get; set; }
     }
 }

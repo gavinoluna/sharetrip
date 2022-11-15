@@ -30,7 +30,8 @@ namespace SharedTrip.Core.Services
                 StartDestinationId = model.StartDestinationId,
                 EndDestinationId = model.EndDestinationId,
                 SpaceForLuggage = model.SpaceForLuggage,
-                DriverId = driverId
+                DriverId = driverId,
+                CountOfSeats = model.CountOfSeats
             };
 
             try
@@ -119,7 +120,7 @@ namespace SharedTrip.Core.Services
                     Price = t.PricePerPerson,
                     IsActive = t.IsActive,
                     AllSeats = t.Car.CountOfSeats,
-                    FreeSeats = t.Car.CountOfSeats - (t.PassengersTrips.Count() + 1),
+                    FreeSeats = t.CountOfSeats - t.PassengersTrips.Count(),
                     Date = t.Date.ToString("MM/dd/yyyy HH:mm"),
                     AdditionalInformation = t.AdditionalInformation,
                     AllowedBaverages = t.AllowedBaverages,

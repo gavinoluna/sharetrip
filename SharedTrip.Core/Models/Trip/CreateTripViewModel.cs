@@ -45,5 +45,8 @@ namespace SharedTrip.Core.Models.Trip
 
         [StringLength(AdditionalInformationMaxLength)]
         public string? AdditionalInformation { get; set; }
+
+        [Display(Name = "Count of Seats")]
+        public int CountOfSeats { get; set; }
     }
 }

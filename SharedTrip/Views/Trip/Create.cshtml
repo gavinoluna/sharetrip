@@ -51,6 +51,11 @@
                                 <input asp-for="@Model.PricePerPerson" class="form-control mb-3" type="number" aria-required="true" />
                                 <span asp-validation-for="@Model.PricePerPerson" class="text-danger"></span>
                             </div>
+                            <div class="form-floating">
+                                <label asp-for="@Model.CountOfSeats"></label>
+                                <input asp-for="@Model.CountOfSeats" class="form-control mb-3" type="number" aria-required="true" />
+                                <span asp-validation-for="@Model.CountOfSeats" class="text-danger"></span>
+                            </div>
                             <div class="container" id="divContainer">
                                 <div class="row">
                                     <div class="col divCol">
