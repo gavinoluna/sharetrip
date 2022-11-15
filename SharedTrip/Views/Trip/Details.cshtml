@@ -138,15 +138,22 @@
                 @if (ViewBag.CurrentUserId == Model.Driver.Id)
                 {
                     <div class="row mb-2">
-                        @foreach(var passenger in Model.Trip.Passengers)
+                        @if (!Model.Trip.Passengers.Any())
                         {
-                            <a asp-controller="User" asp-action="Details" asp-route-userId="@passenger.Id">
-                                <div class="col">
-                                    <img src="@passenger.ProfileImageUrl" width="100" alt="Profile Picture"
-                                    class="rounded-circle img-fluid profile-picture pp-large pp-sm-small">
-                                    <span class="text-muted">@passenger.Name</span>
-                                </div>
-                            </a>
+                            <p class="ml-3">There are no passengers.</p>
+                        }
+                        else
+                        {
+                            @foreach (var passenger in Model.Trip.Passengers)
+                            {
+                                <a asp-controller="User" asp-action="Details" asp-route-userId="@passenger.Id">
+                                    <div class="col">
+                                        <img src="@passenger.ProfileImageUrl" width="100" alt="Profile Picture"
+                                        class="rounded-circle img-fluid profile-picture pp-large pp-sm-small">
+                                        <span class="text-muted">@passenger.Name</span>
+                                    </div>
+                                </a>
+                            }
                         }
                     </div>
                 }
