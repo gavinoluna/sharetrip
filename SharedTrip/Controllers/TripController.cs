@@ -103,6 +103,22 @@ namespace SharedTrip.Controllers
             return View(detailsModel);
         }
 
+        public async Task<IActionResult> Delete(int tripId)
+        {
+            var isDeleted = await this.tripService.DeleteTripAsync(tripId);
+
+            if (isDeleted == false)
+            {
+                this.notyfService.Error("Something went wrong");
+            }
+            else
+            {
+                this.notyfService.Success("The trip was deleted successfully");
+            }
+
+            return RedirectToAction(nameof(MyTrips));
+        }
+
         private async Task PopulateCreateTripViewModel(CreateTripViewModel model)
         {
             var destinations = await this.tripService.GetPopulatedPlacesAsync();

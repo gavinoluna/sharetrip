@@ -15,5 +15,7 @@ namespace SharedTrip.Core.Contracts
         Task<IEnumerable<MyTripViewModel>> GetMyTripsAsync(string userId);
 
         Task<TripViewModel> GetTripDetailsAsync(int tripId);
+
+        Task<bool> DeleteTripAsync(int tripId);
     }
 }

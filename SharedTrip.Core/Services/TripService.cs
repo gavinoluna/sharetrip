@@ -139,5 +139,30 @@ namespace SharedTrip.Core.Services
 
             return trip;
         }
+
+        public async Task<bool> DeleteTripAsync(int tripId)
+        {
+            var isDeleted = false;
+
+            var trip = await this.context
+                .Trips
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip != null)
+            {
+                try
+                {
+                    trip.IsActive = false;
+                    await this.context.SaveChangesAsync();
+                    isDeleted = true;
+                }
+                catch (Exception)
+                {
+                    isDeleted = false;
+                }
+            }
+
+            return isDeleted;
+        }
     }
 }
