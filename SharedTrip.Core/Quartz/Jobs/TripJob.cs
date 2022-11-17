@@ -3,6 +3,7 @@ using Quartz;
 using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
+using static SharedTrip.Infrastructure.Data.Constants.DataConstants;
 
 namespace SharedTrip.Core.Quartz.Jobs
 {
@@ -17,19 +18,16 @@ namespace SharedTrip.Core.Quartz.Jobs
 
         public async Task Execute(IJobExecutionContext context)
         {
-            var trips = await this.context
+            var outDatedTrips = await this.context
                 .Trips
-                .Where(t => t.IsActive == true)
+                .Where(t => t.IsActive == true && DateTime.Compare(t.Date, DateTime.Now) <= 0)
                 .ToListAsync();
 
             try
             {
-                foreach (var trip in trips)
+                foreach (var trip in outDatedTrips)
                 {
-                    if (DateTime.Compare(trip.Date, DateTime.Now) <= 0)
-                    {
-                        trip.IsActive = false;
-                    }
+                    trip.IsActive = false;
                 }
 
                 await this.context.SaveChangesAsync();
