@@ -1,7 +1,7 @@
-using AspNetCoreHero.ToastNotification;
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Quartz;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
 

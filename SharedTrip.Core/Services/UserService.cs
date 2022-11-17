@@ -40,8 +40,8 @@ namespace SharedTrip.Core.Services
                     PhoneNumber = u.PhoneNumber,
                     Email = u.Email,
                     Rating = u.Rating,
-                    CountOfTripsAsPassenger = u.CountOfTripsAsPassenger,
-                    CountOfTripsAsDriver = u.CountOfTripsAsDriver
+                    CountOfTripsAsPassenger = this.context.Trips.Where(t => t.PassengersTrips.Any(pt => pt.PassengerId == u.Id)).Count(),
+                    CountOfTripsAsDriver = this.context.Trips.Where(t => t.DriverId == u.Id).Count()
                 })
                 .FirstOrDefaultAsync();
 

@@ -1,6 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification;
 using CloudinaryDotNet;
+using Quartz;
 using SharedTrip.Core.Contracts;
+using SharedTrip.Core.Quartz.Jobs;
 using SharedTrip.Core.Services;
 
 namespace Microsoft.Extensions.DependencyInjection
@@ -21,6 +23,22 @@ namespace Microsoft.Extensions.DependencyInjection
                 config.IsDismissable = true;
                 config.Position = NotyfPosition.TopRight;
             });
+
+            services.AddQuartz(q =>
+            {
+                q.UseMicrosoftDependencyInjectionJobFactory();
+
+                var tripJob = new JobKey("TripJob");
+                q.AddJob<TripJob>(opts => opts.WithIdentity(tripJob));
+                q.AddTrigger(opts => opts
+                    .ForJob(tripJob)
+                    .WithIdentity("TripJob-Trigger")
+                    .WithSimpleSchedule(x => x
+                        .WithIntervalInMinutes(1)
+                        .RepeatForever()));
+            });
+
+            services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
 
             return services;
         }
