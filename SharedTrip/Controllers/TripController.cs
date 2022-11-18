@@ -36,7 +36,7 @@ namespace SharedTrip.Controllers
 
             var model = new CreateTripViewModel();
 
-            await PopulateCreateTripViewModel(model);
+            await PopulateTripModel(model);
 
             return View(model);
         }
@@ -46,7 +46,7 @@ namespace SharedTrip.Controllers
         {
             if (!ModelState.IsValid)
             {
-                await PopulateCreateTripViewModel(model);
+                await PopulateTripModel(model);
 
                 return View(model);
             }
@@ -55,7 +55,7 @@ namespace SharedTrip.Controllers
             {
                 this.notyfService.Error("You already have an arranged trip for that date");
 
-                await PopulateCreateTripViewModel(model);
+                await PopulateTripModel(model);
 
                 return View(model);
             }
@@ -66,7 +66,7 @@ namespace SharedTrip.Controllers
             {
                 this.notyfService.Error("Something went wrong");
 
-                await PopulateCreateTripViewModel(model);
+                await PopulateTripModel(model);
 
                 return View(model);
             }
@@ -80,6 +80,56 @@ namespace SharedTrip.Controllers
             var trips = await this.tripService.GetMyTripsAsync(User.Id());
 
             return View(trips);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(int tripId)
+        {
+            var trip = await this.tripService.GetTripForEditAsync(tripId);
+
+            if (trip == null)
+            {
+                this.notyfService.Error("This trip does not exist");
+                return RedirectToAction(nameof(MyTrips)); // Change when All trips view is ready
+            }
+
+            await PopulateTripModel(trip);
+
+            return View(trip);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditTripViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                await PopulateTripModel(model);
+
+                return View(model);
+            }
+
+            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model, model.Id) == false)
+            {
+                this.notyfService.Error("You already have an arranged trip for that date");
+
+                await PopulateTripModel(model);
+
+                return View(model);
+            }
+
+            var isEdited = await this.tripService.EditTripAsync(model);
+
+            if (isEdited == false)
+            {
+                this.notyfService.Error("Something went wrong");
+
+                await PopulateTripModel(model);
+
+                return View(model);
+            }
+
+            this.notyfService.Success("The trip was edited successfully");
+            return RedirectToAction(nameof(Details), new { tripId = model.Id });
         }
 
         [HttpGet]
@@ -119,7 +169,7 @@ namespace SharedTrip.Controllers
             return RedirectToAction(nameof(MyTrips));
         }
 
-        private async Task PopulateCreateTripViewModel(CreateTripViewModel model)
+        private async Task PopulateTripModel(ITrip model)
         {
             var destinations = await this.tripService.GetPopulatedPlacesAsync();
 

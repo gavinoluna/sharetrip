@@ -64,15 +64,15 @@ namespace SharedTrip.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> CheckWhetherUserIsFree(string userId, CreateTripViewModel tripModel)
+        public async Task<bool> CheckWhetherUserIsFree(string userId, ITrip tripModel, int? tripId = null)
         {
             var user = await this.context.Users
                 .Include(u => u.DriverTrips)
                 .Include(u => u.PassengersTrips)
                 .FirstAsync(u => u.Id == userId);
 
-            if (user.PassengersTrips.Any(pt => DateTime.Compare(pt.Trip.Date, tripModel.Date) == 0)
-                || user.DriverTrips.Any(dt => DateTime.Compare(dt.Date, tripModel.Date) == 0))
+            if (user.PassengersTrips.Any(pt => DateTime.Compare(pt.Trip.Date, tripModel.Date) == 0 && pt.Trip.Id != tripId)
+                || user.DriverTrips.Any(dt => DateTime.Compare(dt.Date, tripModel.Date) == 0 && dt.Id != tripId))
             {
                 return false;
             }
@@ -163,6 +163,68 @@ namespace SharedTrip.Core.Services
             }
 
             return isDeleted;
+        }
+
+        public async Task<EditTripViewModel> GetTripForEditAsync(int tripId)
+        {
+            var trip = await this.context
+                .Trips
+                .Where(t => t.Id == tripId)
+                .Select(t => new EditTripViewModel
+                {
+                    AdditionalInformation = t.AdditionalInformation,
+                    AllowedBaverages = t.AllowedBaverages,
+                    AllowedFood = t.AllowedFood,
+                    AllowedSmoking = t.AllowedSmoking,
+                    CarId = t.CarId,
+                    Date = t.Date,
+                    PricePerPerson = t.PricePerPerson,
+                    StartDestinationId = t.StartDestinationId,
+                    EndDestinationId = t.EndDestinationId,
+                    SpaceForLuggage = t.SpaceForLuggage,
+                    DriverId = t.DriverId,
+                    CountOfSeats = t.CountOfSeats,
+                    Id = t.Id
+                })
+                .FirstOrDefaultAsync();
+
+            return trip;
+        }
+
+        public async Task<bool> EditTripAsync(EditTripViewModel model)
+        {
+            var isEdited = false;
+
+            var trip = await this.context.Trips.FindAsync(model.Id);
+
+            if (trip == null)
+            {
+                return isEdited;
+            }
+
+            trip.PricePerPerson = model.PricePerPerson;
+            trip.CarId = model.CarId;
+            trip.StartDestinationId = model.StartDestinationId;
+            trip.EndDestinationId = model.EndDestinationId;
+            trip.AdditionalInformation = model.AdditionalInformation;
+            trip.AllowedBaverages = model.AllowedBaverages;
+            trip.AllowedFood = model.AllowedFood;
+            trip.AllowedSmoking = model.AllowedSmoking;
+            trip.CountOfSeats = model.CountOfSeats;
+            trip.Date = model.Date;
+            trip.SpaceForLuggage = model.SpaceForLuggage;
+
+            try
+            {
+                await this.context.SaveChangesAsync();
+                isEdited = true;
+            }
+            catch (Exception)
+            {
+                isEdited = false;
+            }
+
+            return isEdited;
         }
     }
 }

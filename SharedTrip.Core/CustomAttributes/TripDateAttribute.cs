@@ -17,7 +17,7 @@ namespace SharedTrip.Core.CustomAttributes
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var trip = (CreateTripViewModel)validationContext.ObjectInstance;
+            var trip = (ITrip)validationContext.ObjectInstance;
 
             if (DateTime.Compare(trip.Date, currentDate) <= 0
                 || trip.Date.Year > maxYear)

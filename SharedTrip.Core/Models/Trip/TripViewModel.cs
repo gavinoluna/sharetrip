@@ -9,10 +9,6 @@ namespace SharedTrip.Core.Models.Trip
 
         public string DriverId { get; set; } = null!;
 
-        public string DriverImageUrl { get; set; } = null!;
-
-        public string DriverName { get; set; } = null!;
-
         public int CarId { get; set; }
 
         public string StartDestination { get; set; } = null!;

@@ -6,8 +6,12 @@ using static SharedTrip.Infrastructure.Data.Constants.DataConstants.Trip;
 
 namespace SharedTrip.Core.Models.Trip
 {
-    public class CreateTripViewModel : ITrip
+    public class EditTripViewModel : ITrip
     {
+        public int Id { get; set; }
+
+        public string DriverId { get; set; } = null!;
+
         public int CarId { get; set; }
 
         public IEnumerable<CreateTripCarViewModel> Cars { get; set; } = new List<CreateTripCarViewModel>();

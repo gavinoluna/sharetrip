@@ -25,4 +25,12 @@
     <ProjectReference Include="..\SharedTrip.Core\SharedTrip.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Trip\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Trip\Edit.cshtml" />
+  </ItemGroup>
+
 </Project>
