@@ -12,15 +12,17 @@ namespace SharedTrip.Core.Contracts
 
         Task<IEnumerable<PopulatedPlaceViewModel>> GetPopulatedPlacesAsync();
 
-        Task<bool> CheckWhetherUserIsFree(string userId, ITrip tripModel, int? tripId = null);
+        Task<bool> CheckWhetherUserIsFree(string userId, DateTime date, int? tripId = null);
 
-        Task<IEnumerable<MyTripViewModel>> GetMyTripsAsync(string userId);
+        Task<IEnumerable<AllTripsViewModel>> GetMyTripsAsync(string userId);
 
         Task<TripViewModel> GetTripDetailsAsync(int tripId);
 
         Task<EditTripViewModel> GetTripForEditAsync(int tripId);
 
         Task<bool> EditTripAsync(EditTripViewModel model);
+
+        Task<bool> JoinTripAsync(string userId, int tripId);
 
         Task<bool> DeleteTripAsync(int tripId);
     }

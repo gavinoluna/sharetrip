@@ -72,7 +72,7 @@ namespace SharedTrip.Controllers
                 return View(model);
             }
 
-            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model) == false)
+            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date) == false)
             {
                 this.notyfService.Error("You already have an arranged trip for that date");
 
@@ -92,7 +92,7 @@ namespace SharedTrip.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(nameof(MyTrips));
+            return RedirectToAction(nameof(Details), new { tripId = tripId });
         }
 
         [HttpGet]
@@ -111,7 +111,7 @@ namespace SharedTrip.Controllers
             if (trip == null)
             {
                 this.notyfService.Error("This trip does not exist");
-                return RedirectToAction(nameof(MyTrips)); // Change when All trips view is ready
+                return RedirectToAction(nameof(MyTrips));
             }
 
             await PopulateTripModel(trip);
@@ -129,7 +129,7 @@ namespace SharedTrip.Controllers
                 return View(model);
             }
 
-            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model, model.Id) == false)
+            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date, model.Id) == false)
             {
                 this.notyfService.Error("You already have an arranged trip for that date");
 
@@ -161,7 +161,7 @@ namespace SharedTrip.Controllers
             if (trip == null)
             {
                 this.notyfService.Error("This trip does not exist.");
-                return RedirectToAction(nameof(MyTrips)); //fix when all trips view is ready
+                return RedirectToAction(nameof(All));
             }
 
             var detailsModel = new TripDetailsViewModel
@@ -172,6 +172,34 @@ namespace SharedTrip.Controllers
             };
 
             return View(detailsModel);
+        }
+
+        public async Task<IActionResult> JoinTrip(int tripId)
+        {
+            var trip = await this.tripService.GetTripForEditAsync(tripId);
+
+            if (trip == null)
+            {
+                this.notyfService.Error("This trip does not exist");
+                return RedirectToAction(nameof(All));
+            }
+
+            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), trip.Date) == false)
+            {
+                this.notyfService.Error("You already have an arranged trip for this date");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
+            var hasJoined = await this.tripService.JoinTripAsync(User.Id(), tripId);
+
+            if (hasJoined == false)
+            {
+                this.notyfService.Error("Something went wrong");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
+            this.notyfService.Success("You have joined the trip successfully");
+            return RedirectToAction(nameof(Details), new { tripId = tripId });
         }
 
         public async Task<IActionResult> Delete(int tripId)

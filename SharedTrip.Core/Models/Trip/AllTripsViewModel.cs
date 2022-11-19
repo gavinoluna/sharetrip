@@ -1,6 +1,6 @@
 ﻿namespace SharedTrip.Core.Models.Trip
 {
-    public class MyTripViewModel
+    public class AllTripsViewModel
     {
         public int Id { get; set; }
 

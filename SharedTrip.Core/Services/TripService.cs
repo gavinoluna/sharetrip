@@ -64,15 +64,16 @@ namespace SharedTrip.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<bool> CheckWhetherUserIsFree(string userId, ITrip tripModel, int? tripId = null)
+        public async Task<bool> CheckWhetherUserIsFree(string userId, DateTime date, int? tripId = null)
         {
             var user = await this.context.Users
                 .Include(u => u.DriverTrips)
                 .Include(u => u.PassengersTrips)
+                .ThenInclude(pt => pt.Trip)
                 .FirstAsync(u => u.Id == userId);
 
-            if (user.PassengersTrips.Any(pt => DateTime.Compare(pt.Trip.Date, tripModel.Date) == 0 && pt.Trip.Id != tripId)
-                || user.DriverTrips.Any(dt => DateTime.Compare(dt.Date, tripModel.Date) == 0 && dt.Id != tripId))
+            if (user.PassengersTrips.Any(pt => DateTime.Compare(pt.Trip.Date, date) == 0 && pt.Trip.Id != tripId)
+                || user.DriverTrips.Any(dt => DateTime.Compare(dt.Date, date) == 0 && dt.Id != tripId))
             {
                 return false;
             }
@@ -80,12 +81,12 @@ namespace SharedTrip.Core.Services
             return true;
         }
 
-        public async Task<IEnumerable<MyTripViewModel>> GetMyTripsAsync(string userId)
+        public async Task<IEnumerable<AllTripsViewModel>> GetMyTripsAsync(string userId)
         {
             var trips = await this.context
                 .Trips
                 .Where(t => (t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId)) && t.IsActive == true)
-                .Select(t => new MyTripViewModel
+                .Select(t => new AllTripsViewModel
                 {
                     Id = t.Id,
                     StartDestination = t.StartDestination.Name,
@@ -252,7 +253,7 @@ namespace SharedTrip.Core.Services
                 .OrderByDescending(t => t.Date)
                 .Skip((currentPage - 1) * tripsPerPage)
                 .Take(tripsPerPage)
-                .Select(t => new MyTripViewModel
+                .Select(t => new AllTripsViewModel
                 {
                     Id = t.Id,
                     StartDestination = t.StartDestination.Name,
@@ -273,6 +274,39 @@ namespace SharedTrip.Core.Services
             result.TotalTripsCount = await tripsQuery.CountAsync();
 
             return result;
+        }
+
+        public async Task<bool> JoinTripAsync(string userId, int tripId)
+        {
+            var hasJoined = false;
+
+            var trip = await this.context
+                .Trips
+                .Where(t => t.Id == tripId)
+                .FirstOrDefaultAsync();
+
+            if (trip == null)
+            {
+                return hasJoined;
+            }
+
+            try
+            {
+                trip.PassengersTrips.Add(new PassengerTrip
+                {
+                    TripId = tripId,
+                    PassengerId = userId
+                });
+
+                await this.context.SaveChangesAsync();
+                hasJoined = true;
+            }
+            catch (Exception)
+            {
+                hasJoined = false;
+            }
+
+            return hasJoined;
         }
     }
 }

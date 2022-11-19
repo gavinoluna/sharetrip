@@ -22,6 +22,6 @@ namespace SharedTrip.Core.Models.Trip
 
         public int TotalTripsCount { get; set; }
 
-        public IEnumerable<MyTripViewModel> Trips { get; set; } = Enumerable.Empty<MyTripViewModel>();
+        public IEnumerable<AllTripsViewModel> Trips { get; set; } = Enumerable.Empty<AllTripsViewModel>();
     }
 }

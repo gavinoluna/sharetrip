@@ -4,6 +4,6 @@
     {
         public int TotalTripsCount { get; set; }
 
-        public IEnumerable<MyTripViewModel> Trips { get; set; } = new List<MyTripViewModel>();
+        public IEnumerable<AllTripsViewModel> Trips { get; set; } = new List<AllTripsViewModel>();
     }
 }

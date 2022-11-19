@@ -45,7 +45,7 @@ namespace SharedTrip.Infrastructure.Data.Entities
         [StringLength(AdditionalInformationMaxLength)]
         public string? AdditionalInformation { get; set; }
 
-        public IEnumerable<PassengerTrip> PassengersTrips { get; set; } = new List<PassengerTrip>();
+        public List<PassengerTrip> PassengersTrips { get; set; } = new List<PassengerTrip>();
 
         public bool IsActive { get; set; }
 
