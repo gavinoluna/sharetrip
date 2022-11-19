@@ -21,6 +21,16 @@ body {
     font-family: Georgia, serif
 }
 
+.searchElements {
+    width: 200px;
+}
+
+#homeSelect div ul {
+    max-height: 250px;
+    overflow: auto;
+    width: 200px;
+}
+
 #divContainer {
     margin-left: 50px;
     margin-bottom: 20px;

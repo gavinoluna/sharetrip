@@ -1,0 +1,148 @@
+﻿@model AllTripsQueryModel
+
+@{
+    ViewData["Title"] = "All Trips";
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalTripsCount /
+    AllTripsQueryModel.TripsPerPage);
+}
+
+<div class="advance-search">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-12 col-md-12 align-content-center">
+                <form method="get">
+                    <div class="form-row">
+                        <div class="form-group" id="homeSelect">
+                            <label asp-for="@Model.StartDestinationId"></label>
+                            <select asp-for="@Model.StartDestinationId" class="form-control searchElements">
+                                @foreach (var dest in Model.StartDestinations)
+                                {
+                                    <option value="@dest.Id">@dest.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group ml-5" id="homeSelect">
+                            <label asp-for="@Model.EndDestinationId"></label>
+                            <select asp-for="@Model.EndDestinationId" class="form-control searchElements">
+                                @foreach (var dest in Model.EndDestinations)
+                                {
+                                    <option value="@dest.Id">@dest.Name</option>
+                                }
+                            </select>
+                        </div>
+                        <div class="form-group ml-5">
+                            <label asp-for="@Model.Date"></label>
+                            <input asp-for="@Model.Date" type="date" value="@DateTime.Now.ToString("mm/dd/yyyy")" class="form-control mb-3" aria-required="true" />
+                        </div>
+                        <div class="form-group col-xl-2 col-lg-3 col-md-6 align-self-center ml-5">
+                            <button type="submit" class="btn btn-primary active w-100">Search Now</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="dashboard section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                @if (Model.Trips.Any())
+                {
+                    <div class="widget dashboard-container my-adslist">
+                        <table class="table table-responsive product-dashboard-table">
+                            <tbody>
+                                @foreach (var trip in Model.Trips)
+                                {
+                                    <tr>
+                                        <td class="product-thumb">
+                                            <a href="/User/Details/@trip.DriverId"><img width="130" src="@trip.DriverImageUrl" class="imgElement" alt="image description"></a>
+                                            <span><strong>@trip.DriverName</strong></span>
+                                        </td>
+                                        <td class="product-details">
+                                            <span><strong>From</strong> @trip.StartDestination</span>
+                                            <span><strong>To</strong> @trip.EndDestination</span>
+                                            <span><strong>Car</strong> @trip.Car</span>
+                                            <span><strong>Price</strong> @trip.Price лв.</span>
+                                        </td>
+                                        <td class="product-details">
+                                            <span><strong>Date</strong> @trip.Date</span>
+                                            <span><strong>Free Seats</strong>@trip.FreeSeats of @trip.AllSeats</span>
+                                            <span class="@(trip.IsActive ? "status active" : "status notActive")"><strong>Status</strong>@(trip.IsActive ? "Active" : "Not Active")</span>
+                                        </td>
+                                        <td class="action" data-title="Action">
+                                            <div class="">
+                                                <ul class="list-inline justify-content-center">
+                                                    <li class="list-inline-item">
+                                                        <a data-toggle="tooltip" data-placement="top" title="View" class="view" asp-controller="Trip" asp-action="Details" asp-route-tripId="@trip.Id">
+                                                            <i class="fa fa-eye"></i>
+                                                        </a>
+                                                    </li>
+                                                    @if (trip.DriverId == ViewBag.CurrentUserId)
+                                                    {
+                                                        <li class="list-inline-item">
+                                                            <a data-toggle="tooltip" data-placement="top" title="Edit" class="edit" asp-controller="Trip" asp-action="Edit" asp-route-tripId="@trip.Id">
+                                                                <i class="fa fa-pencil"></i>
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item">
+                                                            <a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" asp-controller="Trip" asp-action="Delete" asp-route-tripId="@trip.Id">
+                                                                <i class="fa fa-trash"></i>
+                                                            </a>
+                                                        </li>
+                                                    }
+                                                </ul>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                            <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+                           asp-controller="Trip"
+                           asp-action="All"
+                           asp-route-currentPage="@previousPage"
+                           asp-route-startDestinationId="@Model.StartDestinationId"
+                           asp-route-endDestinationId="@Model.EndDestinationId"
+                           asp-route-date="@Model.Date">
+                                Previous
+                            </a>
+                        </div>
+
+                        @{
+                            var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+                            !Model.Trips.Any();
+                        }
+
+                        <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+                            <a class="btn btn-primary
+                            @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+                           asp-controller="Trip"
+                           asp-action="All"
+                           asp-route-currentPage="@(Model.CurrentPage + 1)"
+                           asp-route-startDestinationId="@Model.StartDestinationId"
+                           asp-route-endDestinationId="@Model.EndDestinationId"
+                           asp-route-date="@Model.Date">Next</a>
+                        </div>
+                    </div>
+
+                }
+                else
+                {
+                    <h2 class="text-center">There are no trips.</h2>
+                }
+            </div>
+        </div>
+    </div>
+</section>

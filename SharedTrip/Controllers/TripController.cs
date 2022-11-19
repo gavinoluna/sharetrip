@@ -26,6 +26,27 @@ namespace SharedTrip.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> All([FromQuery] AllTripsQueryModel query)
+        {
+            var result = await this.tripService.AllAsync(
+                query.StartDestinationId,
+                query.EndDestinationId,
+                query.Date,
+                query.CurrentPage,
+                AllTripsQueryModel.TripsPerPage);
+
+            var destinations = await this.tripService.GetPopulatedPlacesAsync();
+
+            query.StartDestinations = destinations;
+            query.EndDestinations = destinations;
+
+            query.TotalTripsCount = result.TotalTripsCount;
+            query.Trips = result.Trips;
+
+            return View(query);
+        }
+
+        [HttpGet]
         public async Task<IActionResult> Create()
         {
             if (!await this.userService.HasCar(User.Id()))

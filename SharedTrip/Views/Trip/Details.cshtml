@@ -134,9 +134,9 @@
                         </div>
                     </div>
                 </div>
-                <p>Passengers:</p>
                 @if (ViewBag.CurrentUserId == Model.Driver.Id)
                 {
+                    <p>Passengers:</p>
                     <div class="row mb-2">
                         @if (!Model.Trip.Passengers.Any())
                         {

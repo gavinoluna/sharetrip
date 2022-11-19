@@ -11,12 +11,12 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav ml-auto main-nav">
-            <li class="nav-item active">
-                <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
-            </li>
             @if(SignInManager.IsSignedIn(User)){
+                <li class="nav-item active">
+                    <a class="nav-link" asp-controller="Home" asp-action="Index">Home</a>
+                </li>
                 <li class="nav-item">
-                    <a class="nav-link" asp-controller="Trip" asp-action="Trips">Trips</a>
+                    <a class="nav-link" asp-controller="Trip" asp-action="All">Trips</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Trip" asp-action="Create">Create a Trip</a>

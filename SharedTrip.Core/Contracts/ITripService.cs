@@ -4,6 +4,8 @@ namespace SharedTrip.Core.Contracts
 {
     public interface ITripService
     {
+        Task<TripQueryServiceModel> AllAsync(int startDestinationId, int endDestinationId, DateTime date, int currentPage = 1, int tripsPerPage = 5);
+
         Task<int> GetCountOfTripsAsync();
 
         Task<int> CreateTripAsync(CreateTripViewModel model, string driverId);

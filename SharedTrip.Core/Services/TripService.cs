@@ -152,7 +152,7 @@ namespace SharedTrip.Core.Services
             {
                 try
                 {
-                    trip.IsActive = false;
+                    this.context.Trips.Remove(trip);
                     await this.context.SaveChangesAsync();
                     isDeleted = true;
                 }
@@ -225,6 +225,54 @@ namespace SharedTrip.Core.Services
             }
 
             return isEdited;
+        }
+
+        public async Task<TripQueryServiceModel> AllAsync(
+            int startDestinationId,
+            int endDestinationId,
+            DateTime date,
+            int currentPage = 1,
+            int tripsPerPage = 5)
+        {
+            var result = new TripQueryServiceModel();
+            var tripsQuery = this.context
+                .Trips
+                .Where(t => t.IsActive == true)
+                .AsQueryable();
+
+            if (startDestinationId > 0 && endDestinationId > 0 && DateTime.Compare(date, DateTime.Now) > 0)
+            {
+                tripsQuery = tripsQuery
+                    .Where(t => t.StartDestinationId == startDestinationId
+                    && t.EndDestinationId == endDestinationId
+                    && DateTime.Compare(date, t.Date.Date) == 0);
+            }
+
+            var trips = await tripsQuery
+                .OrderByDescending(t => t.Date)
+                .Skip((currentPage - 1) * tripsPerPage)
+                .Take(tripsPerPage)
+                .Select(t => new MyTripViewModel
+                {
+                    Id = t.Id,
+                    StartDestination = t.StartDestination.Name,
+                    EndDestination = t.EndDestination.Name,
+                    DriverId = t.DriverId,
+                    DriverImageUrl = t.Driver.ProfilePictureUrl,
+                    DriverName = $"{t.Driver.FirstName} {t.Driver.LastName}",
+                    Car = $"{t.Car.Brand.Name} {t.Car.Model}",
+                    Price = t.PricePerPerson,
+                    IsActive = t.IsActive,
+                    AllSeats = t.Car.CountOfSeats,
+                    FreeSeats = t.Car.CountOfSeats - (t.PassengersTrips.Count() + 1),
+                    Date = t.Date.ToString("MM/dd/yyyy HH:mm")
+                })
+                .ToListAsync();
+
+            result.Trips = trips;
+            result.TotalTripsCount = await tripsQuery.CountAsync();
+
+            return result;
         }
     }
 }
