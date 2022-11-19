@@ -10,15 +10,50 @@ namespace SharedTrip.Core.Services
         private readonly ApplicationDbContext context;
         private readonly ICommentService commentService;
         private readonly ICarService carService;
+        private readonly ICloudinaryService cloudinaryService;
 
         public UserService(
             ApplicationDbContext context,
             ICommentService commentService,
-            ICarService carService)
+            ICarService carService,
+            ICloudinaryService cloudinaryService)
         {
             this.context = context;
             this.commentService = commentService;
             this.carService = carService;
+            this.cloudinaryService = cloudinaryService;
+        }
+
+        public async Task<bool> EditUserAsync(EditUserViewModel model)
+        {
+            var isEdited = false;
+
+            var user = await this.context
+                .Users
+                .Where(u => u.Id == model.Id)
+                .FirstOrDefaultAsync();
+
+            if (user == null)
+            {
+                return isEdited;
+            }
+
+            try
+            {
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.PhoneNumber = model.PhoneNumber;
+                user.ProfilePictureUrl = await this.cloudinaryService.UploadPicture(model.ProfilePicture);
+
+                await this.context.SaveChangesAsync();
+                isEdited = true;
+            }
+            catch (Exception)
+            {
+                isEdited = false;
+            }
+
+            return isEdited;
         }
 
         public async Task<int> GetCountOfUsersAsync()
@@ -72,6 +107,23 @@ namespace SharedTrip.Core.Services
                 .FirstOrDefaultAsync();
 
             return driver;
+        }
+
+        public async Task<EditUserViewModel> GetUserForEditAsync(string userId)
+        {
+            var user = await this.context
+                .Users
+                .Where(u => u.Id == userId)
+                .Select(u => new EditUserViewModel
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    PhoneNumber = u.PhoneNumber
+                })
+                .FirstOrDefaultAsync();
+
+            return user;
         }
 
         public async Task<bool> HasCar(string userId)

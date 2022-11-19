@@ -11,5 +11,9 @@ namespace SharedTrip.Core.Contracts
         Task<bool> HasCar(string userId);
 
         Task<TripDriverViewModel> GetTripDriverAsync(string driverId);
+
+        Task<EditUserViewModel> GetUserForEditAsync(string userId);
+
+        Task<bool> EditUserAsync(EditUserViewModel model);
     }
 }
