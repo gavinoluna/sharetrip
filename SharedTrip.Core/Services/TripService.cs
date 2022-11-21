@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Trip;
+using SharedTrip.Core.Models.Trip.ServiceModels;
 using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
@@ -81,11 +82,19 @@ namespace SharedTrip.Core.Services
             return true;
         }
 
-        public async Task<IEnumerable<AllTripsViewModel>> GetMyTripsAsync(string userId)
+        public async Task<TripQueryServiceModel> GetMyTripsAsync(string userId, int currentPage = 1, int tripsPerPage = 5)
         {
-            var trips = await this.context
+            var result = new TripQueryServiceModel();
+
+            var tripsQuery = this.context
                 .Trips
                 .Where(t => (t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId)) && t.IsActive == true)
+                .OrderBy(t => t.Date)
+                .AsQueryable();
+
+            var trips = await tripsQuery
+                .Skip((currentPage - 1) * tripsPerPage)
+                .Take(tripsPerPage)
                 .Select(t => new AllTripsViewModel
                 {
                     Id = t.Id,
@@ -98,12 +107,15 @@ namespace SharedTrip.Core.Services
                     Price = t.PricePerPerson,
                     IsActive = t.IsActive,
                     AllSeats = t.Car.CountOfSeats,
-                    FreeSeats = t.Car.CountOfSeats - (t.PassengersTrips.Count() + 1),
+                    FreeSeats = t.CountOfSeats - t.PassengersTrips.Count(),
                     Date = t.Date.ToString("MM/dd/yyyy HH:mm")
                 })
                 .ToListAsync();
 
-            return trips;
+            result.Trips = trips;
+            result.TotalTripsCount = await tripsQuery.CountAsync();
+
+            return result;
         }
 
         public async Task<TripViewModel> GetTripDetailsAsync(int tripId)
@@ -265,7 +277,7 @@ namespace SharedTrip.Core.Services
                     Price = t.PricePerPerson,
                     IsActive = t.IsActive,
                     AllSeats = t.Car.CountOfSeats,
-                    FreeSeats = t.Car.CountOfSeats - (t.PassengersTrips.Count() + 1),
+                    FreeSeats = t.CountOfSeats - t.PassengersTrips.Count(),
                     Date = t.Date.ToString("MM/dd/yyyy HH:mm")
                 })
                 .ToListAsync();

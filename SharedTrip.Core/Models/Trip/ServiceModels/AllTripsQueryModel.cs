@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SharedTrip.Core.Models.Trip
+namespace SharedTrip.Core.Models.Trip.ServiceModels
 {
     public class AllTripsQueryModel
     {

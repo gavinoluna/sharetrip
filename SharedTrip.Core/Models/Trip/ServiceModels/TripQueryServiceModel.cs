@@ -1,4 +1,4 @@
-﻿namespace SharedTrip.Core.Models.Trip
+﻿namespace SharedTrip.Core.Models.Trip.ServiceModels
 {
     public class TripQueryServiceModel
     {

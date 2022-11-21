@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Trip;
+using SharedTrip.Core.Models.Trip.ServiceModels;
 using System.Security.Claims;
 
 namespace SharedTrip.Controllers
@@ -96,11 +97,14 @@ namespace SharedTrip.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyTrips()
+        public async Task<IActionResult> MyTrips([FromQuery]MyTripQueryModel query)
         {
-            var trips = await this.tripService.GetMyTripsAsync(User.Id());
+            var result = await this.tripService.GetMyTripsAsync(User.Id(), query.CurrentPage, MyTripQueryModel.TripsPerPage);
 
-            return View(trips);
+            query.Trips = result.Trips;
+            query.TotalTripsCount = result.TotalTripsCount;
+
+            return View(query);
         }
 
         [HttpGet]

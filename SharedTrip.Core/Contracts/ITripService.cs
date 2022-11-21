@@ -1,4 +1,5 @@
 ﻿using SharedTrip.Core.Models.Trip;
+using SharedTrip.Core.Models.Trip.ServiceModels;
 
 namespace SharedTrip.Core.Contracts
 {
@@ -14,7 +15,7 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> CheckWhetherUserIsFree(string userId, DateTime date, int? tripId = null);
 
-        Task<IEnumerable<AllTripsViewModel>> GetMyTripsAsync(string userId);
+        Task<TripQueryServiceModel> GetMyTripsAsync(string userId, int currentPage = 1, int tripsPerPage = 5);
 
         Task<TripViewModel> GetTripDetailsAsync(int tripId);
 
