@@ -262,7 +262,7 @@ namespace SharedTrip.Core.Services
             }
 
             var trips = await tripsQuery
-                .OrderByDescending(t => t.Date)
+                .OrderBy(t => t.Date)
                 .Skip((currentPage - 1) * tripsPerPage)
                 .Take(tripsPerPage)
                 .Select(t => new AllTripsViewModel
