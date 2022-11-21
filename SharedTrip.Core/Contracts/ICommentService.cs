@@ -6,6 +6,6 @@ namespace SharedTrip.Core.Contracts
     {
         Task<bool> CreateComment(AddCommentViewModel model);
 
-        Task<IEnumerable<CommentViewModel>> GetAllByCommentsByUserIdAsync(string userId);
+        Task<CommentQueryServiceModel> GetAllByCommentsByUserIdAsync(string receiverId, int currentPage = 1, int commentsPerPage = 3);
     }
 }

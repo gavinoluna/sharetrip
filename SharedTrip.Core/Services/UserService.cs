@@ -85,7 +85,7 @@ namespace SharedTrip.Core.Services
                 user.Cars = await this.carService.GetMyCarsAsync(userId);
             }
 
-            user.Comments = await this.commentService.GetAllByCommentsByUserIdAsync(userId);
+            //user.Comments = await this.commentService.GetAllByCommentsByUserIdAsync(userId);
 
             return user;
         }

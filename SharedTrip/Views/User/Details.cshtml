@@ -1,4 +1,5 @@
-﻿@model ProfileViewModel
+﻿@using SharedTrip.Core.Models.Comments;
+@model ProfileViewModel
 
 @{
     ViewData["Title"] = "My Profile";
@@ -67,28 +68,28 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-sm-3">
-                                <p class="mb-0">Full Name</p>
+                                <p class="mb-3" style="font-size:17px">Full Name</p>
                             </div>
                             <div class="col-sm-9">
-                                <p class="text-muted mb-0">@Model.FirstName @Model.LastName</p>
+                                <p class="text-muted mb-0" style="font-size:17px">@Model.FirstName @Model.LastName</p>
                             </div>
                         </div>
                         @if (ViewBag.CurrentUserId == Model.Id)
                         {
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <p class="mb-0">Email</p>
+                                    <p class="mb-3" style="font-size:17px">Email</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@Model.Email</p>
+                                    <p class="text-muted mb-0" style="font-size:17px">@Model.Email</p>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="col-sm-3">
-                                    <p class="mb-0">Phone Number</p>
+                                    <p class="mb-3" style="font-size:17px">Phone Number</p>
                                 </div>
                                 <div class="col-sm-9">
-                                    <p class="text-muted mb-0">@Model.PhoneNumber</p>
+                                    <p class="text-muted mb-0" style="font-size:17px">@Model.PhoneNumber</p>
                                 </div>
                             </div>
                         }
@@ -98,7 +99,7 @@
                 <section class="content-item" id="comments">
                     <div class="container">
                         <div class="row">
-                            <div class="col-sm-11">
+                            <div class="col-sm-11" id="commentsDiv">
                                 <form>
                                     <h3 class="pull-left">New Comment</h3>
                                     <fieldset>
@@ -136,6 +137,15 @@
                                         </li>
                                     }
                                 </ul>
+                                <div class="row mb-5">
+                                    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                                        <button class="btn btn-primary" id="previous">Previous</button>
+                                    </div>
+
+                                    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+                                        <button class="btn btn-primary" id="next">Next</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -154,7 +164,7 @@
 
             if (textAreaElement.value.length > 0) {
                 var model = {
-                    creatorId: '@ViewBag.UserId',
+                    creatorId: '@ViewBag.CurrentUserId',
                     receiverId: document.getElementById('userId').value,
                     createdOn: '@DateTime.UtcNow',
                     content: textAreaElement.value
@@ -171,44 +181,68 @@
                     .then(result => {
                         if (result == true) {
                             textAreaElement.value = '';
-                            showComments();
+                            if (result == true) {
+                                getComments();
+                            }
                         }
                     })
             }
         }
 
-        const showComments = async function () {
-            let receiverId = document.getElementById('userId').value;
-            fetch(`/Comment/GetComments?userId=${receiverId}`, {
-                method: 'GET',
+        const getComments = async function (currentPage) {
+            let receiverId = "@Model.Id";
+
+            let url = new URL('https://localhost:7164/Comment/GetComments');
+            url.searchParams.append('receiverId', "@Model.Id");
+
+            if (currentPage != null) {
+                console.log(currentPage);
+            }
+
+            fetch(url, {
+                method: "GET",
                 headers: { 'Content-Type': 'application/json' }
             })
                 .then(response => response.json())
-                .then(comments => {
-                    let commentsUl = document.getElementById('commentsUl');
-                    commentsUl.innerHTML = '';
-                    comments.forEach(x => {
-                        let liElement = document.createElement('li');
-                        liElement.innerHTML = `<div class="media">
-                                                                    <a class="pull-left" href="/User/MyProfile/${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
-                                                                    <div class="media-body">
-                                                                            <h4 class="media-heading">${x.creatorName}</h4>
-                                                                            <p>${x.content}</p>
-                                                                            <ul class="list-unstyled list-inline media-detail pull-left">
-                                                                                <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
-                                                                                <li><i class="fa fa-thumbs-up"></i>13</li>
-                                                                            </ul>
-                                                                            <ul class="list-unstyled list-inline media-detail pull-right">
-                                                                                 <li class=""><a href="">Like</a></li>
-                                                                            </ul>
-                                                                        </div>
-                                                                    </div>`;
-                        commentsUl.appendChild(liElement);
-                    })
-                })
+                .then(result => {
+                    const params = new URLSearchParams(window.location.search);
+                    '@ViewBag.CurrentPage' = result.currentPage;
+                    console.log('@ViewBag.CurrentPage');
+                    showComments(result);
+                });
         }
+
+        const showComments = function (model) {
+            let commentsUl = document.getElementById('commentsUl');
+            commentsUl.innerHTML = '';
+            model.comments.forEach(x => {
+                let liElement = document.createElement('li');
+                liElement.innerHTML = `<div class="media">
+                    <a class="pull-left" href="/User/MyProfile/${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
+                    <div class="media-body">
+                            <h4 class="media-heading">${x.creatorName}</h4>
+                            <p>${x.content}</p>
+                            <ul class="list-unstyled list-inline media-detail pull-left">
+                                <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
+                                <li><i class="fa fa-thumbs-up"></i>13</li>
+                            </ul>
+                            <ul class="list-unstyled list-inline media-detail pull-right">
+                                 <li class=""><a href="">Like</a></li>
+                            </ul>
+                        </div>
+                    </div>`;
+                commentsUl.appendChild(liElement);
+            })
+        }
+
+        let previousButton = document.getElementById('previous');
+        previousButton.addEventListener('click', function (e) {
+            console.log('@ViewBag.CurrentPage');
+            getComments(currentPage - 1);
+        })
 
         let submitButton = document.getElementById('submitButton');
         submitButton.addEventListener('click', create);
+        window.onload = getComments();
     </script>
 }

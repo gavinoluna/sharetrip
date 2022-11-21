@@ -30,11 +30,14 @@ namespace SharedTrip.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetComments([FromQuery] string userId)
+        public async Task<IActionResult> GetComments([FromQuery] AllCommentsQueryModel query)
         {
-            var comments = await this.commentService.GetAllByCommentsByUserIdAsync(userId);
+            var queryResult = await this.commentService.GetAllByCommentsByUserIdAsync(query.ReceiverId, query.CurrentPage, AllCommentsQueryModel.CommentsPerPage);
 
-            return Json(comments);
+            query.Comments = queryResult.Comments;
+            query.TotalCommentsCount = queryResult.TotalCommentsCount;
+
+            return Json(query);
         }
     }
 }

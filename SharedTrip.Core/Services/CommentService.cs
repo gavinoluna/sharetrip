@@ -3,6 +3,7 @@ using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Comments;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
+using System.Xml.XPath;
 
 namespace SharedTrip.Core.Services
 {
@@ -41,12 +42,19 @@ namespace SharedTrip.Core.Services
             return isAdded;
         }
 
-        public async Task<IEnumerable<CommentViewModel>> GetAllByCommentsByUserIdAsync(string userId)
+        public async Task<CommentQueryServiceModel> GetAllByCommentsByUserIdAsync(string receiverId, int currentPage = 1, int commentsPerPage = 3)
         {
-            return await this.context
+            var result = new CommentQueryServiceModel();
+
+            var commentsQuery = this.context
                 .Comments
-                .Where(c => c.ReceiverId == userId)
-                .OrderBy(c => c.CreatedOn)
+                .Where(c => c.ReceiverId == receiverId)
+                .OrderByDescending(c => c.CreatedOn)
+                .AsQueryable();
+
+            var comments = await commentsQuery
+                .Skip((currentPage - 1) * commentsPerPage)
+                .Take(commentsPerPage)
                 .Select(c => new CommentViewModel
                 {
                     Id = c.Id,
@@ -57,6 +65,11 @@ namespace SharedTrip.Core.Services
                     CreatorProfileImageUrl = c.Creator.ProfilePictureUrl
                 })
                 .ToListAsync();
+
+            result.Comments = comments;
+            result.TotalCommentsCount = await commentsQuery.CountAsync();
+
+            return result;
         }
     }
 }
