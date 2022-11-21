@@ -25,6 +25,8 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> JoinTripAsync(string userId, int tripId);
 
+        Task<bool> CheckIfUserIsInTripAsync(string userId, int tripId);
+
         Task<bool> DeleteTripAsync(int tripId);
     }
 }

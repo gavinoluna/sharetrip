@@ -188,6 +188,12 @@ namespace SharedTrip.Controllers
                 return RedirectToAction(nameof(All));
             }
 
+            if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true)
+            {
+                this.notyfService.Information("You are already participating in this trip");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
             if (await this.tripService.CheckWhetherUserIsFree(User.Id(), trip.Date) == false)
             {
                 this.notyfService.Error("You already have an arranged trip for this date");

@@ -320,5 +320,27 @@ namespace SharedTrip.Core.Services
 
             return hasJoined;
         }
+
+        public async Task<bool> CheckIfUserIsInTripAsync(string userId, int tripId)
+        {
+            var isInTrip = false;
+
+            var trip = await this.context
+                .Trips
+                .Include(t => t.PassengersTrips)
+                .FirstOrDefaultAsync(t => t.Id == tripId);
+
+            if (trip == null)
+            {
+                return isInTrip;
+            }
+
+            if (trip.DriverId == userId || trip.PassengersTrips.Any(pt => pt.PassengerId == userId))
+            {
+                isInTrip = true;
+            }
+
+            return isInTrip;
+        }
     }
 }
