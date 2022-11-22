@@ -13,9 +13,6 @@ namespace SharedTrip.Core.Models.Comments
         public string ReceiverId { get; set; } = null!;
 
         [Required]
-        public string CreatedOn { get; set; } = null!;
-
-        [Required]
         [StringLength(ContentMaxLength, MinimumLength = ContentMinLength, ErrorMessage = "{0} must be between {2} and {1} characters")]
         public string Content { get; set; } = null!;
     }

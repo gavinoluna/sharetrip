@@ -25,7 +25,7 @@ namespace SharedTrip.Core.Services
                 CreatorId = model.CreatorId,
                 ReceiverId = model.ReceiverId,
                 Content = model.Content,
-                //CreatedOn = model.CreatedOn
+                CreatedOn = DateTime.Now
             };
 
             try
@@ -59,7 +59,7 @@ namespace SharedTrip.Core.Services
                 {
                     Id = c.Id,
                     Content = c.Content,
-                    CreatedOn = c.CreatedOn.ToString("{0:MM/dd/yy H:mm}"),
+                    CreatedOn = c.CreatedOn.ToString("{MM/dd/yy H:mm}"),
                     CreatorId = c.CreatorId,
                     CreatorName = $"{c.Creator.FirstName} {c.Creator.LastName}",
                     CreatorProfileImageUrl = c.Creator.ProfilePictureUrl
