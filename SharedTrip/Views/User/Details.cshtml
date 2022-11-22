@@ -157,6 +157,25 @@
 
 @section Scripts{
     <script>
+        let currentPage = 1;
+
+        let previousButton = document.getElementById('previous');
+
+        previousButton.addEventListener('click', () => {
+            if (!previousButton.classList.contains('disabled')) {
+                currentPage -= 1;
+                getComments(currentPage);
+            }
+        });
+
+        let nextButton = document.getElementById('next');
+        nextButton.addEventListener('click', () => {
+            if (!nextButton.classList.contains('disabled')) {
+                currentPage += 1;
+                getComments(currentPage);
+            }
+        });
+
         const create = async function (e) {
             e.preventDefault;
 
@@ -189,14 +208,14 @@
             }
         }
 
-        const getComments = async function (currentPage) {
-            let receiverId = "@Model.Id";
+        const getComments = async function (page) {
+            const receiverId = "@Model.Id";
 
-            let url = new URL('https://localhost:7164/Comment/GetComments');
+            const url = new URL('https://localhost:7164/Comment/GetComments');
             url.searchParams.append('receiverId', "@Model.Id");
 
-            if (currentPage != null) {
-                console.log(currentPage);
+            if (page != null) {
+                url.searchParams.append('currentPage', page);
             }
 
             fetch(url, {
@@ -205,41 +224,56 @@
             })
                 .then(response => response.json())
                 .then(result => {
-                    const params = new URLSearchParams(window.location.search);
-                    '@ViewBag.CurrentPage' = result.currentPage;
-                    console.log('@ViewBag.CurrentPage');
-                    showComments(result);
+                    currentPage = result.currentPage
+
+                    if (currentPage == 1) {
+                        previousButton.classList.add('disabled');
+                    }
+                    else {
+                        previousButton.classList.remove('disabled');
+                    }
+
+                    let maxPage = Math.ceil(parseFloat(result.totalCommentsCount) / parseInt('@AllCommentsQueryModel.CommentsPerPage'));
+
+                    if (currentPage == maxPage) {
+                        nextButton.classList.add('disabled');
+                    }
+                    else {
+                        nextButton.classList.remove('disabled');
+                    }
+
+                    showComments(result.comments);
                 });
         }
 
-        const showComments = function (model) {
-            let commentsUl = document.getElementById('commentsUl');
-            commentsUl.innerHTML = '';
-            model.comments.forEach(x => {
-                let liElement = document.createElement('li');
-                liElement.innerHTML = `<div class="media">
-                    <a class="pull-left" href="/User/MyProfile/${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
-                    <div class="media-body">
-                            <h4 class="media-heading">${x.creatorName}</h4>
-                            <p>${x.content}</p>
-                            <ul class="list-unstyled list-inline media-detail pull-left">
-                                <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
-                                <li><i class="fa fa-thumbs-up"></i>13</li>
-                            </ul>
-                            <ul class="list-unstyled list-inline media-detail pull-right">
-                                 <li class=""><a href="">Like</a></li>
-                            </ul>
-                        </div>
-                    </div>`;
-                commentsUl.appendChild(liElement);
-            })
+        const showComments = function (comments) {
+            if (comments.length > 0) {
+                let commentsUl = document.getElementById('commentsUl');
+                commentsUl.innerHTML = '';
+                comments.forEach(x => {
+                    let liElement = document.createElement('li');
+                    liElement.innerHTML = `<div class="media">
+                            <a class="pull-left" href="/User/MyProfile/${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
+                            <div class="media-body">
+                                    <h4 class="media-heading">${x.creatorName}</h4>
+                                    <p>${x.content}</p>
+                                    <ul class="list-unstyled list-inline media-detail pull-left">
+                                        <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
+                                        <li><i class="fa fa-thumbs-up"></i>13</li>
+                                    </ul>
+                                    <ul class="list-unstyled list-inline media-detail pull-right">
+                                         <li class=""><a href="">Like</a></li>
+                                    </ul>
+                                </div>
+                            </div>`;
+                    commentsUl.appendChild(liElement);
+                })
+            }
+            else{
+                previousButton.classList.add('disabled');
+                nextButton.classList.add('disabled');
+            }
         }
-
-        let previousButton = document.getElementById('previous');
-        previousButton.addEventListener('click', function (e) {
-            console.log('@ViewBag.CurrentPage');
-            getComments(currentPage - 1);
-        })
 
         let submitButton = document.getElementById('submitButton');
         submitButton.addEventListener('click', create);
