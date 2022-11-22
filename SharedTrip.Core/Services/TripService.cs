@@ -124,7 +124,7 @@ namespace SharedTrip.Core.Services
         {
             var trip = await this.context
                 .Trips
-                .Where(t => t.Id == tripId && t.IsDeleted == false)
+                .Where(t => t.Id == tripId && t.IsDeleted == false && t.IsActive == true)
                 .Select(t => new TripViewModel
                 {
                     Id = t.Id,
@@ -184,7 +184,7 @@ namespace SharedTrip.Core.Services
         {
             var trip = await this.context
                 .Trips
-                .Where(t => t.Id == tripId && t.IsDeleted == false)
+                .Where(t => t.Id == tripId && t.IsDeleted == false && t.IsActive == true)
                 .Select(t => new EditTripViewModel
                 {
                     AdditionalInformation = t.AdditionalInformation,
