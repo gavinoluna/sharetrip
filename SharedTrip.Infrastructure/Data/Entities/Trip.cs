@@ -49,6 +49,8 @@ namespace SharedTrip.Infrastructure.Data.Entities
 
         public bool IsActive { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public int CountOfSeats { get; set; }
     }
 }

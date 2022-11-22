@@ -75,8 +75,8 @@ namespace SharedTrip.Core.Services
                     PhoneNumber = u.PhoneNumber,
                     Email = u.Email,
                     Rating = u.Rating,
-                    CountOfTripsAsPassenger = this.context.Trips.Where(t => t.PassengersTrips.Any(pt => pt.PassengerId == u.Id)).Count(),
-                    CountOfTripsAsDriver = this.context.Trips.Where(t => t.DriverId == u.Id).Count()
+                    CountOfTripsAsPassenger = this.context.Trips.Where(t => t.PassengersTrips.Any(pt => pt.PassengerId == u.Id) && t.IsDeleted == false).Count(),
+                    CountOfTripsAsDriver = this.context.Trips.Where(t => t.DriverId == u.Id && t.IsDeleted == false).Count()
                 })
                 .FirstOrDefaultAsync();
 
@@ -98,8 +98,8 @@ namespace SharedTrip.Core.Services
                 .Select(u => new TripDriverViewModel
                 {
                     Id = u.Id,
-                    CountOfTripsAsDriver = u.CountOfTripsAsDriver,
-                    CountOfTripsAsPassenger = u.CountOfTripsAsPassenger,
+                    CountOfTripsAsPassenger = this.context.Trips.Where(t => t.PassengersTrips.Any(pt => pt.PassengerId == u.Id) && t.IsDeleted == false).Count(),
+                    CountOfTripsAsDriver = this.context.Trips.Where(t => t.DriverId == u.Id && t.IsDeleted == false).Count(),
                     Name = $"{u.FirstName} {u.LastName}",
                     PhoneNumber = u.PhoneNumber,
                     ProfileImageUrl = u.ProfilePictureUrl

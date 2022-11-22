@@ -71,6 +71,10 @@ namespace SharedTrip.Infrastructure.Data
                 .Property(t => t.IsActive)
                 .HasDefaultValue(true);
 
+            builder.Entity<Trip>()
+                .Property(t => t.IsDeleted)
+                .HasDefaultValue(false);
+
             //Messages
             builder
                 .Entity<Message>()

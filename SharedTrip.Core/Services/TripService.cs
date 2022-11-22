@@ -50,6 +50,7 @@ namespace SharedTrip.Core.Services
         public async Task<int> GetCountOfTripsAsync()
             => await this.context
                          .Trips
+                         .Where(t => t.IsDeleted == false)
                          .CountAsync();
 
         public async Task<IEnumerable<PopulatedPlaceViewModel>> GetPopulatedPlacesAsync()
@@ -73,8 +74,8 @@ namespace SharedTrip.Core.Services
                 .ThenInclude(pt => pt.Trip)
                 .FirstAsync(u => u.Id == userId);
 
-            if (user.PassengersTrips.Any(pt => DateTime.Compare(pt.Trip.Date, date) == 0 && pt.Trip.Id != tripId)
-                || user.DriverTrips.Any(dt => DateTime.Compare(dt.Date, date) == 0 && dt.Id != tripId))
+            if (user.PassengersTrips.Where(pt => pt.Trip.IsDeleted == false).Any(pt => DateTime.Compare(pt.Trip.Date, date) == 0 && pt.Trip.Id != tripId)
+                || user.DriverTrips.Where(dt => dt.IsDeleted == false).Any(dt => DateTime.Compare(dt.Date, date) == 0 && dt.Id != tripId))
             {
                 return false;
             }
@@ -88,7 +89,8 @@ namespace SharedTrip.Core.Services
 
             var tripsQuery = this.context
                 .Trips
-                .Where(t => (t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId)) && t.IsActive == true)
+                .Where(t => (t.DriverId == userId || t.PassengersTrips.Any(pt => pt.PassengerId == userId)) && t.IsActive == true
+                && t.IsDeleted == false)
                 .OrderBy(t => t.Date)
                 .AsQueryable();
 
@@ -122,7 +124,7 @@ namespace SharedTrip.Core.Services
         {
             var trip = await this.context
                 .Trips
-                .Where(t => t.Id == tripId)
+                .Where(t => t.Id == tripId && t.IsDeleted == false)
                 .Select(t => new TripViewModel
                 {
                     Id = t.Id,
@@ -165,7 +167,7 @@ namespace SharedTrip.Core.Services
             {
                 try
                 {
-                    this.context.Trips.Remove(trip);
+                    trip.IsDeleted = true;
                     await this.context.SaveChangesAsync();
                     isDeleted = true;
                 }
@@ -182,7 +184,7 @@ namespace SharedTrip.Core.Services
         {
             var trip = await this.context
                 .Trips
-                .Where(t => t.Id == tripId)
+                .Where(t => t.Id == tripId && t.IsDeleted == false)
                 .Select(t => new EditTripViewModel
                 {
                     AdditionalInformation = t.AdditionalInformation,
@@ -250,7 +252,7 @@ namespace SharedTrip.Core.Services
             var result = new TripQueryServiceModel();
             var tripsQuery = this.context
                 .Trips
-                .Where(t => t.IsActive == true)
+                .Where(t => t.IsActive == true && t.IsDeleted == false)
                 .AsQueryable();
 
             if (startDestinationId > 0 && endDestinationId > 0 && DateTime.Compare(date, DateTime.Now) > 0)
