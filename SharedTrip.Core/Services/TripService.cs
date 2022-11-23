@@ -344,5 +344,29 @@ namespace SharedTrip.Core.Services
 
             return isInTrip;
         }
+
+        public async Task<bool> IsUserDriverOfTrip(string userId, int tripId)
+        {
+            var isDriver = false;
+
+            var trip = await this.context
+                .Trips
+                .Where(t => t.Id == tripId)
+                .FirstAsync();
+
+            if (trip.DriverId == userId)
+            {
+                isDriver = true;
+            }
+
+            return isDriver;
+        }
+
+        public async Task<bool> TripExists(int tripId)
+        {
+            return await this.context
+                .Trips
+                .AnyAsync(t => t.Id == tripId);
+        }
     }
 }

@@ -110,13 +110,19 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int tripId)
         {
-            var trip = await this.tripService.GetTripForEditAsync(tripId);
-
-            if (trip == null)
+            if ((await this.tripService.TripExists(tripId)) == false)
             {
                 this.notyfService.Error("This trip does not exist");
                 return RedirectToAction(nameof(MyTrips));
             }
+
+            if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
+            {
+                this.notyfService.Error("Only the driver of the trip can edit it");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
+            var trip = await this.tripService.GetTripForEditAsync(tripId);
 
             await PopulateTripModel(trip);
 
@@ -160,13 +166,13 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int tripId)
         {
-            var trip = await this.tripService.GetTripDetailsAsync(tripId);
-
-            if (trip == null)
+            if ((await this.tripService.TripExists(tripId)) == false)
             {
                 this.notyfService.Error("This trip does not exist.");
                 return RedirectToAction(nameof(All));
             }
+
+            var trip = await this.tripService.GetTripDetailsAsync(tripId);
 
             var detailsModel = new TripDetailsViewModel
             {
@@ -180,13 +186,13 @@ namespace SharedTrip.Controllers
 
         public async Task<IActionResult> JoinTrip(int tripId)
         {
-            var trip = await this.tripService.GetTripForEditAsync(tripId);
-
-            if (trip == null)
+            if ((await this.tripService.TripExists(tripId)) == false)
             {
                 this.notyfService.Error("This trip does not exist");
                 return RedirectToAction(nameof(All));
             }
+
+            var trip = await this.tripService.GetTripForEditAsync(tripId);
 
             if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true)
             {
@@ -214,6 +220,18 @@ namespace SharedTrip.Controllers
 
         public async Task<IActionResult> Delete(int tripId)
         {
+            if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
+            {
+                this.notyfService.Error("Only the driver of the trip can delete it");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
+            if ((await this.tripService.TripExists(tripId)) == false)
+            {
+                this.notyfService.Error("This trip does not exist");
+                return RedirectToAction(nameof(MyTrips));
+            }
+
             var isDeleted = await this.tripService.DeleteTripAsync(tripId);
 
             if (isDeleted == false)

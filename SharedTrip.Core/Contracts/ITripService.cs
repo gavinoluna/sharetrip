@@ -27,6 +27,10 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> CheckIfUserIsInTripAsync(string userId, int tripId);
 
+        Task<bool> IsUserDriverOfTrip(string userId, int tripId);
+
+        Task<bool> TripExists(int tripId);
+
         Task<bool> DeleteTripAsync(int tripId);
     }
 }

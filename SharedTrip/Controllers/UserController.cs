@@ -35,7 +35,8 @@ namespace SharedTrip.Controllers
 
             if (user == null)
             {
-                return NotFound();
+                this.notyfService.Error("This user does not exist");
+                return RedirectToAction(nameof(Details));
             }
 
             return View(user);
@@ -49,7 +50,7 @@ namespace SharedTrip.Controllers
             if (user == null)
             {
                 this.notyfService.Error("The user was not found");
-                return RedirectToAction();
+                return RedirectToAction(nameof(Details));
             }
 
             return View(user);
