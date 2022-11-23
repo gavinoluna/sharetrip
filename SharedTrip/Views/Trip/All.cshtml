@@ -63,47 +63,7 @@
                             <tbody>
                                 @foreach (var trip in Model.Trips)
                                 {
-                                    <tr>
-                                        <td class="product-thumb">
-                                            <a href="/User/Details/@trip.DriverId"><img width="130" src="@trip.DriverImageUrl" class="imgElement" alt="image description"></a>
-                                            <span><strong>@trip.DriverName</strong></span>
-                                        </td>
-                                        <td class="product-details">
-                                            <span><strong>From</strong> @trip.StartDestination</span>
-                                            <span><strong>To</strong> @trip.EndDestination</span>
-                                            <span><strong>Car</strong> @trip.Car</span>
-                                            <span><strong>Price</strong> @trip.Price лв.</span>
-                                        </td>
-                                        <td class="product-details">
-                                            <span><strong>Date</strong> @trip.Date</span>
-                                            <span><strong>Free Seats</strong>@trip.FreeSeats of @trip.AllSeats</span>
-                                            <span class="@(trip.IsActive ? "status active" : "status notActive")"><strong>Status</strong>@(trip.IsActive ? "Active" : "Not Active")</span>
-                                        </td>
-                                        <td class="action" data-title="Action">
-                                            <div class="">
-                                                <ul class="list-inline justify-content-center">
-                                                    <li class="list-inline-item">
-                                                        <a data-toggle="tooltip" data-placement="top" title="View" class="view" asp-controller="Trip" asp-action="Details" asp-route-tripId="@trip.Id">
-                                                            <i class="fa fa-eye"></i>
-                                                        </a>
-                                                    </li>
-                                                    @if (trip.DriverId == ViewBag.CurrentUserId)
-                                                    {
-                                                        <li class="list-inline-item">
-                                                            <a data-toggle="tooltip" data-placement="top" title="Edit" class="edit" asp-controller="Trip" asp-action="Edit" asp-route-tripId="@trip.Id">
-                                                                <i class="fa fa-pencil"></i>
-                                                            </a>
-                                                        </li>
-                                                        <li class="list-inline-item">
-                                                            <a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" asp-controller="Trip" asp-action="Delete" asp-route-tripId="@trip.Id">
-                                                                <i class="fa fa-trash"></i>
-                                                            </a>
-                                                        </li>
-                                                    }
-                                                </ul>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <partial name="_TripPartial" model="@trip" />
                                 }
                             </tbody>
                         </table>

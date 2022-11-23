@@ -1,0 +1,43 @@
+﻿@model AllTripsViewModel
+
+<tr>
+    <td class="product-thumb">
+        <a href="/User/Details/@Model.DriverId"><img width="130" src="@Model.DriverImageUrl" class="imgElement" alt="image description"></a>
+        <span><strong>@Model.DriverName</strong></span>
+    </td>
+    <td class="product-details">
+        <span><strong>From</strong> @Model.StartDestination</span>
+        <span><strong>To</strong> @Model.EndDestination</span>
+        <span><strong>Car</strong> @Model.Car</span>
+        <span><strong>Price</strong> @Model.Price лв.</span>
+    </td>
+    <td class="product-details">
+        <span><strong>Date</strong> @Model.Date</span>
+        <span><strong>Free Seats</strong>@Model.FreeSeats of @Model.AllSeats</span>
+        <span class="@(Model.IsActive ? "status active" : "status notActive")"><strong>Status</strong>@(Model.IsActive ? "Active" : "Not Active")</span>
+    </td>
+    <td class="action" data-title="Action">
+        <div class="">
+            <ul class="list-inline justify-content-center">
+                <li class="list-inline-item">
+                    <a data-toggle="tooltip" data-placement="top" title="View" class="view" asp-controller="Trip" asp-action="Details" asp-route-tripId="@Model.Id">
+                        <i class="fa fa-eye"></i>
+                    </a>
+                </li>
+                @if (Model.DriverId == ViewBag.CurrentUserId)
+                {
+                    <li class="list-inline-item">
+                        <a data-toggle="tooltip" data-placement="top" title="Edit" class="edit" asp-controller="Trip" asp-action="Edit" asp-route-tripId="@Model.Id">
+                            <i class="fa fa-pencil"></i>
+                        </a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a data-toggle="tooltip" data-placement="top" title="Delete" class="delete" asp-controller="Trip" asp-action="Delete" asp-route-tripId="@Model.Id">
+                            <i class="fa fa-trash"></i>
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </td>
+</tr>
