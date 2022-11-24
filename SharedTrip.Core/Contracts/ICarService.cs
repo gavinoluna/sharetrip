@@ -15,5 +15,7 @@ namespace SharedTrip.Core.Contracts
         Task<CarDetailsViewModel> GetCarAsync(int carId);
 
         Task<IEnumerable<CreateTripCarViewModel>> GetCarsForTripAsync(string userId);
+
+        Task<CarQueryServiceModel> GetMyCarsAsync(string userId, int currentPage = 1, int carsPerPage = 5);
     }
 }

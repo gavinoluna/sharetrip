@@ -1,0 +1,20 @@
+﻿@model ProfileCarViewModel
+
+<div class="col-md-4">
+    <div class="card mb-3">
+        <img class="card-img-top" src="@Model.ImageUrl" alt="Car Image">
+        <div class="card-body text-center divButtons">
+            <h4>@Model.Brand @Model.Model</h4>
+            <br />
+            <a asp-controller="Car" asp-action="Details" asp-route-carId="@Model.Id"
+               class="btn btn-success">Details</a>
+
+            <a asp-controller="Car" asp-action="Edit" asp-route-carId="@Model.Id"
+               class="btn btn-warning">Edit</a>
+
+            <a asp-controller="Car" asp-action="Delete" asp-route-carId="@Model.Id"
+               class="btn btn-danger">Delete</a>
+
+        </div>
+    </div>
+</div>

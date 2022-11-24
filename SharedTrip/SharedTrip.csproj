@@ -30,7 +30,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Views\Car\MyCars.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Trip\Edit.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Views\Car\MyCars.cshtml" />
   </ItemGroup>
 
 </Project>

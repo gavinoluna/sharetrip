@@ -120,5 +120,36 @@ namespace SharedTrip.Core.Services
                 })
                 .ToListAsync();
         }
+
+        public async Task<CarQueryServiceModel> GetMyCarsAsync(string userId, int currentPage = 1, int carsPerPage = 5)
+        {
+            var model = new CarQueryServiceModel();
+
+            var carsQuery = this.context
+                .Cars
+                .Where(c => c.DriverId == userId) //Add is not deleted
+                .OrderBy(c => c.Brand.Name)
+                .ThenBy(c => c.Model)
+                .AsQueryable();
+
+            var cars = await carsQuery
+                .Skip((currentPage - 1) * carsPerPage)
+                .Take(carsPerPage)
+                .Select(c => new ProfileCarViewModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand.Name,
+                    Colour = c.Colour.Name,
+                    ImageUrl = c.ImageUrl,
+                    Model = c.Model,
+                    Year = c.Year
+                })
+                .ToListAsync();
+
+            model.Cars = cars;
+            model.TotalCarsCount = await carsQuery.CountAsync();
+
+            return model;
+        }
     }
 }

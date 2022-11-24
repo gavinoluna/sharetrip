@@ -61,13 +61,30 @@ namespace SharedTrip.Controllers
         {
             var car = await this.carService.GetCarAsync(carId);
 
-            if (car == null || car.DriverId != User.Id())
+            if (car == null)
             {
                 this.notyfService.Warning("This car could not be found");
                 return RedirectToAction("Details", "User");
             }
 
+            if (car.DriverId != User.Id())
+            {
+                this.notyfService.Error("You have no access to cars that are not yours");
+                return RedirectToAction(nameof(MyCars));
+            }
+
             return View(car);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MyCars([FromQuery] AllCarsQueryModel query)
+        {
+            var result = await this.carService.GetMyCarsAsync(User.Id(), query.CurrentPage, AllCarsQueryModel.CarsPerPage);
+
+            query.Cars = result.Cars;
+            query.TotalCarsCount = result.TotalCarsCount;
+
+            return View(query);
         }
     }
 }
