@@ -15,21 +15,17 @@
                         <img src=@Model.ProfileImageUrl alt="avatar"
                              class="rounded-circle img-fluid" style="width: 150px;">
                         <h5 class="my-3">@Model.FirstName @Model.LastName</h5>
-                        <p class="text-muted mb-1">
-                            <i class="fa-solid fa-person-walking-luggage"
-                               data-toggle="tooltip" data-placement="top" title="Count of trips as a passenger"></i>: @Model.CountOfTripsAsPassenger
-                        </p>
-                        <p class="text-muted mb-1">
-                            <i class="fa-solid fa-car"
-                               data-toggle="tooltip" data-placement="top" title="Count of trips as a driver"></i>: @Model.CountOfTripsAsDriver
-                        </p>
-                        @if (ViewBag.CurrentUserId == Model.Id)
-                        {
-                            <div class="d-flex justify-content-center mb-2">
-                                <a asp-controller="User" asp-action="Edit" asp-route-userId="@Model.Id" class="btn btn-outline-primary ms-1">Edit</a>
-                            </div>
-                        }
-                        else
+                        <div class="d-flex justify-content-center">
+                            <p class="text-muted mb-1 mr-3">
+                                <i class="fa-solid fa-person-walking-luggage"
+                                   data-toggle="tooltip" data-placement="top" title="Count of trips as a passenger"></i>: @Model.CountOfTripsAsPassenger
+                            </p>
+                            <p class="text-muted mb-1">
+                                <i class="fa-solid fa-car"
+                                   data-toggle="tooltip" data-placement="top" title="Count of trips as a driver"></i>: @Model.CountOfTripsAsDriver
+                            </p>
+                        </div>
+                        @if (ViewBag.CurrentUserId != Model.Id)
                         {
                             <div class="d-flex justify-content-center mb-2">
                                 <button type="button" class="btn btn-outline-primary ms-1">Message</button>
@@ -37,30 +33,25 @@
                         }
                     </div>
                 </div>
-                <div class="card mb-4 mb-lg-0">
-                    <div class="card-body p-0">
-                        <ul class="list-group list-group-flush rounded-3">
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fas fa-globe fa-lg text-warning"></i>
-                                <p class="mb-0">https://mdbootstrap.com</p>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-github fa-lg" style="color: #333333;"></i>
-                                <p class="mb-0">mdbootstrap</p>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-twitter fa-lg" style="color: #55acee;"></i>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fab fa-instagram fa-lg" style="color: #ac2bac;"></i>
-                                <p class="mb-0">mdbootstrap</p>
-                            </li>
-                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
-                                <i class="fa-brands fa-facebook" style="color: #3b5998;"></i>
-                                <p class="mb-0">mdbootstrap</p>
-                            </li>
-                        </ul>
-                    </div>
+                <div class="widget user-dashboard-menu">
+                    <ul>
+                        <li>
+                            <a asp-controller="Trip" asp-action="MyTrips"><i class="fa fa-user"></i> My Trips</a>
+                        </li>
+                        <li>
+                            <a asp-controller="Car" asp-action="MyCars"><i class="fa-solid fa-car"></i> My Cars</a>
+                        </li>
+                        <li>
+                            <a asp-controller="User" asp-action="Edit"><i class="fa fa-cog"></i> Edit</a>
+                        </li>
+                        <li>
+                            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                <i class="fa fa-cog"></i> Logout</a>
+                        </li>
+                        <li>
+                            <a asp-controller="User" asp-action="Delete" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a>
+                        </li>
+                    </ul>
                 </div>
             </div>
             <div class="col-lg-8">
