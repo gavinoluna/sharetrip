@@ -33,30 +33,33 @@
                         }
                     </div>
                 </div>
-                <div class="widget user-dashboard-menu">
-                    <ul>
-                        <li>
-                            <a asp-controller="Trip" asp-action="MyTrips"><i class="fa fa-user"></i> My Trips</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Car" asp-action="MyCars"><i class="fa-solid fa-car-on"></i> My Cars</a>
-                        </li>
-                        <li>
-                            <a asp-controller="Car" asp-action="Create"><i class="fa-solid fa-car"></i> Create a Car</a>
-                        </li>
-                        <li>
-                            <a asp-controller="User" asp-action="Edit"><i class="fa fa-cog"></i> Edit</a>
-                        </li>
-                        <li>
-                            <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                <i class="fa-solid fa-door-open"></i> Logout
-                            </a>
-                        </li>
-                        <li>
-                            <a asp-controller="User" asp-action="Delete" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a>
-                        </li>
-                    </ul>
-                </div>
+                @if(ViewBag.CurrentUserId == Model.Id)
+                {
+                    <div class="widget user-dashboard-menu">
+                        <ul>
+                            <li>
+                                <a asp-controller="Trip" asp-action="MyTrips"><i class="fa fa-user"></i> My Trips</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Car" asp-action="MyCars"><i class="fa-solid fa-car-on"></i> My Cars</a>
+                            </li>
+                            <li>
+                                <a asp-controller="Car" asp-action="Create"><i class="fa-solid fa-car"></i> Create a Car</a>
+                            </li>
+                            <li>
+                                <a asp-controller="User" asp-action="Edit"><i class="fa fa-cog"></i> Edit</a>
+                            </li>
+                            <li>
+                                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                    <i class="fa-solid fa-door-open"></i> Logout
+                                </a>
+                            </li>
+                            <li>
+                                <a asp-controller="User" asp-action="Delete" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
             <div class="col-lg-8">
                 <div class="card mb-4">
