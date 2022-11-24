@@ -366,6 +366,7 @@ namespace SharedTrip.Core.Services
         {
             return await this.context
                 .Trips
+                .Where(t => t.IsActive == true && t.IsDeleted == false)
                 .AnyAsync(t => t.Id == tripId);
         }
 
