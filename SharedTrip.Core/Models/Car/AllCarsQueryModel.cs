@@ -2,7 +2,7 @@
 {
     public class AllCarsQueryModel
     {
-        public const int CarsPerPage = 5;
+        public const int CarsPerPage = 3;
 
         public int CurrentPage { get; set; } = 1;
 

@@ -121,7 +121,7 @@ namespace SharedTrip.Core.Services
                 .ToListAsync();
         }
 
-        public async Task<CarQueryServiceModel> GetMyCarsAsync(string userId, int currentPage = 1, int carsPerPage = 5)
+        public async Task<CarQueryServiceModel> GetMyCarsAsync(string userId, int currentPage = 1, int carsPerPage = 3)
         {
             var model = new CarQueryServiceModel();
 
