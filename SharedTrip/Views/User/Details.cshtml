@@ -231,7 +231,7 @@
                     liElement.innerHTML = `<div class="media">
                             <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
                             <div class="media-body">
-                                    <h4 class="media-heading">${x.creatorName}</h4>
+                                    <h4 class="media-heading"><a href="/User/Details?userId=${x.creatorId}">${x.creatorName}</a></h4>
                                     <p>${x.content}</p>
                                     <ul class="list-unstyled list-inline media-detail pull-left">
                                         <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
