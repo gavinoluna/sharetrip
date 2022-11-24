@@ -159,17 +159,22 @@
                 }
                 else if (Model.Trip.Passengers.Any(p => p.Id == ViewBag.CurrentUserId))
                 {
-                    <div class="row mb-2">
-                        <div class="col">
+                    <div class="d-flex justify-content-start mb-2">
+                        <div class="col mt-2">
                             <i class="fa-solid fa-phone"></i>
                             <span class="text-muted align-top">Phone Number:</span>
                             <span class="align-top">@Model.Driver.PhoneNumber</span>
+                        </div>
+                        <div class="d-flex justify-content-start divButtons">
+                            <a class="btn btn-dark" asp-controller="Trip" asp-action="LeaveTrip" asp-route-tripId="@Model.Trip.Id">Leave Trip</a>
                         </div>
                     </div>
                 }
                 else
                 {
-                    <a class="btn btn-primary" asp-controller="Trip" asp-action="JoinTrip" asp-route-tripId="@Model.Trip.Id">Join Trip</a>
+                    <div class="d-flex justify-content-start divButtons">
+                        <a class="btn btn-dark" asp-controller="Trip" asp-action="JoinTrip" asp-route-tripId="@Model.Trip.Id">Join Trip</a>
+                    </div>
                 }
             </div>
         </div>

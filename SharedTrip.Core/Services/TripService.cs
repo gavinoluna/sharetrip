@@ -368,5 +368,32 @@ namespace SharedTrip.Core.Services
                 .Trips
                 .AnyAsync(t => t.Id == tripId);
         }
+
+        public async Task<bool> LeaveTripAsync(string userId, int tripId)
+        {
+            var hasLeft = false;
+
+            var trip = await this.context
+                .Trips
+                .Where(t => t.Id == tripId)
+                .FirstOrDefaultAsync();
+
+            var passengerTrip = trip.PassengersTrips
+                .Where(t => t.PassengerId == userId && t.TripId == tripId)
+                .FirstOrDefault();
+
+            try
+            {
+                trip.PassengersTrips.Remove(passengerTrip);
+                await this.context.SaveChangesAsync();
+                hasLeft = true;
+            }
+            catch (Exception)
+            {
+                hasLeft = false;
+            }
+
+            return hasLeft;
+        }
     }
 }

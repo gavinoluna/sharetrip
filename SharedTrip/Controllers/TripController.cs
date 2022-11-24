@@ -218,6 +218,34 @@ namespace SharedTrip.Controllers
             return RedirectToAction(nameof(Details), new { tripId = tripId });
         }
 
+        public async Task<IActionResult> LeaveTrip(int tripId)
+        {
+            if ((await this.tripService.TripExists(tripId)) == false)
+            {
+                this.notyfService.Error("This trip does not exist");
+                return RedirectToAction(nameof(MyTrips));
+            }
+
+            var trip = await this.tripService.GetTripForEditAsync(tripId);
+
+            if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == false)
+            {
+                this.notyfService.Error("You are not participating in this trip");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
+            var hasLeft = await this.tripService.LeaveTripAsync(User.Id(), tripId);
+
+            if (hasLeft == false)
+            {
+                this.notyfService.Error("Something went wrong");
+                return RedirectToAction(nameof(Details), new { tripId = tripId });
+            }
+
+            this.notyfService.Success("You have left the trip successfully");
+            return RedirectToAction(nameof(Details), new { tripId = tripId });
+        }
+
         public async Task<IActionResult> Delete(int tripId)
         {
             if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
