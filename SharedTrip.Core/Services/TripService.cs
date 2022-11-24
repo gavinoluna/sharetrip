@@ -255,12 +255,12 @@ namespace SharedTrip.Core.Services
                 .Where(t => t.IsActive == true && t.IsDeleted == false)
                 .AsQueryable();
 
-            if (startDestinationId > 0 && endDestinationId > 0 && DateTime.Compare(date, DateTime.Now) > 0)
+            if (startDestinationId > 0 && endDestinationId > 0 && DateTime.Compare(date.Date, DateTime.Now.Date) >= 0)
             {
                 tripsQuery = tripsQuery
                     .Where(t => t.StartDestinationId == startDestinationId
                     && t.EndDestinationId == endDestinationId
-                    && DateTime.Compare(date, t.Date.Date) == 0);
+                    && DateTime.Compare(date.Date, t.Date.Date) == 0);
             }
 
             var trips = await tripsQuery
