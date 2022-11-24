@@ -112,25 +112,6 @@
                                 <h3>Comments</h3>
 
                                 <ul id="commentsUl">
-                                    @foreach (var comment in Model.Comments)
-                                    {
-                                        <li>
-                                            <div class="media">
-                                                <a class="pull-left" href="/User/MyProfile/@comment.CreatorId"><img class="media-object" src="@comment.CreatorProfileImageUrl" alt=""></a>
-                                                <div class="media-body">
-                                                    <h4 class="media-heading">@comment.CreatorName</h4>
-                                                    <p>@comment.Content</p>
-                                                    <ul class="list-unstyled list-inline media-detail pull-left">
-                                                        <li><i class="fa fa-calendar"></i>@comment.CreatedOn</li>
-                                                        <li><i class="fa fa-thumbs-up"></i>13</li>
-                                                    </ul>
-                                                    <ul class="list-unstyled list-inline media-detail pull-right">
-                                                        <li class=""><a href="">Like</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
-                                        </li>
-                                    }
                                 </ul>
                                 <div class="row mb-5">
                                     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
@@ -248,7 +229,7 @@
                 comments.forEach(x => {
                     let liElement = document.createElement('li');
                     liElement.innerHTML = `<div class="media">
-                            <a class="pull-left" href="/User/MyProfile/${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
+                            <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
                             <div class="media-body">
                                     <h4 class="media-heading">${x.creatorName}</h4>
                                     <p>${x.content}</p>
