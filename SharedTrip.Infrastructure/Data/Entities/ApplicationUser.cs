@@ -24,6 +24,8 @@ namespace SharedTrip.Infrastructure.Data.Entities
 
         public double Rating { get; set; }
 
+        public bool IsDeleted { get; set; }
+
         public IEnumerable<Car> Cars { get; set; } = new List<Car>();
 
         public IEnumerable<Trip> DriverTrips { get; set; } = new List<Trip>();

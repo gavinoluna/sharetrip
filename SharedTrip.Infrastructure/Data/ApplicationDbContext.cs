@@ -30,6 +30,12 @@ namespace SharedTrip.Infrastructure.Data
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            //ApplicationUser
+            builder
+                .Entity<ApplicationUser>()
+                .Property(x => x.IsDeleted)
+                .HasDefaultValue(false);
+
             //Comments
             builder
                 .Entity<Comment>()
