@@ -18,10 +18,6 @@ namespace SharedTrip.Infrastructure.Data.Entities
         [Required]
         public string ProfilePictureUrl { get; set; } = null!;
 
-        public int CountOfTripsAsDriver { get; set; }
-
-        public int CountOfTripsAsPassenger { get; set; }
-
         public double Rating { get; set; }
 
         public bool IsDeleted { get; set; }
