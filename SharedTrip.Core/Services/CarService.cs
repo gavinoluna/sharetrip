@@ -60,11 +60,6 @@ namespace SharedTrip.Core.Services
                 .Cars
                 .FirstOrDefaultAsync(c => c.Id == carId);
 
-            if (car == null)
-            {
-                return isDeleted;
-            }
-
             try
             {
                 car.IsDeleted = true;

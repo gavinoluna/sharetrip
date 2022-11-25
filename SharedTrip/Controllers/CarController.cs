@@ -131,6 +131,20 @@ namespace SharedTrip.Controllers
 
         public async Task<IActionResult> Delete(int carId)
         {
+            var car = await this.carService.GetCarAsync(carId);
+
+            if (car == null)
+            {
+                this.notyfService.Error("This car does not exist");
+                return RedirectToAction(nameof(MyCars));
+            }
+
+            if (await this.carService.IsUserOwnerOfACar(User.Id(), car.Id) == false)
+            {
+                this.notyfService.Error("Only the owner of a car can delete it");
+                return RedirectToAction(nameof(MyCars));
+            }
+
             var isDeleted = await this.carService.DeleteAsync(carId);
 
             if (isDeleted == false)
