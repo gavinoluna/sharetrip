@@ -80,7 +80,7 @@ namespace SharedTrip.Core.Services
 
             var car = await this.context
                 .Cars
-                .Where(c => c.Id == model.Id)
+                .Where(c => c.Id == model.Id && c.IsDeleted == false)
                 .FirstOrDefaultAsync();
 
             if (car == null)
