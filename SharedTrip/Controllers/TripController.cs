@@ -93,7 +93,7 @@ namespace SharedTrip.Controllers
                 return View(model);
             }
 
-            return RedirectToAction(nameof(Details), new { tripId = tripId });
+            return RedirectToAction(nameof(Details), new { tripId });
         }
 
         [HttpGet]
@@ -119,7 +119,7 @@ namespace SharedTrip.Controllers
             if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
             {
                 this.notyfService.Error("Only the driver of the trip can edit it");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             var trip = await this.tripService.GetTripForEditAsync(tripId);
@@ -197,19 +197,19 @@ namespace SharedTrip.Controllers
             if (await this.tripService.CheckWhetherUserIsFree(User.Id(), trip.Date) == false)
             {
                 this.notyfService.Error("You already have an arranged trip for this date");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             if (await this.tripService.GetCountOfFreeSeatsAsync(trip.Id) <= 0)
             {
                 this.notyfService.Error("There are no free seats in this trip");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true)
             {
                 this.notyfService.Information("You are already participating in this trip");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             var hasJoined = await this.tripService.JoinTripAsync(User.Id(), tripId);
@@ -217,11 +217,11 @@ namespace SharedTrip.Controllers
             if (hasJoined == false)
             {
                 this.notyfService.Error("Something went wrong");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             this.notyfService.Success("You have joined the trip successfully");
-            return RedirectToAction(nameof(Details), new { tripId = tripId });
+            return RedirectToAction(nameof(Details), new { tripId });
         }
 
         public async Task<IActionResult> LeaveTrip(int tripId)
@@ -237,7 +237,7 @@ namespace SharedTrip.Controllers
             if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == false)
             {
                 this.notyfService.Error("You are not participating in this trip");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             var hasLeft = await this.tripService.LeaveTripAsync(User.Id(), tripId);
@@ -245,11 +245,11 @@ namespace SharedTrip.Controllers
             if (hasLeft == false)
             {
                 this.notyfService.Error("Something went wrong");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             this.notyfService.Success("You have left the trip successfully");
-            return RedirectToAction(nameof(Details), new { tripId = tripId });
+            return RedirectToAction(nameof(Details), new { tripId });
         }
 
         public async Task<IActionResult> Delete(int tripId)
@@ -257,7 +257,7 @@ namespace SharedTrip.Controllers
             if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
             {
                 this.notyfService.Error("Only the driver of the trip can delete it");
-                return RedirectToAction(nameof(Details), new { tripId = tripId });
+                return RedirectToAction(nameof(Details), new { tripId });
             }
 
             if ((await this.tripService.TripExists(tripId)) == false)
