@@ -4,7 +4,7 @@ namespace SharedTrip.Core.Contracts
 {
     public interface IUserService
     {
-        Task<ProfileViewModel> GetProfileInfoAsync(string userId, bool showMoreInfo);
+        Task<ProfileViewModel> GetProfileInfoAsync(string userId);
 
         Task<int> GetCountOfUsersAsync();
 

@@ -61,7 +61,7 @@ namespace SharedTrip.Core.Services
                          .Users
                          .CountAsync();
 
-        public async Task<ProfileViewModel> GetProfileInfoAsync(string userId, bool showMoreInfo)
+        public async Task<ProfileViewModel> GetProfileInfoAsync(string userId)
         {
             var user = await this.context
                 .Users
@@ -79,13 +79,6 @@ namespace SharedTrip.Core.Services
                     CountOfTripsAsDriver = this.context.Trips.Where(t => t.DriverId == u.Id && t.IsDeleted == false).Count()
                 })
                 .FirstOrDefaultAsync();
-
-            if (showMoreInfo)
-            {
-                user.Cars = await this.carService.GetMyCarsAsync(userId);
-            }
-
-            //user.Comments = await this.commentService.GetAllByCommentsByUserIdAsync(userId);
 
             return user;
         }

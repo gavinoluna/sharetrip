@@ -36,5 +36,7 @@ namespace SharedTrip.Infrastructure.Data.Entities
 
         [ForeignKey(nameof(DriverId))]
         public ApplicationUser Driver { get; set; } = null!;
+
+        public bool IsDeleted { get; set; }
     }
 }

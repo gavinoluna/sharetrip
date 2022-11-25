@@ -86,5 +86,19 @@ namespace SharedTrip.Controllers
 
             return View(query);
         }
+
+        public async Task<IActionResult> Delete(int carId)
+        {
+            var isDeleted = await this.carService.DeleteAsync(carId);
+
+            if (isDeleted == false)
+            {
+                this.notyfService.Error("Something went wrong");
+                return RedirectToAction(nameof(MyCars));
+            }
+
+            this.notyfService.Success("The car is deleted successfully");
+            return RedirectToAction(nameof(MyCars));
+        }
     }
 }

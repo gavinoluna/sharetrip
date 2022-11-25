@@ -3,6 +3,7 @@ using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
+using SharedTrip.Infrastructure.Migrations;
 
 namespace SharedTrip.Core.Services
 {
@@ -51,6 +52,33 @@ namespace SharedTrip.Core.Services
             return -1;
         }
 
+        public async Task<bool> DeleteAsync(int carId)
+        {
+            var isDeleted = false;
+
+            var car = await this.context
+                .Cars
+                .FirstOrDefaultAsync(c => c.Id == carId);
+
+            if (car == null)
+            {
+                return isDeleted;
+            }
+
+            try
+            {
+                car.IsDeleted = true;
+                await this.context.SaveChangesAsync();
+                isDeleted = true;
+            }
+            catch (Exception)
+            {
+                isDeleted = false;
+            }
+
+            return isDeleted;
+        }
+
         public async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()
             => await this.context
                          .Brands
@@ -65,7 +93,7 @@ namespace SharedTrip.Core.Services
         {
             return await this.context
                                 .Cars
-                                .Where(c => c.Id == carId)
+                                .Where(c => c.Id == carId && c.IsDeleted == false)
                                 .Select(c => new CarDetailsViewModel
                                 {
                                     Id = c.Id,
@@ -85,7 +113,9 @@ namespace SharedTrip.Core.Services
         {
             return await this.context
                 .Cars
-                .Where(c => c.DriverId == userId)
+                .Where(c => c.DriverId == userId && c.IsDeleted == false)
+                .OrderBy(c => c.Brand.Name)
+                .ThenBy(c => c.Model)
                 .Select(c => new CreateTripCarViewModel
                 {
                     Id = c.Id,
@@ -104,30 +134,13 @@ namespace SharedTrip.Core.Services
                          })
                          .ToListAsync();
 
-        public async Task<IEnumerable<ProfileCarViewModel>> GetMyCarsAsync(string userId)
-        {
-            return await this.context
-                .Cars
-                .Where(c => c.DriverId == userId)
-                .Select(c => new ProfileCarViewModel
-                {
-                    Id = c.Id,
-                    Brand = c.Brand.Name,
-                    Colour = c.Colour.Name,
-                    ImageUrl = c.ImageUrl,
-                    Model = c.Model,
-                    Year = c.Year
-                })
-                .ToListAsync();
-        }
-
         public async Task<CarQueryServiceModel> GetMyCarsAsync(string userId, int currentPage = 1, int carsPerPage = 3)
         {
             var model = new CarQueryServiceModel();
 
             var carsQuery = this.context
                 .Cars
-                .Where(c => c.DriverId == userId) //Add is not deleted
+                .Where(c => c.DriverId == userId && c.IsDeleted == false)
                 .OrderBy(c => c.Brand.Name)
                 .ThenBy(c => c.Model)
                 .AsQueryable();

@@ -26,11 +26,11 @@ namespace SharedTrip.Controllers
 
             if (userId == null)
             {
-                user = await this.userService.GetProfileInfoAsync(User.Id(), true);
+                user = await this.userService.GetProfileInfoAsync(User.Id());
             }
             else
             {
-                user = await this.userService.GetProfileInfoAsync(userId, false);
+                user = await this.userService.GetProfileInfoAsync(userId);
             }
 
             if (user == null)

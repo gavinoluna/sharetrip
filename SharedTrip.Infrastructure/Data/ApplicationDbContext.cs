@@ -104,6 +104,11 @@ namespace SharedTrip.Infrastructure.Data
                 .HasForeignKey(x => x.DriverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            builder
+                .Entity<Car>()
+                .Property(c => c.IsDeleted)
+                .HasDefaultValue(false);
+
             builder.ApplyConfiguration(new PopulatedPlaceConfiguration());
             builder.ApplyConfiguration(new CarBrandsConfiguration());
             builder.ApplyConfiguration(new ColourConfiguration());

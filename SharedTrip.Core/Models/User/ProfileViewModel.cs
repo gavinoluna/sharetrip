@@ -17,8 +17,6 @@ namespace SharedTrip.Core.Models.User
 
         public string Email { get; set; } = null!;
 
-        public IEnumerable<ProfileCarViewModel> Cars { get; set; } = new List<ProfileCarViewModel>();
-
         public int CountOfTripsAsDriver { get; set; }
 
         public int CountOfTripsAsPassenger { get; set; }
