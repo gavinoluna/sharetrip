@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
+using SharedTrip.Core.Models.ServiceModels.Car;
 using SharedTrip.Core.Models.Trip;
 using System.Security.Claims;
 

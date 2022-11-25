@@ -1,4 +1,6 @@
-﻿namespace SharedTrip.Core.Models.Car
+﻿using SharedTrip.Core.Models.Car;
+
+namespace SharedTrip.Core.Models.ServiceModels.Car
 {
     public class CarQueryServiceModel
     {

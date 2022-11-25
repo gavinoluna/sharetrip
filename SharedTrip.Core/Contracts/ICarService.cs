@@ -1,4 +1,5 @@
 ﻿using SharedTrip.Core.Models.Car;
+using SharedTrip.Core.Models.ServiceModels.Car;
 
 namespace SharedTrip.Core.Contracts
 {

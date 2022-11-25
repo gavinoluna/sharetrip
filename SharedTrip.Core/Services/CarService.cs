@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
+using SharedTrip.Core.Models.ServiceModels.Car;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
 using SharedTrip.Infrastructure.Migrations;
