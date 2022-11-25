@@ -173,7 +173,8 @@
                 else
                 {
                     <div class="d-flex justify-content-start divButtons">
-                        <a class="btn btn-dark" asp-controller="Trip" asp-action="JoinTrip" asp-route-tripId="@Model.Trip.Id">Join Trip</a>
+                        <a class="btn btn-dark @(Model.Trip.FreeSeats <= 0 ? "disabled" : "")" 
+                        asp-controller="Trip" asp-action="JoinTrip" asp-route-tripId="@Model.Trip.Id">Join Trip</a>
                     </div>
                 }
             </div>

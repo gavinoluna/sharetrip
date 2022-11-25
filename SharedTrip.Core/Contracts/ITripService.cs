@@ -33,6 +33,8 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> LeaveTripAsync(string userId, int tripId);
 
+        Task<int> GetCountOfFreeSeatsAsync(int tripId);
+
         Task<bool> DeleteTripAsync(int tripId);
     }
 }

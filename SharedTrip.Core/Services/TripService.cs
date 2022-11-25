@@ -374,18 +374,14 @@ namespace SharedTrip.Core.Services
         {
             var hasLeft = false;
 
-            var trip = await this.context
-                .Trips
-                .Where(t => t.Id == tripId)
+            var passengerTrip = await this.context
+                .PassengersTrips
+                .Where(pt => pt.PassengerId == userId && pt.TripId == tripId)
                 .FirstOrDefaultAsync();
-
-            var passengerTrip = trip.PassengersTrips
-                .Where(t => t.PassengerId == userId && t.TripId == tripId)
-                .FirstOrDefault();
 
             try
             {
-                trip.PassengersTrips.Remove(passengerTrip);
+                context.PassengersTrips.Remove(passengerTrip);
                 await this.context.SaveChangesAsync();
                 hasLeft = true;
             }
@@ -395,6 +391,16 @@ namespace SharedTrip.Core.Services
             }
 
             return hasLeft;
+        }
+
+        public async Task<int> GetCountOfFreeSeatsAsync(int tripId)
+        {
+            var trip = await this.context
+                .Trips
+                .Where(t => t.Id == tripId)
+                .FirstOrDefaultAsync();
+
+            return trip.CountOfSeats - trip.PassengersTrips.Count();
         }
     }
 }
