@@ -1,11 +1,9 @@
 ﻿using SharedTrip.Core.CustomAttributes;
 using SharedTrip.Core.Models.Car;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
 
 namespace SharedTrip.Core.Models.Trip
 {
-    public interface ITrip
+    public interface ITripModel
     {
         public int CarId { get; set; }
 

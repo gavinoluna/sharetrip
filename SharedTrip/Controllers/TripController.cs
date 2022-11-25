@@ -280,7 +280,7 @@ namespace SharedTrip.Controllers
             return RedirectToAction(nameof(MyTrips));
         }
 
-        private async Task PopulateTripModel(ITrip model)
+        private async Task PopulateTripModel(ITripModel model)
         {
             var destinations = await this.tripService.GetPopulatedPlacesAsync();
 

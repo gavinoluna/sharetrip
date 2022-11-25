@@ -6,7 +6,7 @@ using static SharedTrip.Infrastructure.Data.Constants.DataConstants.Trip;
 
 namespace SharedTrip.Core.Models.Trip
 {
-    public class EditTripViewModel : ITrip
+    public class EditTripViewModel : ITripModel
     {
         public int Id { get; set; }
 

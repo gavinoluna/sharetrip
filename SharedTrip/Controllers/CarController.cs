@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
+using SharedTrip.Core.Models.Trip;
 using System.Security.Claims;
 
 namespace SharedTrip.Controllers
@@ -23,7 +24,7 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            return View(new AddCarViewModel
+            return View(new CreateCarViewModel
             {
                 Brands = await this.carService.GetBrandsAsync(),
                 Colours = await this.carService.GetColoursAsync()
@@ -31,12 +32,11 @@ namespace SharedTrip.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(AddCarViewModel carModel)
+        public async Task<IActionResult> Create(CreateCarViewModel carModel)
         {
             if (!ModelState.IsValid)
             {
-                carModel.Brands = await this.carService.GetBrandsAsync();
-                carModel.Colours = await this.carService.GetColoursAsync();
+                await PopulateCarModel(carModel);
                 return View(carModel);
             }
 
@@ -44,11 +44,9 @@ namespace SharedTrip.Controllers
 
             if (carId == -1)
             {
-                ModelState.AddModelError("", "Something went wrong");
                 this.notyfService.Warning("Something went wrong");
 
-                carModel.Brands = await this.carService.GetBrandsAsync();
-                carModel.Colours = await this.carService.GetColoursAsync();
+                await PopulateCarModel(carModel);
                 return View(carModel);
             }
 
@@ -87,6 +85,50 @@ namespace SharedTrip.Controllers
             return View(query);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Edit(int carId)
+        {
+            var car = await this.carService.GetCarForEditAsync(carId);
+
+            if (car == null)
+            {
+                this.notyfService.Error("This car does not exist");
+                return RedirectToAction(nameof(MyCars));
+            }
+
+            if (await this.carService.IsUserOwnerOfACar(User.Id(), carId) == false)
+            {
+                this.notyfService.Error("Only the owner of the car can edit it");
+                return RedirectToAction(nameof(MyCars));
+            }
+
+            await PopulateCarModel(car);
+
+            return View(car);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditCarViewModel carModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                await PopulateCarModel(carModel);
+                return View(carModel);
+            }
+
+            var isEdited = await this.carService.EditCarAsync(carModel);
+
+            if (isEdited == false)
+            {
+                this.notyfService.Error("Something went wrong");
+                await PopulateCarModel(carModel);
+                return View(carModel);
+            }
+
+            this.notyfService.Success("The car is edited succseffully");
+            return RedirectToAction(nameof(Details), new { carId = carModel.Id });
+        }
+
         public async Task<IActionResult> Delete(int carId)
         {
             var isDeleted = await this.carService.DeleteAsync(carId);
@@ -99,6 +141,12 @@ namespace SharedTrip.Controllers
 
             this.notyfService.Success("The car is deleted successfully");
             return RedirectToAction(nameof(MyCars));
+        }
+
+        private async Task PopulateCarModel(ICarModel model)
+        {
+            model.Brands = await this.carService.GetBrandsAsync();
+            model.Colours = await this.carService.GetColoursAsync();
         }
     }
 }

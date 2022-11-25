@@ -13,7 +13,7 @@ namespace SharedTrip.Core.CustomAttributes
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var car = (AddCarViewModel)validationContext.ObjectInstance;
+            var car = (ICarModel)validationContext.ObjectInstance;
 
             if (car.Year < this.releaseYear || car.Year > this.currentYear)
             {

@@ -20,7 +20,7 @@ namespace SharedTrip.Core.Services
             this.cloudinaryService = cloudinaryService;
         }
 
-        public async Task<int> AddCarAsync(AddCarViewModel model, string userId)
+        public async Task<int> AddCarAsync(CreateCarViewModel model, string userId)
         {
             var user = await this.context.Users.FindAsync(userId);
 
@@ -79,6 +79,41 @@ namespace SharedTrip.Core.Services
             return isDeleted;
         }
 
+        public async Task<bool> EditCarAsync(EditCarViewModel model)
+        {
+            var isEdited = false;
+
+            var car = await this.context
+                .Cars
+                .Where(c => c.Id == model.Id)
+                .FirstOrDefaultAsync();
+
+            if (car == null)
+            {
+                return isEdited;
+            }
+
+            car.Year = model.Year;
+            car.BrandId = model.BrandId;
+            car.ColourId = model.ColourId;
+            car.Climatronic = model.Climatronic;
+            car.ImageUrl = await this.cloudinaryService.UploadPicture(model.Image);
+            car.CountOfSeats = model.CountOfSeats;
+            car.Model = model.Model;
+
+            try
+            {
+                await this.context.SaveChangesAsync();
+                isEdited = true;
+            }
+            catch (Exception)
+            {
+                isEdited = false;
+            }
+
+            return isEdited;
+        }
+
         public async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()
             => await this.context
                          .Brands
@@ -107,6 +142,24 @@ namespace SharedTrip.Core.Services
                                     Year = c.Year
                                 })
                                 .FirstOrDefaultAsync();
+        }
+
+        public async Task<EditCarViewModel> GetCarForEditAsync(int carId)
+        {
+            return await this.context
+                .Cars
+                .Where(c => c.Id == carId && c.IsDeleted == false)
+                .Select(c => new EditCarViewModel
+                {
+                    Id = c.Id,
+                    BrandId = c.BrandId,
+                    Climatronic = c.Climatronic,
+                    ColourId = c.ColourId,
+                    Year = c.Year,
+                    Model = c.Model,
+                    CountOfSeats = c.CountOfSeats
+                })
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<CreateTripCarViewModel>> GetCarsForTripAsync(string userId)
@@ -163,6 +216,22 @@ namespace SharedTrip.Core.Services
             model.TotalCarsCount = await carsQuery.CountAsync();
 
             return model;
+        }
+
+        public async Task<bool> IsUserOwnerOfACar(string userId, int carId)
+        {
+            var car = await this.context
+                .Cars
+                .FirstOrDefaultAsync(c => c.Id == carId);
+
+            if (car.DriverId == userId)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

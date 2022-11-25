@@ -1,7 +1,7 @@
-﻿@model CreateCarViewModel
+﻿@model EditCarViewModel
 
 @{
-    ViewData["Title"] = "Create a Car";
+    ViewData["Title"] = "Edit a Car";
 }
 
 <section class="login py-5 border-top-1">
@@ -9,8 +9,9 @@
         <div class="row justify-content-center">
             <div class="col-lg-8 col-md-8 align-item-center">
                 <div class="border border">
-                    <h3 class="bg-gray p-4">Create a Car</h3>
-                    <form asp-controller="Car" asp-action="Create" method="post" enctype="multipart/form-data">
+                    <h3 class="bg-gray p-4">Edit a Car</h3>
+                    <form asp-controller="Car" asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="@Model.Id" />
                         <div asp-validation-summary="ModelOnly" class="text-danger ml-4"></div>
                         <fieldset class="p-4">
                             <div class="form-group" id="divElement">
@@ -57,7 +58,7 @@
                                     @Html.DisplayNameFor(m => m.Climatronic)
                                 </label>
                             </div>
-                            <button type="submit" class="btn btn-primary font-weight-bold mt-3">Create</button>
+                            <button type="submit" class="btn btn-primary font-weight-bold mt-3">Edit</button>
                         </fieldset>
                     </form>
                 </div>

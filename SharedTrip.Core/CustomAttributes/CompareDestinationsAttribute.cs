@@ -11,7 +11,7 @@ namespace SharedTrip.Core.CustomAttributes
 
         protected override ValidationResult? IsValid(object? value, ValidationContext validationContext)
         {
-            var trip = (ITrip)validationContext.ObjectInstance;
+            var trip = (ITripModel)validationContext.ObjectInstance;
 
             if (trip.StartDestinationId == trip.EndDestinationId)
             {
