@@ -35,16 +35,10 @@ namespace SharedTrip.Core.Services
                 CountOfSeats = model.CountOfSeats
             };
 
-            try
-            {
-                await this.context.Trips.AddAsync(trip);
-                await this.context.SaveChangesAsync();
-                return trip.Id;
-            }
-            catch (Exception)
-            {
-                return -1;
-            }
+            await this.context.Trips.AddAsync(trip);
+            await this.context.SaveChangesAsync();
+
+            return trip.Id;
         }
 
         public async Task<int> GetCountOfTripsAsync()
@@ -155,29 +149,14 @@ namespace SharedTrip.Core.Services
             return trip;
         }
 
-        public async Task<bool> DeleteTripAsync(int tripId)
+        public async Task DeleteTripAsync(int tripId)
         {
-            var isDeleted = false;
-
             var trip = await this.context
                 .Trips
                 .FirstOrDefaultAsync(t => t.Id == tripId);
 
-            if (trip != null)
-            {
-                try
-                {
-                    trip.IsDeleted = true;
-                    await this.context.SaveChangesAsync();
-                    isDeleted = true;
-                }
-                catch (Exception)
-                {
-                    isDeleted = false;
-                }
-            }
-
-            return isDeleted;
+            trip.IsDeleted = true;
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<EditTripViewModel> GetTripForEditAsync(int tripId)
@@ -206,16 +185,9 @@ namespace SharedTrip.Core.Services
             return trip;
         }
 
-        public async Task<bool> EditTripAsync(EditTripViewModel model)
+        public async Task EditTripAsync(EditTripViewModel model)
         {
-            var isEdited = false;
-
             var trip = await this.context.Trips.FindAsync(model.Id);
-
-            if (trip == null)
-            {
-                return isEdited;
-            }
 
             trip.PricePerPerson = model.PricePerPerson;
             trip.CarId = model.CarId;
@@ -229,17 +201,7 @@ namespace SharedTrip.Core.Services
             trip.Date = model.Date;
             trip.SpaceForLuggage = model.SpaceForLuggage;
 
-            try
-            {
-                await this.context.SaveChangesAsync();
-                isEdited = true;
-            }
-            catch (Exception)
-            {
-                isEdited = false;
-            }
-
-            return isEdited;
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<TripQueryServiceModel> AllAsync(
@@ -290,37 +252,20 @@ namespace SharedTrip.Core.Services
             return result;
         }
 
-        public async Task<bool> JoinTripAsync(string userId, int tripId)
+        public async Task JoinTripAsync(string userId, int tripId)
         {
-            var hasJoined = false;
-
             var trip = await this.context
                 .Trips
                 .Where(t => t.Id == tripId)
                 .FirstOrDefaultAsync();
 
-            if (trip == null)
+            trip.PassengersTrips.Add(new PassengerTrip
             {
-                return hasJoined;
-            }
+                TripId = tripId,
+                PassengerId = userId
+            });
 
-            try
-            {
-                trip.PassengersTrips.Add(new PassengerTrip
-                {
-                    TripId = tripId,
-                    PassengerId = userId
-                });
-
-                await this.context.SaveChangesAsync();
-                hasJoined = true;
-            }
-            catch (Exception)
-            {
-                hasJoined = false;
-            }
-
-            return hasJoined;
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<bool> CheckIfUserIsInTripAsync(string userId, int tripId)
@@ -370,27 +315,16 @@ namespace SharedTrip.Core.Services
                 .AnyAsync(t => t.Id == tripId);
         }
 
-        public async Task<bool> LeaveTripAsync(string userId, int tripId)
+        public async Task LeaveTripAsync(string userId, int tripId)
         {
-            var hasLeft = false;
-
             var passengerTrip = await this.context
                 .PassengersTrips
                 .Where(pt => pt.PassengerId == userId && pt.TripId == tripId)
                 .FirstOrDefaultAsync();
 
-            try
-            {
-                context.PassengersTrips.Remove(passengerTrip);
-                await this.context.SaveChangesAsync();
-                hasLeft = true;
-            }
-            catch (Exception)
-            {
-                hasLeft = false;
-            }
 
-            return hasLeft;
+            context.PassengersTrips.Remove(passengerTrip);
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<int> GetCountOfFreeSeatsAsync(int tripId)

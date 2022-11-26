@@ -29,255 +29,309 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> All([FromQuery] AllTripsQueryModel query)
         {
-            var result = await this.tripService.AllAsync(
+            try
+            {
+                var result = await this.tripService.AllAsync(
                 query.StartDestinationId,
                 query.EndDestinationId,
                 query.Date,
                 query.CurrentPage,
                 AllTripsQueryModel.TripsPerPage);
 
-            var destinations = await this.tripService.GetPopulatedPlacesAsync();
+                var destinations = await this.tripService.GetPopulatedPlacesAsync();
 
-            query.StartDestinations = destinations;
-            query.EndDestinations = destinations;
+                query.StartDestinations = destinations;
+                query.EndDestinations = destinations;
 
-            query.TotalTripsCount = result.TotalTripsCount;
-            query.Trips = result.Trips;
+                query.TotalTripsCount = result.TotalTripsCount;
+                query.Trips = result.Trips;
 
-            return View(query);
+                return View(query);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            if (!await this.userService.HasCar(User.Id()))
+            try
             {
-                this.notyfService.Information("You have to posses a car to create a trip.");
-                return RedirectToAction("Create", "Car");
+                if (!await this.userService.HasCar(User.Id()))
+                {
+                    this.notyfService.Information("You have to posses a car to create a trip.");
+                    return RedirectToAction("Create", "Car");
+                }
+
+                var model = new CreateTripViewModel();
+
+                await PopulateTripModel(model);
+
+                return View(model);
             }
-
-            var model = new CreateTripViewModel();
-
-            await PopulateTripModel(model);
-
-            return View(model);
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
+                return RedirectToAction(nameof(All));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateTripViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                await PopulateTripModel(model);
+                if (!ModelState.IsValid)
+                {
+                    await PopulateTripModel(model);
 
-                return View(model);
+                    return View(model);
+                }
+
+                if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date) == false)
+                {
+                    this.notyfService.Error("You already have an arranged trip for that date");
+
+                    await PopulateTripModel(model);
+
+                    return View(model);
+                }
+
+                var tripId = await this.tripService.CreateTripAsync(model, User.Id());
+
+                return RedirectToAction(nameof(Details), new { tripId });
             }
-
-            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date) == false)
-            {
-                this.notyfService.Error("You already have an arranged trip for that date");
-
-                await PopulateTripModel(model);
-
-                return View(model);
-            }
-
-            var tripId = await this.tripService.CreateTripAsync(model, User.Id());
-
-            if (tripId == -1)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
-
+                //add logging
                 await PopulateTripModel(model);
-
                 return View(model);
             }
-
-            return RedirectToAction(nameof(Details), new { tripId });
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyTrips([FromQuery]MyTripQueryModel query)
+        public async Task<IActionResult> MyTrips([FromQuery] MyTripQueryModel query)
         {
-            var result = await this.tripService.GetMyTripsAsync(User.Id(), query.CurrentPage, MyTripQueryModel.TripsPerPage);
+            try
+            {
+                var result = await this.tripService.GetMyTripsAsync(User.Id(), query.CurrentPage, MyTripQueryModel.TripsPerPage);
 
-            query.Trips = result.Trips;
-            query.TotalTripsCount = result.TotalTripsCount;
+                query.Trips = result.Trips;
+                query.TotalTripsCount = result.TotalTripsCount;
 
-            return View(query);
+                return View(query);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
+                return RedirectToAction(nameof(All));
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int tripId)
         {
-            if ((await this.tripService.TripExists(tripId)) == false)
+            try
             {
-                this.notyfService.Error("This trip does not exist");
+                if ((await this.tripService.TripExists(tripId)) == false)
+                {
+                    this.notyfService.Error("This trip does not exist");
+                    return RedirectToAction(nameof(MyTrips));
+                }
+
+                if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
+                {
+                    this.notyfService.Error("Only the driver of the trip can edit it");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                var trip = await this.tripService.GetTripForEditAsync(tripId);
+
+                await PopulateTripModel(trip);
+
+                return View(trip);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
                 return RedirectToAction(nameof(MyTrips));
             }
-
-            if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
-            {
-                this.notyfService.Error("Only the driver of the trip can edit it");
-                return RedirectToAction(nameof(Details), new { tripId });
-            }
-
-            var trip = await this.tripService.GetTripForEditAsync(tripId);
-
-            await PopulateTripModel(trip);
-
-            return View(trip);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditTripViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                await PopulateTripModel(model);
+                if (!ModelState.IsValid)
+                {
+                    await PopulateTripModel(model);
 
-                return View(model);
+                    return View(model);
+                }
+
+                if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date, model.Id) == false)
+                {
+                    this.notyfService.Error("You already have an arranged trip for that date");
+
+                    await PopulateTripModel(model);
+
+                    return View(model);
+                }
+
+                await this.tripService.EditTripAsync(model);
+
+                this.notyfService.Success("The trip was edited successfully");
+                return RedirectToAction(nameof(Details), new { tripId = model.Id });
             }
-
-            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date, model.Id) == false)
-            {
-                this.notyfService.Error("You already have an arranged trip for that date");
-
-                await PopulateTripModel(model);
-
-                return View(model);
-            }
-
-            var isEdited = await this.tripService.EditTripAsync(model);
-
-            if (isEdited == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
-
+                //add logging
                 await PopulateTripModel(model);
-
                 return View(model);
             }
-
-            this.notyfService.Success("The trip was edited successfully");
-            return RedirectToAction(nameof(Details), new { tripId = model.Id });
         }
 
         [HttpGet]
         public async Task<IActionResult> Details(int tripId)
         {
-            if ((await this.tripService.TripExists(tripId)) == false)
+            try
             {
-                this.notyfService.Error("This trip does not exist.");
+                if ((await this.tripService.TripExists(tripId)) == false)
+                {
+                    this.notyfService.Error("This trip does not exist.");
+                    return RedirectToAction(nameof(All));
+                }
+
+                var trip = await this.tripService.GetTripDetailsAsync(tripId);
+
+                var detailsModel = new TripDetailsViewModel
+                {
+                    Trip = trip,
+                    Car = await this.carService.GetCarAsync(trip.CarId),
+                    Driver = await this.userService.GetTripDriverAsync(trip.DriverId)
+                };
+
+                return View(detailsModel);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
                 return RedirectToAction(nameof(All));
             }
-
-            var trip = await this.tripService.GetTripDetailsAsync(tripId);
-
-            var detailsModel = new TripDetailsViewModel
-            {
-                Trip = trip,
-                Car = await this.carService.GetCarAsync(trip.CarId),
-                Driver = await this.userService.GetTripDriverAsync(trip.DriverId)
-            };
-
-            return View(detailsModel);
         }
 
         public async Task<IActionResult> JoinTrip(int tripId)
         {
-            if ((await this.tripService.TripExists(tripId)) == false)
+            try
             {
-                this.notyfService.Error("This trip does not exist");
-                return RedirectToAction(nameof(All));
-            }
+                if ((await this.tripService.TripExists(tripId)) == false)
+                {
+                    this.notyfService.Error("This trip does not exist");
+                    return RedirectToAction(nameof(All));
+                }
 
-            var trip = await this.tripService.GetTripForEditAsync(tripId);
+                var trip = await this.tripService.GetTripForEditAsync(tripId);
 
-            if (await this.tripService.CheckWhetherUserIsFree(User.Id(), trip.Date) == false)
-            {
-                this.notyfService.Error("You already have an arranged trip for this date");
+                if (await this.tripService.CheckWhetherUserIsFree(User.Id(), trip.Date) == false)
+                {
+                    this.notyfService.Error("You already have an arranged trip for this date");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                if (await this.tripService.GetCountOfFreeSeatsAsync(trip.Id) <= 0)
+                {
+                    this.notyfService.Error("There are no free seats in this trip");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true)
+                {
+                    this.notyfService.Information("You are already participating in this trip");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                await this.tripService.JoinTripAsync(User.Id(), tripId);
+
+                this.notyfService.Success("You have joined the trip successfully");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-
-            if (await this.tripService.GetCountOfFreeSeatsAsync(trip.Id) <= 0)
-            {
-                this.notyfService.Error("There are no free seats in this trip");
-                return RedirectToAction(nameof(Details), new { tripId });
-            }
-
-            if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true)
-            {
-                this.notyfService.Information("You are already participating in this trip");
-                return RedirectToAction(nameof(Details), new { tripId });
-            }
-
-            var hasJoined = await this.tripService.JoinTripAsync(User.Id(), tripId);
-
-            if (hasJoined == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
+                //add logging
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-
-            this.notyfService.Success("You have joined the trip successfully");
-            return RedirectToAction(nameof(Details), new { tripId });
         }
 
         public async Task<IActionResult> LeaveTrip(int tripId)
         {
-            if ((await this.tripService.TripExists(tripId)) == false)
+            try
             {
-                this.notyfService.Error("This trip does not exist");
-                return RedirectToAction(nameof(MyTrips));
-            }
+                if ((await this.tripService.TripExists(tripId)) == false)
+                {
+                    this.notyfService.Error("This trip does not exist");
+                    return RedirectToAction(nameof(MyTrips));
+                }
 
-            var trip = await this.tripService.GetTripForEditAsync(tripId);
+                var trip = await this.tripService.GetTripForEditAsync(tripId);
 
-            if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == false)
-            {
-                this.notyfService.Error("You are not participating in this trip");
+                if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == false)
+                {
+                    this.notyfService.Error("You are not participating in this trip");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                await this.tripService.LeaveTripAsync(User.Id(), tripId);
+
+                this.notyfService.Success("You have left the trip successfully");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-
-            var hasLeft = await this.tripService.LeaveTripAsync(User.Id(), tripId);
-
-            if (hasLeft == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
+                //add logging
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-
-            this.notyfService.Success("You have left the trip successfully");
-            return RedirectToAction(nameof(Details), new { tripId });
         }
 
         public async Task<IActionResult> Delete(int tripId)
         {
-            if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
+            try
             {
-                this.notyfService.Error("Only the driver of the trip can delete it");
-                return RedirectToAction(nameof(Details), new { tripId });
-            }
+                if ((await this.tripService.TripExists(tripId)) == false)
+                {
+                    this.notyfService.Error("This trip does not exist");
+                    return RedirectToAction(nameof(MyTrips));
+                }
 
-            if ((await this.tripService.TripExists(tripId)) == false)
-            {
-                this.notyfService.Error("This trip does not exist");
+                if ((await this.tripService.IsUserDriverOfTrip(User.Id(), tripId)) == false)
+                {
+                    this.notyfService.Error("Only the driver of the trip can delete it");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                await this.tripService.DeleteTripAsync(tripId);
+
+                this.notyfService.Success("The trip was deleted successfully");
                 return RedirectToAction(nameof(MyTrips));
             }
-
-            var isDeleted = await this.tripService.DeleteTripAsync(tripId);
-
-            if (isDeleted == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
+                //add logging
+                return RedirectToAction(nameof(MyTrips));
             }
-            else
-            {
-                this.notyfService.Success("The trip was deleted successfully");
-            }
-
-            return RedirectToAction(nameof(MyTrips));
         }
 
         private async Task PopulateTripModel(ITripModel model)

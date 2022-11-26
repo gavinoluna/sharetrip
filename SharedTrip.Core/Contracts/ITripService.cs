@@ -21,9 +21,9 @@ namespace SharedTrip.Core.Contracts
 
         Task<EditTripViewModel> GetTripForEditAsync(int tripId);
 
-        Task<bool> EditTripAsync(EditTripViewModel model);
+        Task EditTripAsync(EditTripViewModel model);
 
-        Task<bool> JoinTripAsync(string userId, int tripId);
+        Task JoinTripAsync(string userId, int tripId);
 
         Task<bool> CheckIfUserIsInTripAsync(string userId, int tripId);
 
@@ -31,10 +31,10 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> TripExists(int tripId);
 
-        Task<bool> LeaveTripAsync(string userId, int tripId);
+        Task LeaveTripAsync(string userId, int tripId);
 
         Task<int> GetCountOfFreeSeatsAsync(int tripId);
 
-        Task<bool> DeleteTripAsync(int tripId);
+        Task DeleteTripAsync(int tripId);
     }
 }
