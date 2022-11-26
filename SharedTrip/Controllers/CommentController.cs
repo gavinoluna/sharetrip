@@ -1,6 +1,5 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Comments;
 
@@ -9,14 +8,10 @@ namespace SharedTrip.Controllers
     public class CommentController : BaseController
     {
         private readonly ICommentService commentService;
-        private readonly INotyfService notyfService;
 
-        public CommentController(
-            ICommentService commentService,
-            INotyfService notyfService)
+        public CommentController(ICommentService commentService)
         {
             this.commentService = commentService;
-            this.notyfService = notyfService;
         }
 
         [HttpPost]
