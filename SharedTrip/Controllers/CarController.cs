@@ -35,7 +35,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception)
             {
-                this.notyfService.Warning("Something went wrong");
+                this.notyfService.Error("Something went wrong");
                 //Add logging
                 return View("Index", "Home");
             }
@@ -59,7 +59,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception)
             {
-                this.notyfService.Warning("Something went wrong");
+                this.notyfService.Error("Something went wrong");
                 //Add logging
                 await PopulateCarModel(carModel);
                 return View(carModel);
@@ -89,7 +89,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception)
             {
-                this.notyfService.Warning("Something went wrong");
+                this.notyfService.Error("Something went wrong");
                 //Add logging
                 return RedirectToAction(nameof(MyCars));
             }
@@ -109,7 +109,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception)
             {
-                this.notyfService.Warning("Something went wrong");
+                this.notyfService.Error("Something went wrong");
                 //Add logging
                 return RedirectToAction("Details", "User");
             }
@@ -140,7 +140,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception)
             {
-                this.notyfService.Warning("Something went wrong");
+                this.notyfService.Error("Something went wrong");
                 //Add logging
                 return RedirectToAction(nameof(MyCars));
             }
