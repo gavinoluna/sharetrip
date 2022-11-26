@@ -136,6 +136,10 @@
                 </div>
                 @if (ViewBag.CurrentUserId == Model.Driver.Id)
                 {
+                    <div class="divButtons mb-3">
+                        <a asp-controller="Trip" asp-action="Edit" asp-route-tripId="@Model.Trip.Id" class="btn btn-warning font-weight-bold mt-3">Edit</a>
+                        <a asp-controller="Trip" asp-action="Delete" asp-route-tripId="@Model.Trip.Id" class="btn btn-danger font-weight-bold mt-3">Delete</a>
+                    </div>
                     <p>Passengers:</p>
                     <div class="row mb-2">
                         @if (!Model.Trip.Passengers.Any())
