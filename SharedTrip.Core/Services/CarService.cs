@@ -22,8 +22,6 @@ namespace SharedTrip.Core.Services
 
         public async Task<int> CreateCarAsync(CreateCarViewModel model, string userId)
         {
-            var user = await this.context.Users.FindAsync(userId);
-
             var car = new Car
             {
                 BrandId = model.BrandId,
@@ -42,41 +40,22 @@ namespace SharedTrip.Core.Services
             return car.Id;
         }
 
-        public async Task<bool> DeleteAsync(int carId)
+        public async Task DeleteAsync(int carId)
         {
-            var isDeleted = false;
-
             var car = await this.context
                 .Cars
                 .FirstOrDefaultAsync(c => c.Id == carId);
 
-            try
-            {
-                car.IsDeleted = true;
-                await this.context.SaveChangesAsync();
-                isDeleted = true;
-            }
-            catch (Exception)
-            {
-                isDeleted = false;
-            }
-
-            return isDeleted;
+            car.IsDeleted = true;
+            await this.context.SaveChangesAsync();
         }
 
-        public async Task<bool> EditCarAsync(EditCarViewModel model)
+        public async Task EditCarAsync(EditCarViewModel model)
         {
-            var isEdited = false;
-
             var car = await this.context
                 .Cars
                 .Where(c => c.Id == model.Id && c.IsDeleted == false)
                 .FirstOrDefaultAsync();
-
-            if (car == null)
-            {
-                return isEdited;
-            }
 
             car.Year = model.Year;
             car.BrandId = model.BrandId;
@@ -86,17 +65,7 @@ namespace SharedTrip.Core.Services
             car.CountOfSeats = model.CountOfSeats;
             car.Model = model.Model;
 
-            try
-            {
-                await this.context.SaveChangesAsync();
-                isEdited = true;
-            }
-            catch (Exception)
-            {
-                isEdited = false;
-            }
-
-            return isEdited;
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()

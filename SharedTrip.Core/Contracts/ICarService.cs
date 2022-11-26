@@ -19,10 +19,10 @@ namespace SharedTrip.Core.Contracts
 
         Task<EditCarViewModel> GetCarForEditAsync(int carId);
 
-        Task<bool> EditCarAsync(EditCarViewModel model);
+        Task EditCarAsync(EditCarViewModel model);
 
         Task<bool> IsUserOwnerOfACar(string userId, int carId);
 
-        Task<bool> DeleteAsync(int carId);
+        Task DeleteAsync(int carId);
     }
 }

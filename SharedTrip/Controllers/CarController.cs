@@ -25,11 +25,20 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> Create()
         {
-            return View(new CreateCarViewModel
+            try
             {
-                Brands = await this.carService.GetBrandsAsync(),
-                Colours = await this.carService.GetColoursAsync()
-            });
+                return View(new CreateCarViewModel
+                {
+                    Brands = await this.carService.GetBrandsAsync(),
+                    Colours = await this.carService.GetColoursAsync()
+                });
+            }
+            catch (Exception)
+            {
+                this.notyfService.Warning("Something went wrong");
+                //Add logging
+                return View("Index", "Home");
+            }
         }
 
         [HttpPost]
@@ -60,104 +69,137 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(int carId)
         {
-            var car = await this.carService.GetCarAsync(carId);
-
-            if (car == null)
+            try
             {
-                this.notyfService.Warning("This car could not be found");
-                return RedirectToAction("Details", "User");
+                var car = await this.carService.GetCarAsync(carId);
+
+                if (car == null)
+                {
+                    this.notyfService.Warning("This car could not be found");
+                    return RedirectToAction("Details", "User");
+                }
+
+                if (car.DriverId != User.Id())
+                {
+                    this.notyfService.Error("You have no access to cars that are not yours");
+                    return RedirectToAction(nameof(MyCars));
+                }
+
+                return View(car);
             }
-
-            if (car.DriverId != User.Id())
+            catch (Exception)
             {
-                this.notyfService.Error("You have no access to cars that are not yours");
+                this.notyfService.Warning("Something went wrong");
+                //Add logging
                 return RedirectToAction(nameof(MyCars));
             }
-
-            return View(car);
         }
 
         [HttpGet]
         public async Task<IActionResult> MyCars([FromQuery] AllCarsQueryModel query)
         {
-            var result = await this.carService.GetMyCarsAsync(User.Id(), query.CurrentPage, AllCarsQueryModel.CarsPerPage);
+            try
+            {
+                var result = await this.carService.GetMyCarsAsync(User.Id(), query.CurrentPage, AllCarsQueryModel.CarsPerPage);
 
-            query.Cars = result.Cars;
-            query.TotalCarsCount = result.TotalCarsCount;
+                query.Cars = result.Cars;
+                query.TotalCarsCount = result.TotalCarsCount;
 
-            return View(query);
+                return View(query);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Warning("Something went wrong");
+                //Add logging
+                return RedirectToAction("Details", "User");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit(int carId)
         {
-            var car = await this.carService.GetCarForEditAsync(carId);
-
-            if (car == null)
+            try
             {
-                this.notyfService.Error("This car does not exist");
+                var car = await this.carService.GetCarForEditAsync(carId);
+
+                if (car == null)
+                {
+                    this.notyfService.Error("This car does not exist");
+                    return RedirectToAction(nameof(MyCars));
+                }
+
+                if (await this.carService.IsUserOwnerOfACar(User.Id(), carId) == false)
+                {
+                    this.notyfService.Error("Only the owner of the car can edit it");
+                    return RedirectToAction(nameof(MyCars));
+                }
+
+                await PopulateCarModel(car);
+
+                return View(car);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Warning("Something went wrong");
+                //Add logging
                 return RedirectToAction(nameof(MyCars));
             }
-
-            if (await this.carService.IsUserOwnerOfACar(User.Id(), carId) == false)
-            {
-                this.notyfService.Error("Only the owner of the car can edit it");
-                return RedirectToAction(nameof(MyCars));
-            }
-
-            await PopulateCarModel(car);
-
-            return View(car);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditCarViewModel carModel)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                await PopulateCarModel(carModel);
-                return View(carModel);
+                if (!ModelState.IsValid)
+                {
+                    await PopulateCarModel(carModel);
+                    return View(carModel);
+                }
+
+                await this.carService.EditCarAsync(carModel);
+
+                this.notyfService.Success("The car is edited succseffully");
+                return RedirectToAction(nameof(Details), new { carId = carModel.Id });
             }
-
-            var isEdited = await this.carService.EditCarAsync(carModel);
-
-            if (isEdited == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
+                //Add logging
                 await PopulateCarModel(carModel);
                 return View(carModel);
             }
-
-            this.notyfService.Success("The car is edited succseffully");
-            return RedirectToAction(nameof(Details), new { carId = carModel.Id });
         }
 
         public async Task<IActionResult> Delete(int carId)
         {
-            var car = await this.carService.GetCarAsync(carId);
-
-            if (car == null)
+            try
             {
-                this.notyfService.Error("This car does not exist");
+                var car = await this.carService.GetCarAsync(carId);
+
+                if (car == null)
+                {
+                    this.notyfService.Error("This car does not exist");
+                    return RedirectToAction(nameof(MyCars));
+                }
+
+                if (await this.carService.IsUserOwnerOfACar(User.Id(), car.Id) == false)
+                {
+                    this.notyfService.Error("Only the owner of a car can delete it");
+                    return RedirectToAction(nameof(MyCars));
+                }
+
+                await this.carService.DeleteAsync(carId);
+
+                this.notyfService.Success("The car is deleted successfully");
                 return RedirectToAction(nameof(MyCars));
             }
-
-            if (await this.carService.IsUserOwnerOfACar(User.Id(), car.Id) == false)
-            {
-                this.notyfService.Error("Only the owner of a car can delete it");
-                return RedirectToAction(nameof(MyCars));
-            }
-
-            var isDeleted = await this.carService.DeleteAsync(carId);
-
-            if (isDeleted == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
+                //add logging
                 return RedirectToAction(nameof(MyCars));
             }
-
-            this.notyfService.Success("The car is deleted successfully");
-            return RedirectToAction(nameof(MyCars));
         }
 
         private async Task PopulateCarModel(ICarModel model)
