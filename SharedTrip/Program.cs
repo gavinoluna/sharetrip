@@ -1,5 +1,6 @@
 using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using SharedTrip.Infrastructure.Data;
@@ -16,6 +17,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.R
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager();
 builder.Services.AddControllersWithViews();
+
+builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
 builder.Services.AddApplicationServices(builder.Configuration);
 

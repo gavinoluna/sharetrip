@@ -20,6 +20,7 @@ namespace SharedTrip.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateComment([FromBody] AddCommentViewModel model)
         {
             var isCreated = false;
@@ -42,6 +43,7 @@ namespace SharedTrip.Controllers
         }
 
         [HttpGet]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> GetComments([FromQuery] AllCommentsQueryModel query)
         {
             try
