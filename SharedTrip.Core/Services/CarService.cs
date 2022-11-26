@@ -4,7 +4,6 @@ using SharedTrip.Core.Models.Car;
 using SharedTrip.Core.Models.ServiceModels.Car;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
-using SharedTrip.Infrastructure.Migrations;
 
 namespace SharedTrip.Core.Services
 {
@@ -21,36 +20,26 @@ namespace SharedTrip.Core.Services
             this.cloudinaryService = cloudinaryService;
         }
 
-        public async Task<int> AddCarAsync(CreateCarViewModel model, string userId)
+        public async Task<int> CreateCarAsync(CreateCarViewModel model, string userId)
         {
             var user = await this.context.Users.FindAsync(userId);
 
-            if (user != null)
+            var car = new Car
             {
-                var car = new Car
-                {
-                    BrandId = model.BrandId,
-                    ColourId = model.ColourId,
-                    Climatronic = model.Climatronic,
-                    CountOfSeats = model.CountOfSeats,
-                    DriverId = userId,
-                    Model = model.Model,
-                    Year = model.Year
-                };
+                BrandId = model.BrandId,
+                ColourId = model.ColourId,
+                Climatronic = model.Climatronic,
+                CountOfSeats = model.CountOfSeats,
+                DriverId = userId,
+                Model = model.Model,
+                Year = model.Year
+            };
 
-                try
-                {
-                    car.ImageUrl = await this.cloudinaryService.UploadPicture(model.Image);
-                    await this.context.Cars.AddAsync(car);
-                    await this.context.SaveChangesAsync();
-                    return car.Id;
-                }
-                catch (Exception)
-                {
-                }
-            }
+            await this.context.Cars.AddAsync(car);
+            car.ImageUrl = await this.cloudinaryService.UploadPicture(model.Image);
+            await this.context.SaveChangesAsync();
 
-            return -1;
+            return car.Id;
         }
 
         public async Task<bool> DeleteAsync(int carId)

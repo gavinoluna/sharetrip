@@ -5,7 +5,7 @@ namespace SharedTrip.Core.Contracts
 {
     public interface ICarService
     {
-        Task<int> AddCarAsync(CreateCarViewModel model, string userId);
+        Task<int> CreateCarAsync(CreateCarViewModel model, string userId);
 
         Task<IEnumerable<BrandViewModel>> GetBrandsAsync();
 

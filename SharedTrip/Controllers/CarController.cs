@@ -35,24 +35,26 @@ namespace SharedTrip.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(CreateCarViewModel carModel)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                await PopulateCarModel(carModel);
-                return View(carModel);
+                if (!ModelState.IsValid)
+                {
+                    await PopulateCarModel(carModel);
+                    return View(carModel);
+                }
+
+                var carId = await this.carService.CreateCarAsync(carModel, User.Id());
+
+                this.notyfService.Success("You have successfully created a car.");
+                return RedirectToAction(nameof(Details), new { carId });
             }
-
-            var carId = await this.carService.AddCarAsync(carModel, User.Id());
-
-            if (carId == -1)
+            catch (Exception)
             {
                 this.notyfService.Warning("Something went wrong");
-
+                //Add logging
                 await PopulateCarModel(carModel);
                 return View(carModel);
             }
-
-            this.notyfService.Success("You have successfully created a car.");
-            return RedirectToAction(nameof(Details), new { carId = carId });
         }
 
         [HttpGet]
