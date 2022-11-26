@@ -22,58 +22,79 @@ namespace SharedTrip.Controllers
         [HttpGet]
         public async Task<IActionResult> Details(string userId = null)
         {
-            ProfileViewModel user;
-
-            if (userId == null)
+            try
             {
-                user = await this.userService.GetProfileInfoAsync(User.Id());
-            }
-            else
-            {
-                user = await this.userService.GetProfileInfoAsync(userId);
-            }
+                ProfileViewModel user;
 
-            if (user == null)
-            {
-                this.notyfService.Error("This user does not exist");
-                return RedirectToAction(nameof(Details));
-            }
+                if (userId == null)
+                {
+                    user = await this.userService.GetProfileInfoAsync(User.Id());
+                }
+                else
+                {
+                    user = await this.userService.GetProfileInfoAsync(userId);
+                }
 
-            return View(user);
+                if (user == null)
+                {
+                    this.notyfService.Error("This user does not exist");
+                    return RedirectToAction(nameof(Details));
+                }
+
+                return View(user);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         [HttpGet]
         public async Task<IActionResult> Edit()
         {
-            var user = await this.userService.GetUserForEditAsync(User.Id());
-
-            if (user == null)
+            try
             {
-                this.notyfService.Error("The user was not found");
+                var user = await this.userService.GetUserForEditAsync(User.Id());
+
+                if (user == null)
+                {
+                    this.notyfService.Error("The user was not found");
+                    return RedirectToAction(nameof(Details));
+                }
+
+                return View(user);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
                 return RedirectToAction(nameof(Details));
             }
-
-            return View(user);
         }
 
         [HttpPost]
         public async Task<IActionResult> Edit(EditUserViewModel model)
         {
-            if (!ModelState.IsValid)
+            try
             {
-                return View(model);
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                await this.userService.EditUserAsync(model);
+
+                this.notyfService.Success("Profile is edited successfully");
+                return RedirectToAction(nameof(Details));
             }
-
-            var isEdited = await this.userService.EditUserAsync(model);
-
-            if (isEdited == false)
+            catch (Exception)
             {
                 this.notyfService.Error("Something went wrong");
+                //add logging
                 return View(model);
             }
-
-            this.notyfService.Success("Profile is edited successfully");
-            return RedirectToAction(nameof(Details));
         }
     }
 }

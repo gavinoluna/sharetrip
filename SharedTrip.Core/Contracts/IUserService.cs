@@ -14,6 +14,6 @@ namespace SharedTrip.Core.Contracts
 
         Task<EditUserViewModel> GetUserForEditAsync(string userId);
 
-        Task<bool> EditUserAsync(EditUserViewModel model);
+        Task EditUserAsync(EditUserViewModel model);
     }
 }

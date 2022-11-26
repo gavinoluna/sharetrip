@@ -24,36 +24,19 @@ namespace SharedTrip.Core.Services
             this.cloudinaryService = cloudinaryService;
         }
 
-        public async Task<bool> EditUserAsync(EditUserViewModel model)
+        public async Task EditUserAsync(EditUserViewModel model)
         {
-            var isEdited = false;
-
             var user = await this.context
                 .Users
                 .Where(u => u.Id == model.Id)
                 .FirstOrDefaultAsync();
 
-            if (user == null)
-            {
-                return isEdited;
-            }
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.PhoneNumber = model.PhoneNumber;
+            user.ProfilePictureUrl = await this.cloudinaryService.UploadPicture(model.ProfilePicture);
 
-            try
-            {
-                user.FirstName = model.FirstName;
-                user.LastName = model.LastName;
-                user.PhoneNumber = model.PhoneNumber;
-                user.ProfilePictureUrl = await this.cloudinaryService.UploadPicture(model.ProfilePicture);
-
-                await this.context.SaveChangesAsync();
-                isEdited = true;
-            }
-            catch (Exception)
-            {
-                isEdited = false;
-            }
-
-            return isEdited;
+            await this.context.SaveChangesAsync();
         }
 
         public async Task<int> GetCountOfUsersAsync()
