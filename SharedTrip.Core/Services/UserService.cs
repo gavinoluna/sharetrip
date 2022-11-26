@@ -8,19 +8,13 @@ namespace SharedTrip.Core.Services
     public class UserService : IUserService
     {
         private readonly ApplicationDbContext context;
-        private readonly ICommentService commentService;
-        private readonly ICarService carService;
         private readonly ICloudinaryService cloudinaryService;
 
         public UserService(
             ApplicationDbContext context,
-            ICommentService commentService,
-            ICarService carService,
             ICloudinaryService cloudinaryService)
         {
             this.context = context;
-            this.commentService = commentService;
-            this.carService = carService;
             this.cloudinaryService = cloudinaryService;
         }
 
@@ -100,6 +94,13 @@ namespace SharedTrip.Core.Services
                 .FirstOrDefaultAsync();
 
             return user;
+        }
+
+        public async Task<string> GetUserFullNameAsync(string userId)
+        {
+            var user = await this.context.Users.FindAsync(userId);
+
+            return user.FirstName + " " + user.LastName;
         }
 
         public async Task<bool> HasCar(string userId)
