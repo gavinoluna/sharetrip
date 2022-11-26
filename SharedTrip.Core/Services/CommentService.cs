@@ -28,16 +28,9 @@ namespace SharedTrip.Core.Services
                 CreatedOn = DateTime.Now
             };
 
-            try
-            {
-                await this.context.Comments.AddAsync(comment);
-                await this.context.SaveChangesAsync();
-                isAdded = true;
-            }
-            catch (Exception)
-            {
-                isAdded = false;
-            }
+            await this.context.Comments.AddAsync(comment);
+            await this.context.SaveChangesAsync();
+            isAdded = true;
 
             return isAdded;
         }
