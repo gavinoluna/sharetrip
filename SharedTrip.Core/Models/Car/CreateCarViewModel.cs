@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using SharedTrip.Core.Contracts;
 using SharedTrip.Core.CustomAttributes;
 using System.ComponentModel.DataAnnotations;
 

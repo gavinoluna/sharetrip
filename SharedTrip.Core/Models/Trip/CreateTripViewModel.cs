@@ -1,4 +1,5 @@
-﻿using SharedTrip.Core.CustomAttributes;
+﻿using SharedTrip.Core.Contracts;
+using SharedTrip.Core.CustomAttributes;
 using SharedTrip.Core.Models.Car;
 using System.ComponentModel.DataAnnotations;
 

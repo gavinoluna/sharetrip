@@ -1,4 +1,4 @@
-﻿using SharedTrip.Core.Models.Trip;
+﻿using SharedTrip.Core.Contracts;
 using System;
 using System.ComponentModel.DataAnnotations;
 

@@ -1,7 +1,8 @@
 ﻿using SharedTrip.Core.CustomAttributes;
 using SharedTrip.Core.Models.Car;
+using SharedTrip.Core.Models.Trip;
 
-namespace SharedTrip.Core.Models.Trip
+namespace SharedTrip.Core.Contracts
 {
     public interface ITripModel
     {
