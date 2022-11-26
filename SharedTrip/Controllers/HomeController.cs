@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Home;
 using SharedTrip.Models;
@@ -10,24 +11,36 @@ namespace SharedTrip.Controllers
     {
         private readonly IUserService userService;
         private readonly ITripService tripService;
+        private readonly INotyfService notyfService;
 
         public HomeController(
             IUserService userService,
-            ITripService tripService)
+            ITripService tripService,
+            INotyfService notyfService)
         {
             this.userService = userService;
             this.tripService = tripService;
+            this.notyfService = notyfService;
         }
 
         public async Task<IActionResult> Index()
         {
-            var model = new HomeViewModel
+            try
             {
-                CountOfTrips = await this.tripService.GetCountOfTripsAsync(),
-                CountOfUsers = await this.userService.GetCountOfUsersAsync()
-            };
+                var model = new HomeViewModel
+                {
+                    CountOfTrips = await this.tripService.GetCountOfTripsAsync(),
+                    CountOfUsers = await this.userService.GetCountOfUsersAsync()
+                };
 
-            return View(model);
+                return View(model);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
+                return RedirectToAction("Details", "User");
+            }
         }
 
         public IActionResult Privacy()
