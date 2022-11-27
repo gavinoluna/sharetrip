@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Newtonsoft.Json;
 using SharedTrip.Infrastructure.Data.Entities;
 using SharedTrip.Infrastructure.Data.Seeding.Dtos;
-using System.Drawing;
 
 namespace SharedTrip.Infrastructure.Data.Seeding.Configuration
 {

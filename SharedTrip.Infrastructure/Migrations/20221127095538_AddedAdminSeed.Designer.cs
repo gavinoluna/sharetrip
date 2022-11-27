@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SharedTrip.Infrastructure.Data;
 
@@ -11,9 +12,10 @@ using SharedTrip.Infrastructure.Data;
 namespace SharedTrip.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221127095538_AddedAdminSeed")]
+    partial class AddedAdminSeed
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -250,7 +252,7 @@ namespace SharedTrip.Infrastructure.Migrations
                         {
                             Id = "bcb4f072-ecca-43c9-ab26-c060c6f364e4",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "f1cb6dc9-beb9-4140-983c-4b169838382d",
+                            ConcurrencyStamp = "e5a02280-12c1-4f93-ba15-715020786128",
                             Email = "admin@abv.bg",
                             EmailConfirmed = false,
                             FirstName = "Great",
@@ -259,12 +261,12 @@ namespace SharedTrip.Infrastructure.Migrations
                             LockoutEnabled = false,
                             NormalizedEmail = "admin@abv.bg",
                             NormalizedUserName = "admin@abv.bg",
-                            PasswordHash = "AQAAAAEAACcQAAAAEDtUEfincIDsc79zq+eUz5GjesfUAtI9fxyNWr5gI1RdTzDrdj9ggftd98xuDRNB9A==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEP1OuujYlYa4+ajEWpffHNF55HHkLpXEEtL79iMYX/oaY5xDyfPNbW+ixm9fnjTJEA==",
                             PhoneNumber = "1234567899",
                             PhoneNumberConfirmed = false,
-                            ProfilePictureUrl = "https://res.cloudinary.com/dftfu5p0r/image/upload/v1669543091/3048127_t9hrkf.png",
+                            ProfilePictureUrl = "https://cdn-icons-png.flaticon.com/512/3048/3048127.png",
                             Rating = 0.0,
-                            SecurityStamp = "a3c1f5e8-f639-4cff-8c6b-16b9353a6428",
+                            SecurityStamp = "c96c5587-663e-4507-95e8-af1074ddf652",
                             TwoFactorEnabled = false,
                             UserName = "admin@abv.bg"
                         });
