@@ -28,7 +28,7 @@ namespace SharedTrip.Core.Services
             string publicId = uploadResult.JsonObj["public_id"]!.ToString();
             var uploadedImageUrl = await cloudinary.GetResourceAsync(publicId);
 
-            return uploadedImageUrl.Url;
+            return uploadedImageUrl.SecureUrl;
         }
     }
 }
