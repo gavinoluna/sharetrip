@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using SharedTrip.Extensions;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
 
@@ -14,8 +15,10 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>()
     .AddSignInManager();
+
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
@@ -42,6 +45,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.SeedAdministrator();
 app.UseNotyf();
 
 app.MapControllerRoute(
