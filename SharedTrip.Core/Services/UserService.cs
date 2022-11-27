@@ -100,6 +100,11 @@ namespace SharedTrip.Core.Services
         {
             var user = await this.context.Users.FindAsync(userId);
 
+            if (user == null)
+            {
+                return null;
+            }
+
             return user.FirstName + " " + user.LastName;
         }
 
