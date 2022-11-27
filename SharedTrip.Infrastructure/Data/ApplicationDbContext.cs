@@ -113,6 +113,7 @@ namespace SharedTrip.Infrastructure.Data
             builder.ApplyConfiguration(new CarBrandsConfiguration());
             builder.ApplyConfiguration(new ColourConfiguration());
             builder.ApplyConfiguration(new AdminConfiguration());
+            builder.ApplyConfiguration(new UserRoleConfiguration());
 
             base.OnModelCreating(builder);
         }
