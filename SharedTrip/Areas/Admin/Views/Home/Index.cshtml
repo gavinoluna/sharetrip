@@ -1,5 +1,67 @@
-﻿@{
+﻿@model DashboardViewModel
+
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<h1>Welcome to Admin area!</h1>
+<h1 class="text-center">Welcome to Admin area!</h1>
+
+<h2 class="text-center">Dashboard</h2>
+
+<div class="row mt-5">
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-warning">
+            <div class="inner">
+                <h3>@Model.CountOfUsers</h3>
+                <p>Users</p>
+            </div>
+            <div class="icon">
+                <i class="far fa-user"></i>
+            </div>
+            <a asp-area="Admin" asp-controller="User" asp-action="All" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-info">
+            <div class="inner">
+                <h3>@Model.CountOfTrips</h3>
+                <p>Trips</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-suitcase-rolling"></i>
+            </div>
+            <a asp-area="Admin" asp-controller="Trip" asp-action="All" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-success">
+            <div class="inner">
+                <h3>@Model.CountOfCars</h3>
+                <p>Cars</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-car"></i>
+            </div>
+            <a asp-area="Admin" asp-controller="Car" asp-action="All" class="small-box-footer">More info <i class="fas fa-arrow-circle-right"></i></a>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-6">
+
+        <div class="small-box bg-danger">
+            <div class="inner">
+                <h3>@Model.CountOfComments</h3>
+                <p>Comments</p>
+            </div>
+            <div class="icon">
+                <i class="fas fa-comments"></i>
+            </div>
+        </div>
+    </div>
+
+</div>

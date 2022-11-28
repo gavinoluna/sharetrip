@@ -64,5 +64,12 @@ namespace SharedTrip.Core.Services
 
             return result;
         }
+
+        public async Task<int> GetCountOfCommentsAsync()
+        {
+            return await this.context
+                .Comments
+                .CountAsync();
+        }
     }
 }

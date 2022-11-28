@@ -23,6 +23,8 @@ namespace SharedTrip.Core.Contracts
 
         Task<bool> IsUserOwnerOfACar(string userId, int carId);
 
+        Task<int> GetCountOfCarsAsync();
+
         Task DeleteAsync(int carId);
     }
 }

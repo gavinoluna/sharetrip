@@ -141,6 +141,14 @@ namespace SharedTrip.Core.Services
                          })
                          .ToListAsync();
 
+        public async Task<int> GetCountOfCarsAsync()
+        {
+            return await this.context
+                .Cars
+                .Where(c => c.IsDeleted == false)
+                .CountAsync();
+        }
+
         public async Task<CarQueryServiceModel> GetMyCarsAsync(string userId, int currentPage = 1, int carsPerPage = 3)
         {
             var model = new CarQueryServiceModel();
