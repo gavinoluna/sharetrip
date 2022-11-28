@@ -25,25 +25,13 @@
                     <a class="nav-link" asp-controller="Trip" asp-action="MyTrips">My Trips</a>
                 </li>
             }
-            <li class="nav-item dropdown dropdown-slide @@listing">
-                <a class="nav-link dropdown-toggle" href="#!" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Listing <span><i class="fa fa-angle-down"></i></span>
-                </a>
-                <!-- Dropdown list -->
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item @@category" href="category.html">Ad-Gird View</a></li>
-                    <li><a class="dropdown-item @@listView" href="ad-list-view.html">Ad-List View</a></li>
 
-                    <li class="dropdown dropdown-submenu dropleft">
-                        <a class="dropdown-item dropdown-toggle" href="#!" id="dropdown0201" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Sub Menu</a>
-
-                        <ul class="dropdown-menu" aria-labelledby="dropdown0201">
-                            <li><a class="dropdown-item" href="index.html">Submenu 01</a></li>
-                            <li><a class="dropdown-item" href="index.html">Submenu 02</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </li>
+            @if (User.IsInRole("Administrator"))
+            {
+                <li class="nav-item">
+                    <a class="nav-link" asp-area="Admin" asp-controller="Home" asp-action="Index">Admin Panel</a>
+                </li>
+            }
         </ul>
     </div>
 </div>
