@@ -1,0 +1,75 @@
+﻿@model AllUsersQueryModel
+
+@{
+    ViewData["Title"] = "All Users";
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Users</h3>
+            </div>
+
+            <div class="card-body table-responsive p-0">
+                <table class="table table-hover text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr>
+                                <td>@user.Id</td>
+                                <td>@user.FirstName</td>
+                                <td>@user.LastName</td>
+                                <td>@user.Email</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalUsersCount /
+        AllUsersQueryModel.UsersPerPage);
+}
+
+<div class="row mb-5">
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+        <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+           asp-area="Admin"
+           asp-controller="User"
+           asp-action="All"
+           asp-route-currentPage="@previousPage"><<</a>
+    </div>
+
+    @{
+        var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+        !Model.Users.Any();
+    }
+
+    <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+        <a class="btn btn-primary
+           @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+           asp-area="Admin"
+           asp-controller="User"
+           asp-action="All"
+           asp-route-currentPage="@(Model.CurrentPage + 1)">>></a>
+    </div>
+</div>

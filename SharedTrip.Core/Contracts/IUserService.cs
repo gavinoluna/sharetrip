@@ -1,4 +1,5 @@
-﻿using SharedTrip.Core.Models.User;
+﻿using SharedTrip.Core.Models.ServiceModels.User;
+using SharedTrip.Core.Models.User;
 
 namespace SharedTrip.Core.Contracts
 {
@@ -15,6 +16,8 @@ namespace SharedTrip.Core.Contracts
         Task<EditUserViewModel> GetUserForEditAsync(string userId);
 
         Task EditUserAsync(EditUserViewModel model);
+
+        Task<UserQueryServiceModel> GetUsers(int currentPage = 1, int usersPerPage = 6);
 
         Task<string> GetUserFullNameAsync(string userId);
     }

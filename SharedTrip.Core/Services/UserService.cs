@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
+using SharedTrip.Core.Models.ServiceModels.User;
 using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
 
@@ -106,6 +107,34 @@ namespace SharedTrip.Core.Services
             }
 
             return user.FirstName + " " + user.LastName;
+        }
+
+        public async Task<UserQueryServiceModel> GetUsers(int currentPage = 1, int usersPerPage = 6)
+        {
+            var model = new UserQueryServiceModel();
+
+            var usersQuery = this.context
+                .Users
+                .OrderBy(u => u.FirstName)
+                .ThenBy(u => u.LastName)
+                .AsQueryable();
+
+            var users = await usersQuery
+                .Skip((currentPage - 1) * usersPerPage)
+                .Take(usersPerPage)
+                .Select(u => new UserListViewModel
+                {
+                    Id = u.Id,
+                    FirstName = u.FirstName,
+                    LastName = u.LastName,
+                    Email = u.Email
+                })
+                .ToListAsync();
+
+            model.Users = users;
+            model.TotalUsersCount = await usersQuery.CountAsync();
+
+            return model;
         }
 
         public async Task<bool> HasCar(string userId)
