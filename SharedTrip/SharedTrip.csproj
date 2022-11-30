@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Areas\Admin\Views\User\Edit.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Car\MyCars.cshtml" />
     <_ContentIncludedByDefault Remove="Views\Trip\Edit.cshtml" />
   </ItemGroup>
@@ -51,6 +52,10 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\adminLTE\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Areas\Admin\Views\User\Edit.cshtml" />
   </ItemGroup>
 
 </Project>

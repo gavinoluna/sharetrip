@@ -7,28 +7,33 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Users</h3>
+            <div class="card-header d-flex justify-content-center">
+                <h3 class="card-title text-center">Users</h3>
             </div>
 
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>First Name</th>
                             <th>Last Name</th>
                             <th>Email</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach (var user in Model.Users)
                         {
                             <tr>
-                                <td>@user.Id</td>
                                 <td>@user.FirstName</td>
                                 <td>@user.LastName</td>
                                 <td>@user.Email</td>
+                                <td>
+                                    <a asp-area="Admin" asp-controller="User" asp-action="Edit" asp-route-userId="@user.Id" 
+                                    class="btn btn-block btn-outline-info btn-xs">Edit</a>
+                                    <a asp-area="Admin" asp-controller="User" asp-action="Roles" asp-route-userId="@user.Id"
+                                    class="btn btn-block btn-outline-warning btn-xs">Roles</a>
+                                </td>
                             </tr>
                         }
                     </tbody>

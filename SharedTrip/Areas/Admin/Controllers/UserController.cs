@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.ServiceModels.User;
+using SharedTrip.Core.Models.User;
 
 namespace SharedTrip.Areas.Admin.Controllers
 {
@@ -33,6 +34,51 @@ namespace SharedTrip.Areas.Admin.Controllers
             {
                 this.notyfService.Error("Something went wrong");
                 return RedirectToAction("Index", "Home");
+            }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Edit(string userId)
+        {
+            try
+            {
+                var user = await this.userService.GetUserForEditAsync(userId);
+
+                if (user == null)
+                {
+                    this.notyfService.Error("The user does not exist");
+                    return RedirectToAction(nameof(All));
+                }
+
+                return View(user);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                return RedirectToAction(nameof(All));
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(EditUserViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return View(model);
+                }
+
+                await this.userService.EditUserAsync(model);
+
+                this.notyfService.Success("Profile is edited successfully");
+                return RedirectToAction(nameof(All));
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logging
+                return View(model);
             }
         }
     }
