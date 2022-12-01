@@ -1,8 +1,13 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore;
+using SharedTrip.Areas.Admin.Models.User;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.ServiceModels.User;
 using SharedTrip.Core.Models.User;
+using SharedTrip.Infrastructure.Data.Entities;
 
 namespace SharedTrip.Areas.Admin.Controllers
 {
@@ -10,13 +15,19 @@ namespace SharedTrip.Areas.Admin.Controllers
     {
         private readonly IUserService userService;
         private readonly INotyfService notyfService;
+        private readonly RoleManager<IdentityRole> roleManager;
+        private readonly UserManager<ApplicationUser> userManager;
 
         public UserController(
             IUserService userService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager)
         {
             this.userService = userService;
             this.notyfService = notyfService;
+            this.roleManager = roleManager;
+            this.userManager = userManager;
         }
 
         public async Task<IActionResult> All([FromQuery] AllUsersQueryModel query)
@@ -80,6 +91,28 @@ namespace SharedTrip.Areas.Admin.Controllers
                 //add logging
                 return View(model);
             }
+        }
+
+        public async Task<IActionResult> Roles(string userId)
+        {
+            var user = await this.userService.GetUserByIdAsync(userId);
+            var model = new UserRolesViewModel()
+            {
+                UserId = user.Id,
+                FullName = $"{user.FirstName} {user.LastName}"
+            };
+
+            ViewBag.RoleItems = this.roleManager
+                .Roles
+                .ToList()
+                .Select(r => new SelectListItem
+                {
+                    Text = r.Name,
+                    Value = r.Id,
+                    Selected = this.userManager.IsInRoleAsync(user, r.Name).Result
+                });
+
+            return View(model);
         }
     }
 }

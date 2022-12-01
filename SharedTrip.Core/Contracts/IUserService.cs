@@ -1,5 +1,6 @@
 ﻿using SharedTrip.Core.Models.ServiceModels.User;
 using SharedTrip.Core.Models.User;
+using SharedTrip.Infrastructure.Data.Entities;
 
 namespace SharedTrip.Core.Contracts
 {
@@ -14,6 +15,8 @@ namespace SharedTrip.Core.Contracts
         Task<TripDriverViewModel> GetTripDriverAsync(string driverId);
 
         Task<EditUserViewModel> GetUserForEditAsync(string userId);
+
+        Task<ApplicationUser> GetUserByIdAsync(string userId);
 
         Task EditUserAsync(EditUserViewModel model);
 

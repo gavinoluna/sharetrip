@@ -1,0 +1,30 @@
+﻿@model UserRolesViewModel
+
+<div class="col-md-6">
+    <div class="card card-primary">
+        <div class="card-header text-center">Roles</div>
+        <form method="post" enctype="multipart/form-data">
+            <input asp-for="@Model.UserId" type="hidden" />
+            <div class="card-body">
+                <div class="form-group">
+                    <h4>User: @Html.DisplayFor(m => m.FullName)</h4>
+                </div>
+                <div class="form-group">
+                    <div class="form-group">
+                        <label>User Roles</label>
+                        <select asp-for="RoleIds" multiple="" class="form-control">
+                            @foreach (var role in (IEnumerable<SelectListItem>)ViewBag.RoleItems)
+                            {
+                                <option value="@role.Value" class="selected">@role.Text</option>
+                            }
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </div>
+        </form>
+    </div>
+</div>

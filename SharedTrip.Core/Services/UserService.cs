@@ -3,6 +3,7 @@ using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.ServiceModels.User;
 using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
+using SharedTrip.Infrastructure.Data.Entities;
 
 namespace SharedTrip.Core.Services
 {
@@ -78,6 +79,13 @@ namespace SharedTrip.Core.Services
                 .FirstOrDefaultAsync();
 
             return driver;
+        }
+
+        public async Task<ApplicationUser> GetUserByIdAsync(string userId)
+        {
+            return await this.context
+                .Users
+                .FindAsync(userId);
         }
 
         public async Task<EditUserViewModel> GetUserForEditAsync(string userId)
