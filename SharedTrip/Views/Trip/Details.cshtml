@@ -153,7 +153,7 @@
                                 <a asp-controller="User" asp-action="Details" asp-route-userId="@passenger.Id">
                                     <div class="col">
                                         <img src="@passenger.ProfileImageUrl" width="50" alt="Profile Picture"
-                                        class="rounded-circle img-fluid profile-picture pp-large pp-sm-small">
+                                 class="rounded-circle img-fluid profile-picture pp-large pp-sm-small">
                                         <span class="text-muted">@passenger.Name</span>
                                     </div>
                                 </a>
@@ -177,14 +177,15 @@
                 else
                 {
                     <div class="d-flex justify-content-start divButtons">
-                        <a class="btn btn-dark @(Model.Trip.FreeSeats <= 0 ? "disabled" : "")" 
-                        asp-controller="Trip" asp-action="JoinTrip" asp-route-tripId="@Model.Trip.Id">Join Trip</a>
+                        <a class="btn btn-dark @(Model.Trip.FreeSeats <= 0 ? "disabled" : "")"
+                       asp-controller="Trip" asp-action="JoinTrip" asp-route-tripId="@Model.Trip.Id">Join Trip</a>
                     </div>
                 }
             </div>
         </div>
     </div>
 </div>
+<p class="text-muted">Car</p>
 <div class="card lg-3 mt-3">
     <div class="card-body">
         <div class="row">

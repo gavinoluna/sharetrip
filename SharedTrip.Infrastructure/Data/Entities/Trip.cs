@@ -47,7 +47,7 @@ namespace SharedTrip.Infrastructure.Data.Entities
 
         public List<PassengerTrip> PassengersTrips { get; set; } = new List<PassengerTrip>();
 
-        public bool IsActive { get; set; }
+        public bool IsActive { get; set; } = true;
 
         public bool IsDeleted { get; set; }
 
