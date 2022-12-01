@@ -18,7 +18,5 @@ namespace SharedTrip.Core.Contracts
         Task EditUserAsync(EditUserViewModel model);
 
         Task<UserQueryServiceModel> GetUsers(int currentPage = 1, int usersPerPage = 6);
-
-        Task<string> GetUserFullNameAsync(string userId);
     }
 }

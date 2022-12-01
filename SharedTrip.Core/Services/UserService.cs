@@ -97,18 +97,6 @@ namespace SharedTrip.Core.Services
             return user;
         }
 
-        public async Task<string> GetUserFullNameAsync(string userId)
-        {
-            var user = await this.context.Users.FindAsync(userId);
-
-            if (user == null)
-            {
-                return null;
-            }
-
-            return user.FirstName + " " + user.LastName;
-        }
-
         public async Task<UserQueryServiceModel> GetUsers(int currentPage = 1, int usersPerPage = 6)
         {
             var model = new UserQueryServiceModel();
