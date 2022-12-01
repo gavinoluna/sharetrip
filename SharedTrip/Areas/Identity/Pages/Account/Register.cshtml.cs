@@ -139,8 +139,7 @@ namespace SharedTrip.Areas.Identity.Pages.Account
                     }
                     else
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return LocalRedirect(returnUrl);
+                        return RedirectToAction("Login", "Account");
                     }
                 }
                 foreach (var error in result.Errors)
