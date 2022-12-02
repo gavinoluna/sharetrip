@@ -1,0 +1,85 @@
+﻿@model AllTripsQueryModel
+
+@{
+    var previousPage = Model.CurrentPage - 1;
+    if (previousPage < 1)
+    {
+        previousPage = 1;
+    }
+
+    var maxPage = Math.Ceiling((double)Model.TotalTripsCount /
+    AllTripsQueryModel.TripsPerPage);
+}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">All Trips</h3>
+            </div>
+            <div class="card-body">
+                <div id="example2_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                    <div class="row"><div class="col-sm-12 col-md-6"></div><div class="col-sm-12 col-md-6"></div></div><div class="row">
+                        <div class="col-sm-12">
+                            <table class="table table-bordered table-hover dataTable dtr-inline collapsed">
+                                <thead>
+                                    <tr>
+                                        <th class="sorting sorting_asc" rowspan="1" colspan="1">From</th>
+                                        <th class="sorting" rowspan="1" colspan="1">To</th>
+                                        <th class="sorting" rowspan="1" colspan="1">Driver Name</th>
+                                        <th class="sorting" rowspan="1" colspan="1">Car</th>
+                                        <th class="sorting" rowspan="1" colspan="1">Price Per Person</th>
+                                        <th class="sorting" rowspan="1" colspan="1">Free Seats</th>
+                                        <th class="sorting" rowspan="1" colspan="1">Date</th>
+                                        <th class="sorting" rowspan="1" colspan="1">Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var trip in Model.Trips)
+                                    {
+                                        <tr class="odd">
+                                            <td class="dtr-control sorting_1">@trip.StartDestination</td>
+                                            <td>@trip.EndDestination</td>
+                                            <td>@trip.DriverName</td>
+                                            <td>@trip.Car</td>
+                                            <td>@trip.Price lv.</td>
+                                            <td>@trip.FreeSeats of @trip.AllSeats</td>
+                                            <td>@trip.Date</td>
+                                            <td>
+                                                <a asp-area="" asp-controller="Trip" asp-action="Details" asp-route-tripId="@trip.Id"
+                                               class="btn btn-block btn-outline-info btn-xs">Details</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <div class="row mb-5">
+                                <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
+                                    <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
+                                       asp-area="Admin"
+                                       asp-controller="Trip"
+                                       asp-action="All"
+                                       asp-route-currentPage="@previousPage">Previous</a>
+                                </div>
+
+                                @{
+                                    var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
+                                    !Model.Trips.Any();
+                                }
+
+                                <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a class="btn btn-primary
+                                    @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
+                                       asp-area="Admin"
+                                       asp-controller="Trip"
+                                       asp-action="All"
+                                       asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
