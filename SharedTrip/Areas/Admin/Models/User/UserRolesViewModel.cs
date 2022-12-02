@@ -6,6 +6,6 @@
 
         public string FullName { get; set; } = null!;
 
-        public string[] RoleIds { get; set; }
+        public string[] RoleNames { get; set; }
     }
 }

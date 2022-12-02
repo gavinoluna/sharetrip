@@ -102,17 +102,31 @@ namespace SharedTrip.Areas.Admin.Controllers
                 FullName = $"{user.FirstName} {user.LastName}"
             };
 
-            ViewBag.RoleItems = this.roleManager
-                .Roles
+            ViewBag.RoleItems = roleManager.Roles
                 .ToList()
-                .Select(r => new SelectListItem
+                .Select(r => new SelectListItem()
                 {
                     Text = r.Name,
-                    Value = r.Id,
-                    Selected = this.userManager.IsInRoleAsync(user, r.Name).Result
-                });
+                    Value = r.Name,
+                    Selected = userManager.IsInRoleAsync(user, r.Name).Result
+                }).ToList();
 
             return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Roles(UserRolesViewModel model)
+        {
+            var user = await this.userService.GetUserByIdAsync(model.UserId);
+            var userRoles = await userManager.GetRolesAsync(user);
+            await userManager.RemoveFromRolesAsync(user, userRoles);
+
+            if (model.RoleNames?.Length > 0)
+            {
+                await userManager.AddToRolesAsync(user, model.RoleNames);
+            }
+
+            return RedirectToAction(nameof(All));
         }
     }
 }

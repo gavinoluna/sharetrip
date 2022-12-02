@@ -12,10 +12,10 @@
                 <div class="form-group">
                     <div class="form-group">
                         <label>User Roles</label>
-                        <select asp-for="RoleIds" multiple="" class="form-control">
+                        <select asp-for="RoleNames" multiple="" id="selectDropdown" class="form-control">
                             @foreach (var role in (IEnumerable<SelectListItem>)ViewBag.RoleItems)
                             {
-                                <option value="@role.Value" class="selected">@role.Text</option>
+                                <option value="@role.Value">@role.Text</option>
                             }
                         </select>
                     </div>
