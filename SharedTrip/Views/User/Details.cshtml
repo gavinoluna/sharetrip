@@ -33,7 +33,7 @@
                         }
                     </div>
                 </div>
-                @if(ViewBag.CurrentUserId == Model.Id)
+                @if (ViewBag.CurrentUserId == Model.Id)
                 {
                     <div class="widget user-dashboard-menu">
                         <ul>
@@ -48,11 +48,6 @@
                             </li>
                             <li>
                                 <a asp-controller="User" asp-action="Edit"><i class="fa fa-cog"></i> Edit</a>
-                            </li>
-                            <li>
-                                <a asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
-                                    <i class="fa-solid fa-door-open"></i> Logout
-                                </a>
                             </li>
                             <li>
                                 <a asp-controller="User" asp-action="Delete" data-toggle="modal" data-target="#deleteaccount"><i class="fa fa-power-off"></i>Delete Account</a>
@@ -174,7 +169,7 @@
                         'Content-Type': 'application/json',
                         'XSRF-TOKEN': getToken()
                     },
-                    data: { __RequestVerificationToken : getToken() },
+                    data: { __RequestVerificationToken: getToken() },
                     body: JSON.stringify(model)
                 })
                     .then(response => response.json())
@@ -201,8 +196,9 @@
 
             fetch(url, {
                 method: "GET",
-                headers: { 'Content-Type': 'application/json',
-                           'XSRF-TOKEN': getToken()
+                headers: {
+                    'Content-Type': 'application/json',
+                    'XSRF-TOKEN': getToken()
                 }
             })
                 .then(response => response.json())
@@ -236,29 +232,29 @@
                 comments.forEach(x => {
                     let liElement = document.createElement('li');
                     liElement.innerHTML = `<div class="media">
-                            <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
-                            <div class="media-body">
-                                    <h4 class="media-heading"><a href="/User/Details?userId=${x.creatorId}">${x.creatorName}</a></h4>
-                                    <p>${x.content}</p>
-                                    <ul class="list-unstyled list-inline media-detail pull-left">
-                                        <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
-                                        <li><i class="fa fa-thumbs-up"></i>13</li>
-                                    </ul>
-                                    <ul class="list-unstyled list-inline media-detail pull-right">
-                                         <li class=""><a href="">Like</a></li>
-                                    </ul>
-                                </div>
-                            </div>`;
+                                    <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
+                                    <div class="media-body">
+                                            <h4 class="media-heading"><a href="/User/Details?userId=${x.creatorId}">${x.creatorName}</a></h4>
+                                            <p>${x.content}</p>
+                                            <ul class="list-unstyled list-inline media-detail pull-left">
+                                                <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
+                                                <li><i class="fa fa-thumbs-up"></i>13</li>
+                                            </ul>
+                                            <ul class="list-unstyled list-inline media-detail pull-right">
+                                                 <li class=""><a href="">Like</a></li>
+                                            </ul>
+                                        </div>
+                                    </div>`;
                     commentsUl.appendChild(liElement);
                 })
             }
-            else{
+            else {
                 previousButton.classList.add('disabled');
                 nextButton.classList.add('disabled');
             }
         }
 
-        const getToken = function() {
+        const getToken = function () {
             var token = '@Html.AntiForgeryToken()';
             token = $(token).val();
             return token;
