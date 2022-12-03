@@ -68,6 +68,36 @@ namespace SharedTrip.Core.Services
             await this.context.SaveChangesAsync();
         }
 
+        public async Task<AllCarsQueryServiceModel> GetAllCarsAsync(int currentPage = 1, int carsPerPage = 6)
+        {
+            var model = new AllCarsQueryServiceModel();
+            var carsQuery = this.context
+            .Cars
+                .Where(c => c.IsDeleted == false)
+                .OrderBy(c => c.Brand.Name)
+                .ThenBy(c => c.Model)
+                .AsQueryable();
+
+            var cars = await carsQuery
+                .Skip((currentPage - 1) * carsPerPage)
+                .Take(carsPerPage)
+                .Select(c => new AllCarsViewModel
+                {
+                    Id = c.Id,
+                    Brand = c.Brand.Name,
+                    Colour = c.Colour.Name,
+                    Model = c.Model,
+                    Year = c.Year,
+                    DriverName = $"{c.Driver.FirstName} {c.Driver.LastName}"
+                })
+                .ToListAsync();
+
+            model.Cars = cars;
+            model.TotalCarsCount = await carsQuery.CountAsync();
+
+            return model;
+        }
+
         public async Task<IEnumerable<BrandViewModel>> GetBrandsAsync()
             => await this.context
                          .Brands

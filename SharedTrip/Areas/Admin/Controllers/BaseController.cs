@@ -5,8 +5,8 @@ using static SharedTrip.Infrastructure.Data.Constants.AdminConstants;
 
 namespace SharedTrip.Areas.Admin.Controllers
 {
+    [Area(AreaName)]
     [Authorize(Roles = AdministratorRole)]
-    [Area("Admin")]
     public class BaseController : Controller
     {
     }

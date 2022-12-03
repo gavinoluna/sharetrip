@@ -1,4 +1,4 @@
-﻿@model AllCarsQueryModel
+﻿@model MyCarsQueryModel
 
 @{
     ViewData["Title"] = "My Cars";
@@ -15,7 +15,7 @@
     }
 
     var maxPage = Math.Ceiling((double)Model.TotalCarsCount /
-        AllCarsQueryModel.CarsPerPage);
+        MyCarsQueryModel.CarsPerPage);
 }
 
 @if (!Model.Cars.Any())

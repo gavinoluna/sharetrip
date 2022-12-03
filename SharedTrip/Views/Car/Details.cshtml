@@ -30,10 +30,13 @@
                     <i class="fa-solid fa-xmark ml-1" data-toggle="tooltip" data-placement="top" title="No"></i>
                 }
             </p>
-            <div>
-                <a asp-controller="Car" asp-action="Edit" asp-route-carId="@Model.Id" class="btn btn-warning font-weight-bold mt-3">Edit</a>
-                <a asp-controller="Car" asp-action="Delete" asp-route-carId="@Model.Id" class="btn btn-danger font-weight-bold mt-3">Delete</a>
-            </div>
+            @if (Model.DriverId == User.Id())
+            {
+                <div>
+                    <a asp-controller="Car" asp-action="Edit" asp-route-carId="@Model.Id" class="btn btn-warning font-weight-bold mt-3">Edit</a>
+                    <a asp-controller="Car" asp-action="Delete" asp-route-carId="@Model.Id" class="btn btn-danger font-weight-bold mt-3">Delete</a>
+                </div>
+            }
         </div>
     </div>
 </div>

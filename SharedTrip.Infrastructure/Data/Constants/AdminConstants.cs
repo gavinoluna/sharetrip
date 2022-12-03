@@ -2,6 +2,7 @@
 {
     public class AdminConstants
     {
+        public const string AreaName = "Admin";
         public const string AdministratorRole = "Administrator";
         public const string AdminEmail = "admin@abv.bg";
         public const string AdminPhoneNumber = "1234567899";

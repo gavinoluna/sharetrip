@@ -1,10 +1,8 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Car;
 using SharedTrip.Core.Models.ServiceModels.Car;
-using SharedTrip.Core.Models.Trip;
 using System.Security.Claims;
 
 namespace SharedTrip.Controllers
@@ -79,7 +77,7 @@ namespace SharedTrip.Controllers
                     return RedirectToAction("Details", "User");
                 }
 
-                if (car.DriverId != User.Id())
+                if (car.DriverId != User.Id() && User.IsInRole("Administrator") == false)
                 {
                     this.notyfService.Error("You have no access to cars that are not yours");
                     return RedirectToAction(nameof(MyCars));
@@ -96,11 +94,11 @@ namespace SharedTrip.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> MyCars([FromQuery] AllCarsQueryModel query)
+        public async Task<IActionResult> MyCars([FromQuery] MyCarsQueryModel query)
         {
             try
             {
-                var result = await this.carService.GetMyCarsAsync(User.Id(), query.CurrentPage, AllCarsQueryModel.CarsPerPage);
+                var result = await this.carService.GetMyCarsAsync(User.Id(), query.CurrentPage, MyCarsQueryModel.CarsPerPage);
 
                 query.Cars = result.Cars;
                 query.TotalCarsCount = result.TotalCarsCount;

@@ -4,9 +4,6 @@
     <meta charset="utf-8">
     <title>@ViewData["Title"] - Shared Trip</title>
 
-    <!-- theme meta -->
-    <meta name="theme-name" content="classimax" />
-
     <!--
     Essential stylesheets
     =====================================-->
@@ -49,21 +46,19 @@
         <!-- Container Start -->
         <div class="container">
             <div class="row">
-                <div class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0">
+                <div @*class="col-lg-3 col-md-7 offset-md-1 offset-lg-0 mb-4 mb-lg-0"*@>
                     <!-- About -->
                     <div class="block about">
                         <!-- footer logo -->
-                        <img src="images/logo-footer.png" alt="logo">
-                        <!-- description -->
+                        <img src="~/images/logo-footer.png" alt="logo">
                         <p class="alt-color">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-                            incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat.
+                            This is a Web App for people who have no car or just do not want to travel alone. With SharedTrip you have the
+                            possibility to find new travel friends and to turn your trip into an adventure with nice emotions.
                         </p>
                     </div>
                 </div>
                 <!-- Link list -->
-                <div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
+                @*<div class="col-lg-2 offset-lg-1 col-md-3 col-6 mb-4 mb-lg-0">
                     <div class="block">
                         <h4>Site Pages</h4>
                         <ul>
@@ -80,14 +75,16 @@
                     <div class="block">
                         <h4>Admin Pages</h4>
                         <ul>
-                            <li><a href="category.html">Category</a></li>
+                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                            <li><a asp-controller="Trip" asp-action="All">All Trips</a></li>
+                            <li><a asp-controller="Trip" asp-action="Create">Create a Trip</a></li>
                             <li><a href="single.html">Single Page</a></li>
                             <li><a href="store.html">Store Single</a></li>
                             <li><a href="single-blog.html">Single Post</a></li>
                             <li><a href="blog.html">Blog</a></li>
                         </ul>
                     </div>
-                </div>
+                </div>*@
             </div>
         </div>
         <!-- Container End -->

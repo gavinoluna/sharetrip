@@ -1,38 +1,40 @@
-﻿@model AllUsersQueryModel
+﻿@model AllCarsQueryModel
 
 @{
-    ViewData["Title"] = "All Users";
+    ViewData["Title"] = "All Cars";
 }
 
 <div class="row">
     <div class="col-12">
         <div class="card">
             <div class="card-header d-flex justify-content-center">
-                <h3 class="card-title text-center">Users</h3>
+                <h3 class="card-title text-center">Cars</h3>
             </div>
 
             <div class="card-body table-responsive p-0">
                 <table class="table table-hover text-nowrap">
                     <thead>
                         <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
+                            <th>Brand</th>
+                            <th>Model</th>
+                            <th>Colour</th>
+                            <th>Year</th>
+                            <th>Owner Name</th>
                             <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var user in Model.Users)
+                        @foreach (var car in Model.Cars)
                         {
                             <tr>
-                                <td>@user.FirstName</td>
-                                <td>@user.LastName</td>
-                                <td>@user.Email</td>
+                                <td>@car.Brand</td>
+                                <td>@car.Model</td>
+                                <td>@car.Colour</td>
+                                <td>@car.Year</td>
+                                <td>@car.DriverName</td>
                                 <td>
-                                    <a asp-area="Admin" asp-controller="User" asp-action="Edit" asp-route-userId="@user.Id" 
-                                    class="btn btn-block btn-outline-info btn-xs">Edit</a>
-                                    <a asp-area="Admin" asp-controller="User" asp-action="Roles" asp-route-userId="@user.Id"
-                                    class="btn btn-block btn-outline-warning btn-xs">Roles</a>
+                                    <a asp-area="" asp-controller="Car" asp-action="Details" asp-route-carId="@car.Id"
+                                   class="btn btn-block btn-outline-info btn-xs">Details</a>
                                 </td>
                             </tr>
                         }
@@ -51,29 +53,29 @@
         previousPage = 1;
     }
 
-    var maxPage = Math.Ceiling((double)Model.TotalUsersCount /
-        AllUsersQueryModel.UsersPerPage);
+    var maxPage = Math.Ceiling((double)Model.TotalCarsCount /
+        AllCarsQueryModel.CarsPerPage);
 }
 
 <div class="row mb-5">
     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-start">
         <a class="btn btn-primary @(Model.CurrentPage == 1 ? "disabled" : string.Empty)"
            asp-area="Admin"
-           asp-controller="User"
+           asp-controller="Car"
            asp-action="All"
            asp-route-currentPage="@previousPage">Previous</a>
     </div>
 
     @{
         var shouldButtonBeDisabled = Model.CurrentPage == maxPage ||
-        !Model.Users.Any();
+        !Model.Cars.Any();
     }
 
     <div class="col-md-6 d-grid gap-2 d-md-flex justify-content-md-end">
         <a class="btn btn-primary
            @(shouldButtonBeDisabled ? "disabled" : string.Empty)"
            asp-area="Admin"
-           asp-controller="User"
+           asp-controller="Car"
            asp-action="All"
            asp-route-currentPage="@(Model.CurrentPage + 1)">Next</a>
     </div>
