@@ -95,35 +95,54 @@ namespace SharedTrip.Areas.Admin.Controllers
 
         public async Task<IActionResult> Roles(string userId)
         {
-            var user = await this.userService.GetUserByIdAsync(userId);
-            var model = new UserRolesViewModel()
+            try
             {
-                UserId = user.Id,
-                FullName = $"{user.FirstName} {user.LastName}"
-            };
-
-            ViewBag.RoleItems = roleManager.Roles
-                .ToList()
-                .Select(r => new SelectListItem()
+                var user = await this.userService.GetUserByIdAsync(userId);
+                var model = new UserRolesViewModel()
                 {
-                    Text = r.Name,
-                    Value = r.Name,
-                    Selected = userManager.IsInRoleAsync(user, r.Name).Result
-                }).ToList();
+                    UserId = user.Id,
+                    FullName = $"{user.FirstName} {user.LastName}"
+                };
 
-            return View(model);
+                ViewBag.RoleItems = roleManager.Roles
+                    .ToList()
+                    .Select(r => new SelectListItem()
+                    {
+                        Text = r.Name,
+                        Value = r.Name,
+                        Selected = userManager.IsInRoleAsync(user, r.Name).Result
+                    }).ToList();
+
+                return View(model);
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logger
+                return RedirectToAction(nameof(All));
+            }
         }
 
         [HttpPost]
         public async Task<IActionResult> Roles(UserRolesViewModel model)
         {
-            var user = await this.userService.GetUserByIdAsync(model.UserId);
-            var userRoles = await userManager.GetRolesAsync(user);
-            await userManager.RemoveFromRolesAsync(user, userRoles);
-
-            if (model.RoleNames?.Length > 0)
+            try
             {
-                await userManager.AddToRolesAsync(user, model.RoleNames);
+                var user = await this.userService.GetUserByIdAsync(model.UserId);
+                var userRoles = await userManager.GetRolesAsync(user);
+                await userManager.RemoveFromRolesAsync(user, userRoles);
+
+                if (model.RoleNames?.Length > 0)
+                {
+                    await userManager.AddToRolesAsync(user, model.RoleNames);
+                }
+
+                this.notyfService.Success("You have changed the role successfully");
+            }
+            catch (Exception)
+            {
+                this.notyfService.Error("Something went wrong");
+                //add logger
             }
 
             return RedirectToAction(nameof(All));
