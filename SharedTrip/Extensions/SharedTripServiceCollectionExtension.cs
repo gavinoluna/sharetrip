@@ -17,6 +17,10 @@ namespace Microsoft.Extensions.DependencyInjection
             services.AddScoped<ICommentService, CommentService>();
             services.AddScoped<ICarService, CarService>();
             services.AddScoped<ITripService, TripService>();
+            services.AddScoped<IMessageService, MessageService>();
+
+            services.AddSignalR();
+
             services.AddNotyf(config =>
             {
                 config.DurationInSeconds = 6;

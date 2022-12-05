@@ -116,11 +116,10 @@ namespace SharedTrip.Areas.Identity.Pages.Account
                     var user = await _userManager.FindByEmailAsync(Input.Email);
 
                     TempData["FullName"] = $"{user.FirstName} {user.LastName}";
+                    TempData["ProfileImageUrl"] = user.ProfilePictureUrl;
 
                     if (user != null && await _userManager.IsInRoleAsync(user, "Administrator"))
                     {
-                        TempData["ProfileImageUrl"] = user.ProfilePictureUrl;
-
                         return RedirectToAction("Index", "Home", new { Area = "Admin" });
                     }
 

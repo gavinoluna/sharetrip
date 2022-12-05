@@ -25,5 +25,7 @@ namespace SharedTrip.Infrastructure.Data.Entities
         public string Content { get; set; } = null!;
 
         public DateTime CreatedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

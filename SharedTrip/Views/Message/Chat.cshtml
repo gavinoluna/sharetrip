@@ -1,0 +1,188 @@
+﻿@model UserChatViewModel
+
+@{
+    ViewData["Title"] = "Chat";
+}
+
+<div class="container p-0">
+
+    <h1 class="h3 mb-3">Messages</h1>
+
+    <div class="card">
+        <div class="row g-0">
+            <div class="col">
+                <div class="py-2 px-4 border-bottom d-none d-lg-block">
+                    <div class="d-flex align-items-center py-1">
+                        <div class="position-relative">
+                            <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
+                        </div>
+                        <div class="flex-grow-1 pl-3">
+                            <strong>@Model.ReceiverName</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="position-relative">
+                    <div class="chat-messages p-4" id="MessageDiv"></div>
+                </div>
+
+                <div class="flex-grow-0 py-3 px-4 border-top">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="messageInput" placeholder="Type your message">
+                        <button class="btn btn-primary" id="sendButton">Send</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        "use strict";
+
+        var connection = new signalR.HubConnectionBuilder().withUrl("/chatHub").build();
+
+        document.getElementById('sendButton').disabled = true;
+
+        connection.start().then(function () {
+            document.getElementById('sendButton').disabled = false;
+        }).catch(function (err) {
+            return console.error(err.toString());
+        });
+
+        connection.on("ReceiveMessage", function (message) {
+            let divElement = document.createElement('div');
+            divElement.classList.add('pb-4');
+            divElement.classList.add('chat-message-left');
+
+            divElement.innerHTML =
+                `<div>
+                                            <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleString()}</div>
+                                </div>
+                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                            <div class="font-weight-bold mb-1">@Model.ReceiverName</div>
+                                    ${message}
+                                </div>`
+
+            document.getElementById('MessageDiv').appendChild(divElement);
+        });
+
+        const saveMessage = async function (message) {
+            let model = {
+                ReceiverId: '@Model.ReceiverId',
+                SenderId: '@User.Id()',
+                Message: message
+            };
+
+            fetch('/Message/CreateMessage', {
+                method: "POST",
+                headers: {
+                    'Content-type': 'application/json',
+                    'XSRF-TOKEN': getToken()
+                },
+                body: JSON.stringify(model)
+            })
+                .then(response => response.json())
+                .then(result => console.log(result));
+        }
+
+        connection.on("SendMessage", async function (message) {
+            let divElement = document.createElement('div');
+            divElement.classList.add('pb-4');
+            divElement.classList.add('chat-message-right');
+
+            divElement.innerHTML =
+                        `<div>
+                            <img src="@TempData.Peek("ProfileImageUrl")" class="rounded-circle mr-1" alt="@TempData.Peek("FullName")" width="40" height="40">
+                                    <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleString()}</div>
+                        </div>
+                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                            <div class="font-weight-bold mb-1">@TempData.Peek("FullName")</div>
+                            ${message}
+                        </div>`
+
+            document.getElementById('MessageDiv').appendChild(divElement);
+            await saveMessage(message);
+        });
+
+        const showMessages = function (messages) {
+            let messageDiv = document.getElementById('MessageDiv');
+            messageDiv.innerHTML = '';
+
+            messages.forEach(m => {
+                let divElement = document.createElement('div');
+
+                divElement.classList.add('pb-4');
+
+                if (m.senderId == '@User.Id()') {
+                    divElement.classList.add('chat-message-right');
+
+                    divElement.innerHTML =
+                        `<div>
+                            <img src="@TempData.Peek("ProfileImageUrl")" class="rounded-circle mr-1" alt="@TempData.Peek("FullName")" width="40" height="40">
+                            <div class="text-muted small text-nowrap mt-2">${m.createdOn}</div>
+                        </div>
+                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                            <div class="font-weight-bold mb-1">@TempData.Peek("FullName")</div>
+                            ${m.content}
+                        </div>`
+                }
+                else {
+                    divElement.classList.add('chat-message-left');
+
+                    divElement.innerHTML =
+                        `<div>
+                             <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
+                             <div class="text-muted small text-nowrap mt-2">${m.createdOn}</div>
+                         </div>
+                         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                             <div class="font-weight-bold mb-1">@Model.ReceiverName</div>
+                             ${m.content}
+                         </div>`
+                }
+
+                messageDiv.appendChild(divElement);
+            });
+        }
+
+        const getMessages = async function () {
+            fetch('/Message/GetMessages?userId=@Model.ReceiverId', {
+                method: "GET",
+                headers: { 
+                    'Content-type': 'application.json',
+                    'XSRF-TOKEN': getToken()
+                }
+            })
+                .then(response => response.json())
+                .then(messages => showMessages(messages));
+        }
+
+        const getToken = function () {
+            var token = '@Html.AntiForgeryToken()';
+            token = $(token).val();
+            return token;
+        }
+
+        document.getElementById('sendButton').addEventListener('click', function (e) {
+            e.preventDefault();
+            console.log('clicked');            
+            let messageContent = document.getElementById('messageInput').value;
+
+            let model = {
+                message: messageContent,
+                senderId: '@User.Id()',
+                receiverId: '@Model.ReceiverId'
+            };
+
+            connection.invoke("SendMessage", model)
+            document.getElementById('messageInput').value = '';
+        });
+
+        window.onload = getMessages();
+    </script>
+}
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>

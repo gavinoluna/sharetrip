@@ -51,6 +51,10 @@ namespace SharedTrip.Infrastructure.Data
                 .HasForeignKey(x => x.CreatorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            builder.Entity<Comment>()
+                .Property(c => c.IsDeleted)
+                .HasDefaultValue(false);
+
             //Trips
             builder
                 .Entity<PassengerTrip>()

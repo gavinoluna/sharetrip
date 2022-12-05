@@ -52,7 +52,7 @@ namespace SharedTrip.Core.Services
                 {
                     Id = c.Id,
                     Content = c.Content,
-                    CreatedOn = c.CreatedOn.ToString("{MM/dd/yy H:mm}"),
+                    CreatedOn = c.CreatedOn.ToString("MM/dd/yy H:mm"),
                     CreatorId = c.CreatorId,
                     CreatorName = $"{c.Creator.FirstName} {c.Creator.LastName}",
                     CreatorProfileImageUrl = c.Creator.ProfilePictureUrl

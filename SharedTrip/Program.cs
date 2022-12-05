@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
 using SharedTrip.Extensions;
+using SharedTrip.Hubs;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
 
@@ -59,6 +60,8 @@ app.UseEndpoints(endpoints =>
      name: "default",
      pattern: "{controller=Home}/{action=Index}/{id?}"
    );
+
+    app.MapHub<ChatHub>("/chatHub");
 
     app.MapRazorPages();
 });
