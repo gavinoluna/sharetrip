@@ -169,11 +169,12 @@
             })
                 .then(response => response.json())
                 .then(messages => {
-                    if (messages != false) {
-                        showMessages(messages)
+                    if (messages == null) {
+                        console.log(messages);
+                        notify.error("Something went wrong");
                     }
                     else {
-                        notify.error("Something went wrong");
+                        showMessages(messages);
                     }
                 });
         }
@@ -186,7 +187,6 @@
 
         document.getElementById('sendButton').addEventListener('click', function (e) {
             e.preventDefault();
-            console.log('clicked');
             let messageContent = document.getElementById('messageInput').value;
 
             let model = {

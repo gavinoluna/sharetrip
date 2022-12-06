@@ -53,18 +53,18 @@ namespace SharedTrip.Controllers
             try
             {
                 var messages = await this.messageService.GetMessages(userId, User.Id());
-                
+
                 return Json(messages);
             }
             catch (Exception)
             {
-                return Json(false);
+                return Json(null);
             }
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CreateMessage([FromBody]SendMessageViewModel model)
+        public async Task<IActionResult> CreateMessage([FromBody] SendMessageViewModel model)
         {
             var isCreated = false;
 
