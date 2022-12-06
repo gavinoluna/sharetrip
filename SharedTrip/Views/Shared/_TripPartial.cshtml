@@ -2,7 +2,7 @@
 
 <tr>
     <td class="product-thumb">
-        <a href="/User/Details/@Model.DriverId"><img width="130" src="@Model.DriverImageUrl" class="imgElement" alt="image description"></a>
+        <a asp-controller="User" asp-action="Details" asp-route-userId="@Model.DriverId" ><img width="130" src="@Model.DriverImageUrl" class="imgElement" alt="image description"></a>
         <span><strong>@Model.DriverName</strong></span>
     </td>
     <td class="product-details">

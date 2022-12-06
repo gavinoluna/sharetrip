@@ -28,7 +28,7 @@
                         @if (ViewBag.CurrentUserId != Model.Id)
                         {
                             <div class="d-flex justify-content-center mb-2">
-                                <button type="button" class="btn btn-outline-primary ms-1">Message</button>
+                                <a asp-controller="Message" asp-action="Chat" asp-route-userId="@Model.Id" class="btn btn-outline-primary ms-1">Message</a>
                             </div>
                         }
                     </div>
