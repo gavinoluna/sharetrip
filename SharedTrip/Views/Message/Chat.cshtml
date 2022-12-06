@@ -59,15 +59,22 @@
 
             divElement.innerHTML =
                 `<div>
-                                            <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
-                                    <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleString()}</div>
-                                </div>
-                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                                            <div class="font-weight-bold mb-1">@Model.ReceiverName</div>
-                                    ${message}
-                                </div>`
+                                                                            <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
+                                                                    <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleString()}</div>
+                                                                </div>
+                                                                <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                                            <div class="font-weight-bold mb-1">@Model.ReceiverName</div>
+                                                                    ${message}
+                                                                </div>`
 
             document.getElementById('MessageDiv').appendChild(divElement);
+        });
+
+        const notify = new Notyf({
+            position: {
+                x: 'right',
+                y: 'top',
+            }
         });
 
         const saveMessage = async function (message) {
@@ -86,7 +93,11 @@
                 body: JSON.stringify(model)
             })
                 .then(response => response.json())
-                .then(result => console.log(result));
+                .then(result => {
+                    if(result == false){
+                        notify.error("Something went wrong");
+                    }
+                });
         }
 
         connection.on("SendMessage", async function (message) {
@@ -95,14 +106,14 @@
             divElement.classList.add('chat-message-right');
 
             divElement.innerHTML =
-                        `<div>
-                            <img src="@TempData.Peek("ProfileImageUrl")" class="rounded-circle mr-1" alt="@TempData.Peek("FullName")" width="40" height="40">
-                                    <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleString()}</div>
-                        </div>
-                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                            <div class="font-weight-bold mb-1">@TempData.Peek("FullName")</div>
-                            ${message}
-                        </div>`
+                `<div>
+                                                            <img src="@TempData.Peek("ProfileImageUrl")" class="rounded-circle mr-1" alt="@TempData.Peek("FullName")" width="40" height="40">
+                                                                    <div class="text-muted small text-nowrap mt-2">${new Date().toLocaleString()}</div>
+                                                        </div>
+                                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                            <div class="font-weight-bold mb-1">@TempData.Peek("FullName")</div>
+                                                            ${message}
+                                                        </div>`
 
             document.getElementById('MessageDiv').appendChild(divElement);
             await saveMessage(message);
@@ -122,26 +133,26 @@
 
                     divElement.innerHTML =
                         `<div>
-                            <img src="@TempData.Peek("ProfileImageUrl")" class="rounded-circle mr-1" alt="@TempData.Peek("FullName")" width="40" height="40">
-                            <div class="text-muted small text-nowrap mt-2">${m.createdOn}</div>
-                        </div>
-                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                            <div class="font-weight-bold mb-1">@TempData.Peek("FullName")</div>
-                            ${m.content}
-                        </div>`
+                                                            <img src="@TempData.Peek("ProfileImageUrl")" class="rounded-circle mr-1" alt="@TempData.Peek("FullName")" width="40" height="40">
+                                                            <div class="text-muted small text-nowrap mt-2">${m.createdOn}</div>
+                                                        </div>
+                                                        <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                            <div class="font-weight-bold mb-1">@TempData.Peek("FullName")</div>
+                                                            ${m.content}
+                                                        </div>`
                 }
                 else {
                     divElement.classList.add('chat-message-left');
 
                     divElement.innerHTML =
                         `<div>
-                             <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
-                             <div class="text-muted small text-nowrap mt-2">${m.createdOn}</div>
-                         </div>
-                         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
-                             <div class="font-weight-bold mb-1">@Model.ReceiverName</div>
-                             ${m.content}
-                         </div>`
+                                                             <img src="@Model.ReceiverProfileImageUrl" class="rounded-circle mr-1" alt="@Model.ReceiverName" width="40" height="40">
+                                                             <div class="text-muted small text-nowrap mt-2">${m.createdOn}</div>
+                                                         </div>
+                                                         <div class="flex-shrink-1 bg-light rounded py-2 px-3 mr-3">
+                                                             <div class="font-weight-bold mb-1">@Model.ReceiverName</div>
+                                                             ${m.content}
+                                                         </div>`
                 }
 
                 messageDiv.appendChild(divElement);
@@ -151,13 +162,20 @@
         const getMessages = async function () {
             fetch('/Message/GetMessages?userId=@Model.ReceiverId', {
                 method: "GET",
-                headers: { 
+                headers: {
                     'Content-type': 'application.json',
                     'XSRF-TOKEN': getToken()
                 }
             })
                 .then(response => response.json())
-                .then(messages => showMessages(messages));
+                .then(messages => {
+                    if (messages != false) {
+                        showMessages(messages)
+                    }
+                    else {
+                        notify.error("Something went wrong");
+                    }
+                });
         }
 
         const getToken = function () {
@@ -168,7 +186,7 @@
 
         document.getElementById('sendButton').addEventListener('click', function (e) {
             e.preventDefault();
-            console.log('clicked');            
+            console.log('clicked');
             let messageContent = document.getElementById('messageInput').value;
 
             let model = {

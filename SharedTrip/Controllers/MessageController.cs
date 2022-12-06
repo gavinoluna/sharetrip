@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Chat;
 using SharedTrip.Core.Models.Message;
@@ -10,13 +11,16 @@ namespace SharedTrip.Controllers
     {
         private readonly IMessageService messageService;
         private readonly IUserService userService;
+        private readonly INotyfService notyfService;
 
         public MessageController(
             IMessageService messageService,
-            IUserService userService)
+            IUserService userService,
+            INotyfService notyfService)
         {
             this.messageService = messageService;
             this.userService = userService;
+            this.notyfService = notyfService;
         }
 
         public async Task<IActionResult> Chat(string userId)
@@ -37,7 +41,8 @@ namespace SharedTrip.Controllers
             }
             catch (Exception)
             {
-                throw;
+                this.notyfService.Error("Something went wrong");
+                return RedirectToAction("Details", "User");
             }
         }
 
@@ -48,12 +53,12 @@ namespace SharedTrip.Controllers
             try
             {
                 var messages = await this.messageService.GetMessages(userId, User.Id());
-
+                
                 return Json(messages);
             }
             catch (Exception)
             {
-                throw;
+                return Json(false);
             }
         }
 
