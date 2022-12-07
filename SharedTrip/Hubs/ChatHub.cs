@@ -12,8 +12,7 @@ namespace SharedTrip.Hubs
             var message = sanitizer.Sanitize(model.Message);
 
             if (string.IsNullOrEmpty(message) ||
-                string.IsNullOrWhiteSpace(message) ||
-                string.IsNullOrEmpty(message))
+                string.IsNullOrWhiteSpace(message))
             {
                 return;
             }
