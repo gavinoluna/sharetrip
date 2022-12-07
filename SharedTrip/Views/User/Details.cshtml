@@ -176,9 +176,10 @@
                     .then(result => {
                         if (result == true) {
                             textAreaElement.value = '';
-                            if (result == true) {
-                                getComments();
-                            }
+                            getComments();
+                        }
+                        else {
+                            return;
                         }
                     })
             }
@@ -232,19 +233,19 @@
                 comments.forEach(x => {
                     let liElement = document.createElement('li');
                     liElement.innerHTML = `<div class="media">
-                                    <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
-                                    <div class="media-body">
-                                            <h4 class="media-heading"><a href="/User/Details?userId=${x.creatorId}">${x.creatorName}</a></h4>
-                                            <p>${x.content}</p>
-                                            <ul class="list-unstyled list-inline media-detail pull-left">
-                                                <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
-                                                <li><i class="fa fa-thumbs-up"></i>13</li>
-                                            </ul>
-                                            <ul class="list-unstyled list-inline media-detail pull-right">
-                                                 <li class=""><a href="">Like</a></li>
-                                            </ul>
-                                        </div>
-                                    </div>`;
+                                            <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
+                                            <div class="media-body">
+                                                    <h4 class="media-heading"><a href="/User/Details?userId=${x.creatorId}">${x.creatorName}</a></h4>
+                                                    <p>${x.content}</p>
+                                                    <ul class="list-unstyled list-inline media-detail pull-left">
+                                                        <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
+                                                        <li><i class="fa fa-thumbs-up"></i>13</li>
+                                                    </ul>
+                                                    <ul class="list-unstyled list-inline media-detail pull-right">
+                                                         <li class=""><a href="">Like</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>`;
                     commentsUl.appendChild(liElement);
                 })
             }

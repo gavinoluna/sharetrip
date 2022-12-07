@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Ganss.Xss;
+using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Comments;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
-using System.Xml.XPath;
 
 namespace SharedTrip.Core.Services
 {
@@ -19,6 +19,15 @@ namespace SharedTrip.Core.Services
         public async Task<bool> CreateComment(AddCommentViewModel model)
         {
             var isAdded = false;
+
+            var sanitizer = new HtmlSanitizer();
+            var sanitizedMessage = sanitizer.Sanitize(model.Content);
+
+            if (string.IsNullOrEmpty(sanitizedMessage)
+                || string.IsNullOrWhiteSpace(sanitizedMessage))
+            {
+                return isAdded;
+            }
 
             var comment = new Comment
             {
