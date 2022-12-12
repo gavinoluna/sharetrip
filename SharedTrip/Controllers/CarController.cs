@@ -77,7 +77,7 @@ namespace SharedTrip.Controllers
                     return RedirectToAction("Details", "User");
                 }
 
-                if (car.DriverId != User.Id() && User.IsInRole("Administrator") == false)
+                if (await this.carService.IsUserOwnerOfACar(User.Id(), carId) == false && User.IsInRole("Administrator") == false)
                 {
                     this.notyfService.Error("You have no access to cars that are not yours");
                     return RedirectToAction(nameof(MyCars));
