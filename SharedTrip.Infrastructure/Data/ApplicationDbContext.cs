@@ -7,9 +7,17 @@ namespace SharedTrip.Infrastructure.Data
 {
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        private bool seedDb;
+
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options, bool seedDb = true)
             : base(options)
         {
+            if (!this.Database.IsRelational())
+            {
+                this.Database.EnsureCreated();
+            }
+
+            this.seedDb = seedDb;
         }
 
         public DbSet<Car> Cars { get; set; } = null!;
@@ -113,11 +121,14 @@ namespace SharedTrip.Infrastructure.Data
                 .Property(c => c.IsDeleted)
                 .HasDefaultValue(false);
 
-            builder.ApplyConfiguration(new PopulatedPlaceConfiguration());
-            builder.ApplyConfiguration(new CarBrandsConfiguration());
-            builder.ApplyConfiguration(new ColourConfiguration());
-            builder.ApplyConfiguration(new AdminConfiguration());
-            builder.ApplyConfiguration(new UserRoleConfiguration());
+            if (this.seedDb)
+            {
+                builder.ApplyConfiguration(new PopulatedPlaceConfiguration());
+                builder.ApplyConfiguration(new CarBrandsConfiguration());
+                builder.ApplyConfiguration(new ColourConfiguration());
+                builder.ApplyConfiguration(new AdminConfiguration());
+                builder.ApplyConfiguration(new UserRoleConfiguration());
+            }
 
             base.OnModelCreating(builder);
         }
