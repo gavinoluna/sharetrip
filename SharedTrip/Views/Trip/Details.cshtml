@@ -47,35 +47,35 @@
                     <div class="col-12 col-xl-6">
                         <i class="fa-solid fa-suitcase-rolling"></i>
                         <span class="text-muted">Space for Luggage: </span>
-                        <span>@Model.Trip.SpaceForLuggage</span>
+                        <span>@(Model.Trip.SpaceForLuggage == true ? "Yes" : "No")</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-xl-6">
                         <i class="fa-solid fa-wind"></i>
                         <span class="text-muted">Climatronic: </span>
-                        <span>@Model.Car.Climatronic</span>
+                        <span>@(Model.Car.Climatronic == true ? "Yes" : "No")</span>
                     </div>
                     <div class="col-12 col-xl-6">
                         <i class="fa-solid fa-smoking"></i>
                         <span class="text-muted">Allowed Smoking: </span>
-                        <span>@Model.Trip.AllowedSmoking</span>
+                        <span>@(Model.Trip.AllowedSmoking == true ? "Yes" : "No")</span>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-12 col-xl-6">
                         <i class="fa-solid fa-utensils"></i>
                         <span class="text-muted">Allowed Food: </span>
-                        <span>@Model.Trip.AllowedFood</span>
+                        <span>@(Model.Trip.AllowedFood == true ? "Yes" : "No")</span>
                     </div>
                     <div class="col-12 col-xl-6">
                         <i class="fa-solid fa-bottle-water"></i>
                         <span class="text-muted">Allowed Baverages: </span>
-                        <span>@Model.Trip.AllowedBaverages</span>
+                        <span>@(Model.Trip.AllowedBaverages == true ? "Yes" : "No")</span>
                     </div>
                     <div class="col-12 col-xl-6">
                         <span class="text-muted">Is Active: </span>
-                        <span>@Model.Trip.IsActive</span>
+                        <span>@(Model.Trip.IsActive == true ? "Yes" : "No")</span>
                     </div>
                 </div>
             </div>
