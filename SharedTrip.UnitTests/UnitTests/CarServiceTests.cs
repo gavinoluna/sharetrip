@@ -244,7 +244,7 @@ namespace SharedTrip.UnitTests.UnitTests
 
             var result = await this.carService.GetAllCarsAsync();
 
-            Assert.That(2, Is.EqualTo(result.Cars.Count()));
+            Assert.That(result.Cars.Count(), Is.EqualTo(2));
         }
 
         [Test]
@@ -258,7 +258,7 @@ namespace SharedTrip.UnitTests.UnitTests
             await this.carService.EditCarAsync(car);
             var result = await this.carService.GetCarAsync(this.Car.Id);
 
-            Assert.That(newModel, Is.EqualTo(result.Model));
+            Assert.That(result.Model, Is.EqualTo(newModel));
         }
     }
 }
