@@ -55,5 +55,24 @@ namespace SharedTrip.Controllers
                 return Json(query);
             }
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete([FromBody] int commentId)
+        {
+            var isDeleted = false;
+
+            try
+            {
+                await this.commentService.DeleteCommentAsync(commentId);
+                isDeleted = true;
+            }
+            catch (Exception)
+            {
+                isDeleted = false;
+            }
+
+            return Json(isDeleted);
+        }
     }
 }

@@ -227,26 +227,36 @@
         }
 
         const showComments = function (comments) {
+            let commentsUl = document.getElementById('commentsUl');
+            commentsUl.innerHTML = '';
             if (comments.length > 0) {
-                let commentsUl = document.getElementById('commentsUl');
-                commentsUl.innerHTML = '';
                 comments.forEach(x => {
                     let liElement = document.createElement('li');
                     liElement.innerHTML = `<div class="media">
                                             <a class="pull-left" href="/User/Details?userId=${x.creatorId}"><img class="media-object" src="${x.creatorProfileImageUrl}" alt=""></a>
-                                            <div class="media-body">
+                                            <div class="media-body" id="${x.id}">
                                                     <h4 class="media-heading"><a href="/User/Details?userId=${x.creatorId}">${x.creatorName}</a></h4>
                                                     <p>${x.content}</p>
                                                     <ul class="list-unstyled list-inline media-detail pull-left">
                                                         <li><i class="fa fa-calendar"></i>${x.createdOn}</li>
-                                                        <li><i class="fa fa-thumbs-up"></i>13</li>
-                                                    </ul>
-                                                    <ul class="list-unstyled list-inline media-detail pull-right">
-                                                         <li class=""><a href="">Like</a></li>
                                                     </ul>
                                                 </div>
                                             </div>`;
                     commentsUl.appendChild(liElement);
+
+                    if(x.creatorId == '@ViewBag.CurrentUserId'){
+                        var ul = document.createElement('ul');
+                        ul.classList.add('list-unstyled');
+                        ul.classList.add('list-inline');
+                        ul.classList.add('media-detail');
+                        ul.classList.add('pull-right');
+
+                        let li = document.createElement('li');
+                        li.innerHTML = `<button class='btn btn-light' style='padding: 5px 10px;' id=${x.id}">Delete</button>`;
+                        
+                        ul.appendChild(li);
+                        document.getElementById(x.id).appendChild(ul);
+                    }
                 })
             }
             else {
@@ -260,6 +270,33 @@
             token = $(token).val();
             return token;
         }
+
+        const deleteComment = function (commentId){
+            fetch("/Comment/Delete", {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'XSRF-TOKEN': getToken()
+                    },
+                    data: { __RequestVerificationToken: getToken() },
+                    body: JSON.stringify(commentId)
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result == true) {
+                            getComments();
+                        }
+                        else {
+                            return;
+                        }
+                    })
+        };
+
+        document.getElementById('commentsUl').addEventListener('click', (e) => {
+            if(e.target.tagName == 'BUTTON' && e.target.textContent == 'Delete'){
+                deleteComment(e.target.parentNode.parentNode.parentNode.id);
+            }
+        });
 
         let submitButton = document.getElementById('submitButton');
         submitButton.addEventListener('click', create);

@@ -44,13 +44,23 @@ namespace SharedTrip.Core.Services
             return isAdded;
         }
 
+        public async Task DeleteCommentAsync(int commentId)
+        {
+            var comment = await this.context
+                .Comments
+                .FirstOrDefaultAsync(c => c.Id == commentId);
+
+            comment.IsDeleted = true;
+            await this.context.SaveChangesAsync();
+        }
+
         public async Task<CommentQueryServiceModel> GetAllByCommentsByUserIdAsync(string receiverId, int currentPage = 1, int commentsPerPage = 3)
         {
             var result = new CommentQueryServiceModel();
 
             var commentsQuery = this.context
                 .Comments
-                .Where(c => c.ReceiverId == receiverId)
+                .Where(c => c.ReceiverId == receiverId && c.IsDeleted == false)
                 .OrderByDescending(c => c.CreatedOn)
                 .AsQueryable();
 
@@ -78,6 +88,7 @@ namespace SharedTrip.Core.Services
         {
             return await this.context
                 .Comments
+                .Where(c => c.IsDeleted == false)
                 .CountAsync();
         }
     }

@@ -9,5 +9,7 @@ namespace SharedTrip.Core.Contracts
         Task<CommentQueryServiceModel> GetAllByCommentsByUserIdAsync(string receiverId, int currentPage = 1, int commentsPerPage = 3);
 
         Task<int> GetCountOfCommentsAsync();
+
+        Task DeleteCommentAsync(int commentId);
     }
 }
