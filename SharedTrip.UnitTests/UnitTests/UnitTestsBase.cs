@@ -23,6 +23,8 @@ namespace SharedTrip.UnitTests.UnitTests
 
         public Car Car { get; private set; } = null!;
 
+        public Trip Trip { get; private set; } = null!;
+
         private async Task SeedDatabase()
         {
             this.User = new ApplicationUser
@@ -66,6 +68,25 @@ namespace SharedTrip.UnitTests.UnitTests
             };
 
             await this.data.Cars.AddAsync(this.Car);
+
+            this.Trip = new Trip
+            {
+                Id = 1,
+                AdditionalInformation = "Test",
+                AllowedBaverages = true,
+                AllowedFood = false,
+                AllowedSmoking = false,
+                CarId = this.Car.Id,
+                Date = DateTime.Now,
+                PricePerPerson = 10,
+                StartDestinationId = 1,
+                EndDestinationId = 2,
+                SpaceForLuggage = true,
+                CountOfSeats = 4,
+                DriverId = this.User.Id
+            };
+
+            await this.data.Trips.AddAsync(this.Trip);
 
             await this.data.SaveChangesAsync();
         }

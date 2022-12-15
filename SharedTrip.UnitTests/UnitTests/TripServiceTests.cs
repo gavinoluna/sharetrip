@@ -55,7 +55,7 @@ namespace SharedTrip.UnitTests.UnitTests
             Assert.Multiple(() =>
             {
                 Assert.That(tripId, Is.Not.EqualTo(0));
-                Assert.That(tripsCount, Is.EqualTo(1));
+                Assert.That(tripsCount, Is.EqualTo(2));
             });
         }
 
@@ -89,6 +89,165 @@ namespace SharedTrip.UnitTests.UnitTests
             var result = await this.tripService.CheckWhetherUserIsFree(this.User.Id, DateTime.Now.AddDays(2));
 
             Assert.That(result, Is.True);
+        }
+
+        [Test]
+        public async Task GetCountOfFreeSeatsAsyncMethodShouldReturnFreeSeatsCorrectly()
+        {
+            var newUser = new ApplicationUser
+            {
+                Id = "TestId",
+                Email = "test@abv.bg",
+                FirstName = "Test",
+                LastName = "Testov",
+                ProfilePictureUrl = "testUrl"
+            };
+
+            await this.data.Users.AddAsync(newUser);
+            await this.data.SaveChangesAsync();
+
+            await this.tripService.JoinTripAsync(newUser.Id, 1);
+            var freeSeats = await this.tripService.GetCountOfFreeSeatsAsync(1);
+
+            Assert.That(freeSeats, Is.EqualTo(3));
+        }
+
+        [Test]
+        public async Task TripExistsMethodShouldReturnTrueIfTripExists()
+        {
+            var tripExists = await this.tripService.TripExists(1);
+
+            Assert.True(tripExists);
+        }
+
+        [Test]
+        public async Task TripExistsMethodShouldReturnFalseIfTripDoesNotExist()
+        {
+            var tripExists = await this.tripService.TripExists(20);
+
+            Assert.False(tripExists);
+        }
+
+        [Test]
+        public async Task IsUserDriverOfTripMethodShouldReturnTrueIfUserIsDriver()
+        {
+            var isDriver = await this.tripService.IsUserDriverOfTrip(this.User.Id, this.Trip.Id);
+
+            Assert.True(isDriver);
+        }
+
+        [Test]
+        public async Task IsUserDriverOfTripMethodShouldReturnFalseIfUserIsNotDriver()
+        {
+            var newUser = new ApplicationUser
+            {
+                Id = "TestId",
+                Email = "test@abv.bg",
+                FirstName = "Test",
+                LastName = "Testov",
+                ProfilePictureUrl = "testUrl"
+            };
+
+            await this.data.Users.AddAsync(newUser);
+            await this.data.SaveChangesAsync();
+
+            var isDriver = await this.tripService.IsUserDriverOfTrip(newUser.Id, this.Trip.Id);
+
+            Assert.False(isDriver);
+        }
+
+        [Test]
+        public async Task CheckIfUserIsInTripAsyncMethodShouldReturnTrueIfUserIsInTrip()
+        {
+            var isInTrip = await this.tripService.CheckIfUserIsInTripAsync(this.User.Id, this.Trip.Id);
+
+            Assert.True(isInTrip);
+        }
+
+        [Test]
+        public async Task CheckIfUserIsInTripAsyncMethodShouldReturnFalseIfUserIsNotInTrip()
+        {
+            var newUser = new ApplicationUser
+            {
+                Id = "TestId",
+                Email = "test@abv.bg",
+                FirstName = "Test",
+                LastName = "Testov",
+                ProfilePictureUrl = "testUrl"
+            };
+
+            await this.data.Users.AddAsync(newUser);
+            await this.data.SaveChangesAsync();
+
+            var isInTrip = await this.tripService.CheckIfUserIsInTripAsync(newUser.Id, this.Trip.Id);
+
+            Assert.False(isInTrip);
+        }
+
+        [Test]
+        public async Task GetTripForEditAsyncMethodShouldReturnTheCorrectTrip()
+        {
+            var tripForEdit = await this.tripService.GetTripForEditAsync(this.Trip.Id);
+
+            Assert.That(tripForEdit.Id, Is.EqualTo(this.Trip.Id));
+        }
+
+        [Test]
+        public async Task EditTripAsyncMethodShouldEditTripCorrectly()
+        {
+            var tripForEdit = await this.tripService.GetTripForEditAsync(this.Trip.Id);
+
+            tripForEdit.AllowedSmoking = true;
+            tripForEdit.CountOfSeats = 1;
+
+            await this.tripService.EditTripAsync(tripForEdit);
+
+            Assert.True(this.Trip.AllowedSmoking);
+            Assert.That(this.Trip.CountOfSeats, Is.EqualTo(1));
+        }
+
+        [Test]
+        public async Task JoinTripAsyncMethodShouldWorkCorrectly()
+        {
+            var newUser = new ApplicationUser
+            {
+                Id = "TestId",
+                Email = "test@abv.bg",
+                FirstName = "Test",
+                LastName = "Testov",
+                ProfilePictureUrl = "testUrl"
+            };
+
+            await this.data.Users.AddAsync(newUser);
+            await this.data.SaveChangesAsync();
+
+            await this.tripService.JoinTripAsync(newUser.Id, this.Trip.Id);
+            var freeSeats = await this.tripService.GetCountOfFreeSeatsAsync(this.Trip.Id);
+
+            Assert.That(freeSeats, Is.EqualTo(3));
+        }
+
+        [Test]
+        public async Task LeaveTripAsyncMethodShouldWorkCorrectly()
+        {
+            var newUser = new ApplicationUser
+            {
+                Id = "TestId",
+                Email = "test@abv.bg",
+                FirstName = "Test",
+                LastName = "Testov",
+                ProfilePictureUrl = "testUrl"
+            };
+
+            await this.data.Users.AddAsync(newUser);
+            await this.data.SaveChangesAsync();
+
+            await this.tripService.JoinTripAsync(newUser.Id, this.Trip.Id);
+
+            await this.tripService.LeaveTripAsync(newUser.Id, this.Trip.Id);
+            var freeSeats = await this.tripService.GetCountOfFreeSeatsAsync(this.Trip.Id);
+
+            Assert.That(freeSeats, Is.EqualTo(4));
         }
     }
 }
