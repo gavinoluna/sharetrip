@@ -49,15 +49,22 @@ namespace SharedTrip.Core.Services
 
         public async Task<IEnumerable<PopulatedPlaceViewModel>> GetPopulatedPlacesAsync()
         {
-            return await this.context
+            var distintedPopulatedPlaces = await this.context
                 .PopulatedPlaces
+                .GroupBy(p => p.Name)
+                .Select(p => p.First())
+                .ToArrayAsync();
+
+            var populatedPlaces = distintedPopulatedPlaces
                 .Select(p => new PopulatedPlaceViewModel
                 {
                     Id = p.Id,
                     Name = p.Name
                 })
                 .OrderBy(p => p.Name)
-                .ToListAsync();
+                .ToList();
+
+            return populatedPlaces;
         }
 
         public async Task<bool> CheckWhetherUserIsFree(string userId, DateTime date, int? tripId = null)
