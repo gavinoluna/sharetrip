@@ -45,7 +45,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Details", "User");
             }
         }
@@ -62,7 +62,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return Json(null);
             }
         }
@@ -80,7 +80,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 isCreated = false;
             }
 

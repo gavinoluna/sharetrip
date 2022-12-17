@@ -39,7 +39,7 @@ namespace SharedTrip.Core.Quartz.Jobs
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
             }
         }
     }

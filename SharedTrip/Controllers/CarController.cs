@@ -37,7 +37,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return View("Index", "Home");
             }
         }
@@ -61,7 +61,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateCarModel(carModel);
                 return View(carModel);
             }
@@ -91,7 +91,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyCars));
             }
         }
@@ -111,7 +111,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Details", "User");
             }
         }
@@ -142,7 +142,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyCars));
             }
         }
@@ -166,7 +166,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateCarModel(carModel);
                 return View(carModel);
             }
@@ -198,7 +198,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyCars));
             }
         }

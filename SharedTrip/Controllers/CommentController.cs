@@ -37,7 +37,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return Json(isCreated);
             }
         }
@@ -57,7 +57,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return Json(query);
             }
         }
@@ -75,7 +75,7 @@ namespace SharedTrip.Controllers
             }
             catch (Exception ex)
             {
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 isDeleted = false;
             }
 

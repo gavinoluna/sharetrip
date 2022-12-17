@@ -54,7 +54,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -79,7 +79,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(All));
             }
         }
@@ -112,7 +112,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateTripModel(model);
                 return View(model);
             }
@@ -133,7 +133,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(All));
             }
         }
@@ -164,7 +164,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyTrips));
             }
         }
@@ -198,7 +198,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateTripModel(model);
                 return View(model);
             }
@@ -229,7 +229,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(All));
             }
         }
@@ -272,7 +272,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
         }
@@ -309,7 +309,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
         }
@@ -338,7 +338,7 @@ namespace SharedTrip.Controllers
             catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyTrips));
             }
         }
