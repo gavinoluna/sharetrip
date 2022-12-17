@@ -103,7 +103,7 @@ namespace SharedTrip.Areas.Identity.Pages.Account
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
                 user.PhoneNumber = Input.PhoneNumber;
-                user.ProfilePictureUrl = await _cloudinaryService.UploadPicture(Input.ProfilePicture);
+                user.ProfilePictureUrl = "";
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -112,6 +112,8 @@ namespace SharedTrip.Areas.Identity.Pages.Account
 
                 if (result.Succeeded)
                 {
+                    user.ProfilePictureUrl = await _cloudinaryService.UploadPicture(Input.ProfilePicture);
+                    await _userManager.UpdateAsync(user);
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);
