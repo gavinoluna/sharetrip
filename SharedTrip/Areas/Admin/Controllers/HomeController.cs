@@ -12,19 +12,22 @@ namespace SharedTrip.Areas.Admin.Controllers
         private readonly ICarService carService;
         private readonly ICommentService commentService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<HomeController> logger;
 
         public HomeController(
             IUserService userService,
             ITripService tripService,
             ICarService carService,
             ICommentService commentService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<HomeController> logger)
         {
             this.userService = userService;
             this.tripService = tripService;
             this.carService = carService;
             this.commentService = commentService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -38,9 +41,10 @@ namespace SharedTrip.Areas.Admin.Controllers
                 model.CountOfCars = await this.carService.GetCountOfCarsAsync();
                 model.CountOfComments = await this.commentService.GetCountOfCommentsAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
             }
 
             return View(model);

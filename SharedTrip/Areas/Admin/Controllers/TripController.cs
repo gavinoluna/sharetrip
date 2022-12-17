@@ -9,13 +9,16 @@ namespace SharedTrip.Areas.Admin.Controllers
     {
         private readonly ITripService tripService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<TripController> logger;
 
         public TripController(
             ITripService tripService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<TripController> logger)
         {
             this.tripService = tripService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> All([FromQuery]AllTripsQueryModel query)
@@ -34,10 +37,10 @@ namespace SharedTrip.Areas.Admin.Controllers
 
                 return View(query);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"{ex.GetType()}: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Index", "Home", new { area = "Admin" });
             }
         }
