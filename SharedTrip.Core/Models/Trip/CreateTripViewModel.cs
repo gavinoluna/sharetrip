@@ -9,6 +9,7 @@ namespace SharedTrip.Core.Models.Trip
 {
     public class CreateTripViewModel : ITripModel
     {
+        [Display(Name = "Car")]
         public int CarId { get; set; }
 
         public IEnumerable<CreateTripCarViewModel> Cars { get; set; } = new List<CreateTripCarViewModel>();
