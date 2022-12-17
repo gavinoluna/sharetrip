@@ -246,6 +246,12 @@ namespace SharedTrip.Controllers
 
                 var trip = await this.tripService.GetTripForEditAsync(tripId);
 
+                if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true) // Move before CheckWhetherUserIsFree
+                {
+                    this.notyfService.Information("You are already participating in this trip");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
                 if (await this.tripService.CheckWhetherUserIsFree(User.Id(), trip.Date) == false)
                 {
                     this.notyfService.Error("You already have an arranged trip for this date");
@@ -255,12 +261,6 @@ namespace SharedTrip.Controllers
                 if (await this.tripService.GetCountOfFreeSeatsAsync(trip.Id) <= 0)
                 {
                     this.notyfService.Error("There are no free seats in this trip");
-                    return RedirectToAction(nameof(Details), new { tripId });
-                }
-
-                if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == true)
-                {
-                    this.notyfService.Information("You are already participating in this trip");
                     return RedirectToAction(nameof(Details), new { tripId });
                 }
 
@@ -292,6 +292,12 @@ namespace SharedTrip.Controllers
                 if (await this.tripService.CheckIfUserIsInTripAsync(User.Id(), trip.Id) == false)
                 {
                     this.notyfService.Error("You are not participating in this trip");
+                    return RedirectToAction(nameof(Details), new { tripId });
+                }
+
+                if (User.Id() == trip.DriverId)
+                {
+                    this.notyfService.Error("You cannot leave your own trip.");
                     return RedirectToAction(nameof(Details), new { tripId });
                 }
 
