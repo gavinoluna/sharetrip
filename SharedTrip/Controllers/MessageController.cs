@@ -12,15 +12,18 @@ namespace SharedTrip.Controllers
         private readonly IMessageService messageService;
         private readonly IUserService userService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<MessageController> logger;
 
         public MessageController(
             IMessageService messageService,
             IUserService userService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<MessageController> logger)
         {
             this.messageService = messageService;
             this.userService = userService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> Chat(string userId)
@@ -39,9 +42,10 @@ namespace SharedTrip.Controllers
 
                 return View(chatModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Details", "User");
             }
         }
@@ -56,8 +60,9 @@ namespace SharedTrip.Controllers
 
                 return Json(messages);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return Json(null);
             }
         }
@@ -73,8 +78,9 @@ namespace SharedTrip.Controllers
                 await this.messageService.CreateMessage(model);
                 isCreated = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 isCreated = false;
             }
 

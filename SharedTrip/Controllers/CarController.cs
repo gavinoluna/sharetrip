@@ -11,13 +11,16 @@ namespace SharedTrip.Controllers
     {
         private readonly ICarService carService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<CarController> logger;
 
         public CarController(
             ICarService carService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<CarController> logger)
         {
             this.carService = carService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -31,10 +34,10 @@ namespace SharedTrip.Controllers
                     Colours = await this.carService.GetColoursAsync()
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //Add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return View("Index", "Home");
             }
         }
@@ -55,10 +58,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("You have successfully created a car.");
                 return RedirectToAction(nameof(Details), new { carId });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //Add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateCarModel(carModel);
                 return View(carModel);
             }
@@ -85,10 +88,10 @@ namespace SharedTrip.Controllers
 
                 return View(car);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //Add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyCars));
             }
         }
@@ -105,10 +108,10 @@ namespace SharedTrip.Controllers
 
                 return View(query);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //Add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Details", "User");
             }
         }
@@ -136,10 +139,10 @@ namespace SharedTrip.Controllers
 
                 return View(car);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //Add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyCars));
             }
         }
@@ -160,10 +163,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("The car is edited succseffully");
                 return RedirectToAction(nameof(Details), new { carId = carModel.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //Add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateCarModel(carModel);
                 return View(carModel);
             }
@@ -192,10 +195,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("The car is deleted successfully");
                 return RedirectToAction(nameof(MyCars));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyCars));
             }
         }

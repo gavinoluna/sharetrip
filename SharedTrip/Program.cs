@@ -7,6 +7,7 @@ using SharedTrip.Extensions;
 using SharedTrip.Hubs;
 using SharedTrip.Infrastructure.Data;
 using SharedTrip.Infrastructure.Data.Entities;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,6 +26,11 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddAntiforgery(o => o.HeaderName = "XSRF-TOKEN");
 
 builder.Services.AddApplicationServices(builder.Configuration);
+
+builder.Host.UseSerilog((ctx, lc) => lc
+    .WriteTo.File("Logger.txt",
+    Serilog.Events.LogEventLevel.Error,
+    outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}"));
 
 var app = builder.Build();
 

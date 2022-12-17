@@ -1,5 +1,6 @@
 ﻿using AspNetCoreHero.ToastNotification.Abstractions;
 using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Home;
 using SharedTrip.Models;
@@ -12,15 +13,18 @@ namespace SharedTrip.Controllers
         private readonly IUserService userService;
         private readonly ITripService tripService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<HomeController> logger;
 
         public HomeController(
             IUserService userService,
             ITripService tripService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<HomeController> logger)
         {
             this.userService = userService;
             this.tripService = tripService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         public async Task<IActionResult> Index()
@@ -35,10 +39,10 @@ namespace SharedTrip.Controllers
 
                 return View(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Details", "User");
             }
         }

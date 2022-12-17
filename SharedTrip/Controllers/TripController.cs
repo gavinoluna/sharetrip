@@ -13,17 +13,20 @@ namespace SharedTrip.Controllers
         private readonly ICarService carService;
         private readonly IUserService userService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<TripController> logger;    
 
         public TripController(
             ITripService tripService,
             ICarService carService,
             IUserService userService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<TripController> logger)
         {
             this.tripService = tripService;
             this.carService = carService;
             this.userService = userService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -48,10 +51,10 @@ namespace SharedTrip.Controllers
 
                 return View(query);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -73,10 +76,10 @@ namespace SharedTrip.Controllers
 
                 return View(model);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(All));
             }
         }
@@ -106,10 +109,10 @@ namespace SharedTrip.Controllers
 
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateTripModel(model);
                 return View(model);
             }
@@ -127,10 +130,10 @@ namespace SharedTrip.Controllers
 
                 return View(query);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(All));
             }
         }
@@ -158,10 +161,10 @@ namespace SharedTrip.Controllers
 
                 return View(trip);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyTrips));
             }
         }
@@ -192,10 +195,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("The trip was edited successfully");
                 return RedirectToAction(nameof(Details), new { tripId = model.Id });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 await PopulateTripModel(model);
                 return View(model);
             }
@@ -223,10 +226,10 @@ namespace SharedTrip.Controllers
 
                 return View(detailsModel);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(All));
             }
         }
@@ -266,10 +269,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("You have joined the trip successfully");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
         }
@@ -297,10 +300,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("You have left the trip successfully");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(Details), new { tripId });
             }
         }
@@ -326,10 +329,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("The trip was deleted successfully");
                 return RedirectToAction(nameof(MyTrips));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(MyTrips));
             }
         }

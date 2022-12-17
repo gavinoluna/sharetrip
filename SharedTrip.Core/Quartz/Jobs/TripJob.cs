@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using SharedTrip.Core.Models.User;
 using SharedTrip.Infrastructure.Data;
@@ -10,10 +11,14 @@ namespace SharedTrip.Core.Quartz.Jobs
     public class TripJob : IJob
     {
         private readonly ApplicationDbContext context;
+        private readonly ILogger<TripJob> logger;
 
-        public TripJob(ApplicationDbContext context)
+        public TripJob(
+            ApplicationDbContext context,
+            ILogger<TripJob> logger)
         {
             this.context = context;
+            this.logger = logger;
         }
 
         public async Task Execute(IJobExecutionContext context)
@@ -32,8 +37,9 @@ namespace SharedTrip.Core.Quartz.Jobs
 
                 await this.context.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
             }
         }
     }

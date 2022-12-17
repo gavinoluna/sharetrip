@@ -10,13 +10,16 @@ namespace SharedTrip.Controllers
     {
         private readonly IUserService userService;
         private readonly INotyfService notyfService;
+        private readonly ILogger<UserController> logger;
 
         public UserController(
             IUserService userService,
-            INotyfService notyfService)
+            INotyfService notyfService,
+            ILogger<UserController> logger)
         {
             this.userService = userService;
             this.notyfService = notyfService;
+            this.logger = logger;
         }
 
         [HttpGet]
@@ -43,10 +46,10 @@ namespace SharedTrip.Controllers
 
                 return View(user);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -66,10 +69,10 @@ namespace SharedTrip.Controllers
 
                 return View(user);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return RedirectToAction(nameof(Details));
             }
         }
@@ -89,10 +92,10 @@ namespace SharedTrip.Controllers
                 this.notyfService.Success("Profile is edited successfully");
                 return RedirectToAction(nameof(Details));
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 this.notyfService.Error("Something went wrong");
-                //add logging
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return View(model);
             }
         }

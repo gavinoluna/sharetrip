@@ -8,10 +8,14 @@ namespace SharedTrip.Controllers
     public class CommentController : BaseController
     {
         private readonly ICommentService commentService;
+        private readonly ILogger<CommentController> logger;
 
-        public CommentController(ICommentService commentService)
+        public CommentController(
+            ICommentService commentService,
+            ILogger<CommentController> logger)
         {
             this.commentService = commentService;
+            this.logger = logger;
         }
 
         [HttpPost]
@@ -31,8 +35,9 @@ namespace SharedTrip.Controllers
 
                 return Json(isCreated);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return Json(isCreated);
             }
         }
@@ -50,8 +55,9 @@ namespace SharedTrip.Controllers
 
                 return Json(query);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 return Json(query);
             }
         }
@@ -67,8 +73,9 @@ namespace SharedTrip.Controllers
                 await this.commentService.DeleteCommentAsync(commentId);
                 isDeleted = true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                this.logger.LogError($"Error: {ex.Message}, \n {ex.StackTrace}");
                 isDeleted = false;
             }
 
