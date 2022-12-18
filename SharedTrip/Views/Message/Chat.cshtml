@@ -117,11 +117,9 @@
                                                                                     ${message}
                                                                                 </div>`
 
-            let isSaved = await saveMessage(message);
-            if(isSaved == true){
+            await saveMessage(message);
             messageDiv.appendChild(divElement);
             messageDiv.scrollTo(0, messageDiv.scrollHeight);
-            }
         });
 
         const showMessages = function (messages) {

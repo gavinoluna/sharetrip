@@ -1,1 +1,8 @@
-﻿
+﻿2022-12-18 12:35:55 [ERR] Connection id "0HMN0SEHK6TQM", Request id "0HMN0SEHK6TQM:00000003": An unhandled exception was thrown by the application.
+System.OperationCanceledException: The operation was canceled.
+   at System.Threading.CancellationToken.ThrowOperationCanceledException()
+   at System.Threading.CancellationToken.ThrowIfCancellationRequested()
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpResponseStream.WriteAsync(ReadOnlyMemory`1 source, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Watch.BrowserRefresh.BrowserScriptMiddleware.InvokeAsync(HttpContext context)
+   at Microsoft.AspNetCore.Builder.Extensions.MapMiddleware.InvokeCore(HttpContext context, PathString matchedPath, PathString remainingPath)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http.HttpProtocol.ProcessRequests[TContext](IHttpApplication`1 application)

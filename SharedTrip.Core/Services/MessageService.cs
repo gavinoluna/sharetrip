@@ -17,31 +17,18 @@ namespace SharedTrip.Core.Services
             this.context = context;
         }
 
-        public async Task<bool> CreateMessage(SendMessageViewModel model)
+        public async Task CreateMessage(SendMessageViewModel model)
         {
-            var sanitizer = new HtmlSanitizer();
-            sanitizer.AllowedTags.Clear();
-
-            var sanitizedMessage = sanitizer.Sanitize(model.Message);
-
-            if (string.IsNullOrEmpty(sanitizedMessage)
-                || string.IsNullOrWhiteSpace(sanitizedMessage))
-            {
-                return false;
-            }
-
             var message = new Message
             {
                 SenderId = model.SenderId,
                 ReceiverId = model.ReceiverId,
-                Content = sanitizedMessage,
+                Content = model.Message,
                 CreatedOn = DateTime.UtcNow
             };
 
             await this.context.Messages.AddAsync(message);
             await this.context.SaveChangesAsync();
-
-            return true;
         }
 
         public async Task<IEnumerable<MessageViewModel>> GetMessages(string receiverId, string currentUserId)
