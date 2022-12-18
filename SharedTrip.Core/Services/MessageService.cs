@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Ganss.Xss;
+using Microsoft.EntityFrameworkCore;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Chat;
 using SharedTrip.Core.Models.Message;
@@ -16,18 +17,31 @@ namespace SharedTrip.Core.Services
             this.context = context;
         }
 
-        public async Task CreateMessage(SendMessageViewModel model)
+        public async Task<bool> CreateMessage(SendMessageViewModel model)
         {
+            var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedTags.Clear();
+
+            var sanitizedMessage = sanitizer.Sanitize(model.Message);
+
+            if (string.IsNullOrEmpty(sanitizedMessage)
+                || string.IsNullOrWhiteSpace(sanitizedMessage))
+            {
+                return false;
+            }
+
             var message = new Message
             {
                 SenderId = model.SenderId,
                 ReceiverId = model.ReceiverId,
-                Content = model.Message,
+                Content = sanitizedMessage,
                 CreatedOn = DateTime.UtcNow
             };
 
             await this.context.Messages.AddAsync(message);
             await this.context.SaveChangesAsync();
+
+            return true;
         }
 
         public async Task<IEnumerable<MessageViewModel>> GetMessages(string receiverId, string currentUserId)

@@ -75,8 +75,7 @@ namespace SharedTrip.Controllers
 
             try
             {
-                await this.messageService.CreateMessage(model);
-                isCreated = true;
+                isCreated = await this.messageService.CreateMessage(model);
             }
             catch (Exception ex)
             {

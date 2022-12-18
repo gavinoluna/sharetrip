@@ -7,6 +7,6 @@ namespace SharedTrip.Core.Contracts
     {
         Task<IEnumerable<MessageViewModel>> GetMessages(string receiverId, string currentUserId);
 
-        Task CreateMessage(SendMessageViewModel model);
+        Task<bool> CreateMessage(SendMessageViewModel model);
     }
 }
