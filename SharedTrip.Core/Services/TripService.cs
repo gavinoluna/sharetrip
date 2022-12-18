@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ValueGeneration;
 using SharedTrip.Core.Contracts;
 using SharedTrip.Core.Models.Trip;
 using SharedTrip.Core.Models.Trip.ServiceModels;
@@ -110,7 +111,7 @@ namespace SharedTrip.Core.Services
                     Price = t.PricePerPerson,
                     IsActive = t.IsActive,
                     AllSeats = t.Car.CountOfSeats,
-                    FreeSeats = t.CountOfSeats - t.PassengersTrips.Count(),
+                    FreeSeats = t.CountOfSeats == 0 ? t.CountOfSeats : t.CountOfSeats - t.PassengersTrips.Count(),
                     Date = t.Date.ToString("MM/dd/yyyy HH:mm")
                 })
                 .ToListAsync();
@@ -136,7 +137,7 @@ namespace SharedTrip.Core.Services
                     Price = t.PricePerPerson,
                     IsActive = t.IsActive,
                     AllSeats = t.Car.CountOfSeats,
-                    FreeSeats = t.CountOfSeats - t.PassengersTrips.Count(),
+                    FreeSeats = t.CountOfSeats == 0 ? t.CountOfSeats : t.CountOfSeats - t.PassengersTrips.Count(),
                     Date = t.Date.ToString("MM/dd/yyyy HH:mm"),
                     AdditionalInformation = t.AdditionalInformation,
                     AllowedBaverages = t.AllowedBaverages,
@@ -248,7 +249,7 @@ namespace SharedTrip.Core.Services
                     Price = t.PricePerPerson,
                     IsActive = t.IsActive,
                     AllSeats = t.Car.CountOfSeats,
-                    FreeSeats = t.CountOfSeats - t.PassengersTrips.Count(),
+                    FreeSeats = t.CountOfSeats == 0 ? t.CountOfSeats : t.CountOfSeats - t.PassengersTrips.Count(),
                     Date = t.Date.ToString("MM/dd/yyyy HH:mm")
                 })
                 .ToListAsync();
@@ -342,6 +343,27 @@ namespace SharedTrip.Core.Services
                 .FirstOrDefaultAsync();
 
             return trip.CountOfSeats - trip.PassengersTrips.Count();
+        }
+
+        public async Task<bool> ValidateCountOfSeats(int tripId, int countOfSeats)
+        {
+            var isValid = false;
+
+            var trip = await this.context
+                .Trips
+                .Include(t => t.Car)
+                .FirstAsync(t => t.Id == tripId);
+
+            if (countOfSeats >= trip.Car.CountOfSeats || countOfSeats < 0)
+            {
+                isValid = false;
+            }
+            else
+            {
+                isValid = true;
+            }
+
+            return isValid;
         }
     }
 }

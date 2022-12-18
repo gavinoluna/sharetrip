@@ -181,6 +181,15 @@ namespace SharedTrip.Controllers
                     return View(model);
                 }
 
+                if (await this.tripService.ValidateCountOfSeats(model.Id, model.CountOfSeats) == false)
+                {
+                    this.notyfService.Error("Invalid count of seats");
+
+                    await PopulateTripModel(model);
+
+                    return View(model);
+                }
+
                 if (await this.tripService.CheckWhetherUserIsFree(User.Id(), model.Date, model.Id) == false)
                 {
                     this.notyfService.Error("You already have an arranged trip for that date");
