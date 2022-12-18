@@ -96,6 +96,12 @@ namespace SharedTrip.Areas.Identity.Pages.Account
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
             returnUrl ??= Url.Content("~/");
+
+            if (Input.ProfilePicture.Length <= 0 || !Input.ProfilePicture.ContentType.Contains("image"))
+            {
+                ModelState.AddModelError("", "Uploaded file is not an image.");
+            }
+
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
