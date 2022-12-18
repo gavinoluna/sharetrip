@@ -21,6 +21,8 @@ namespace SharedTrip.Core.Services
             var isAdded = false;
 
             var sanitizer = new HtmlSanitizer();
+            sanitizer.AllowedTags.Clear();
+
             var sanitizedMessage = sanitizer.Sanitize(model.Content);
 
             if (string.IsNullOrEmpty(sanitizedMessage)
@@ -33,7 +35,7 @@ namespace SharedTrip.Core.Services
             {
                 CreatorId = model.CreatorId,
                 ReceiverId = model.ReceiverId,
-                Content = model.Content,
+                Content = sanitizedMessage,
                 CreatedOn = DateTime.Now
             };
 
